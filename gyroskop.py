@@ -5,13 +5,13 @@ sensor = mpu6050(0x68)
 
 try:
     while True:
-        print("Gyroskop X:", sensor.GYRO_XOUT0)
-        print("Gyroskop Y:", sensor.GYRO_YOUT0)
-        print("Gyroskop Z:", sensor.GYRO_ZOUT0)
-        time.sleep(2)
+        #print("Gyroskop X:", sensor.GYRO_XOUT0)
+        #print("Gyroskop Y:", sensor.GYRO_YOUT0)
+        #print("Gyroskop Z:", sensor.GYRO_ZOUT0)
+        #time.sleep(2)
         print(sensor.get_gyro_data())
         #print(sensor.)
-        time.sleep(2)
+        time.sleep(0.5)
 
 
 except KeyboardInterrupt:

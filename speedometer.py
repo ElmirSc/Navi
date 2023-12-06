@@ -95,6 +95,7 @@ try:
     while True:
         speedometerOne.setCount()
         time.sleep(1)
+        print(speedometerOne.getCount())
         speedometerOne.checkDirectionTire()
         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)

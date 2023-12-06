@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 from hallSensor import hallSensor
+import os
 
 pi = 3.1415
 
@@ -87,6 +88,7 @@ try:
         speedometerOne.distance += currenDistance
         speedometerOne.speed = currenDistance * 3.6 * speedometerOne.direction
         speedometerOne.printStats()
+
 
 
 except KeyboardInterrupt:

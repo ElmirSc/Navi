@@ -1,3 +1,5 @@
+import os
+
 import RPi.GPIO as GPIO
 import time
 from hallSensor import hallSensor
@@ -23,7 +25,7 @@ def hallSensorCallbackForward(channel):
     global hallSensorForward
 
     currentPinState = GPIO.input(hallSensorForward)
-    print("Pinstate:", currentPinState)
+    #print("Pinstate:", currentPinState)
     count += 1
     timeSensorForward = time.time()
     changeEdgeEvent(hallSensorForward, currentPinState)
@@ -36,7 +38,7 @@ def hallSensorCallbackBack(channel):
     global hallSensorBack
 
     currentPinState = GPIO.input(hallSensorBack)
-    print("Pinstate:", currentPinState)
+    #print("Pinstate:", currentPinState)
     count += 1
     timeSensorBack = time.time()
     changeEdgeEvent(hallSensorBack, currentPinState)
@@ -90,14 +92,15 @@ try:
     while True:
         count = 0
         time.sleep(1)
-        print("Zeit F:", timeSensorForward)
-        print("Zeit B:", timeSensorBack)
+        #print("Zeit F:", timeSensorForward)
+        #print("Zeit B:", timeSensorBack)
         checkDirection()
         currenDistance = (count * ((wheel * pi) / 4))
         fullDistance = fullDistance + currenDistance
         speed = currenDistance * 3.6 * direction
         print("Zurckgelegte Strecke:", fullDistance)
         print("Geschwindigkeit:", speed)
+        os.system('clear')
 
 
 except KeyboardInterrupt:

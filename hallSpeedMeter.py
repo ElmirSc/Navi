@@ -50,9 +50,9 @@ def checkDirection():
     global direction
 
     if timeSensorBack < timeSensorForward:
-        direction = -1
-    else:
         direction = 1
+    else:
+        direction = -1
 
 
 def init():

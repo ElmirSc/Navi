@@ -36,8 +36,8 @@ class speedometer:
         self.changeEdgeEventSpeedometer(self.hallBack.getPinNumber())
 
     def changeEdgeEventSpeedometer(self, pin):
+        GPIO.remove_event_detect(pin)
         if pin == 17:
-            GPIO.remove_event_detect(pin)
             if self.hallForward.pinState == 1:
                 GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=100)
             else:

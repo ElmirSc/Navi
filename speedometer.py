@@ -98,11 +98,11 @@ try:
         print("Pin Forward:", GPIO.input(17))
         print("Pin Back:", GPIO.input(27))
         print(speedometerOne.getCount())
-        speedometerOne.checkDirectionTire()
+        #speedometerOne.checkDirectionTire()
         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)
         speedometerOne.speed = currenDistance * 3.6 * speedometerOne.direction
-        speedometerOne.printStats()
+        #speedometerOne.printStats()
 
 
 

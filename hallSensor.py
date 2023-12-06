@@ -16,5 +16,8 @@ class hallSensor:
     def setTimeSensor(self, time):
         self.timeSensor = time
 
-    def setPinState(self, state):
+    def setPinState(self):
+        self.pinState *= -1
+
+    def initPinState(self,state):
         self.pinState = state

@@ -14,6 +14,7 @@ class speedometer:
         self.direction = 1
         self.distance = 0
         self.wheel = 0.11
+        self.pinState = 1
         self.initSpeedometer()
 
     def setDistance(self, newDistance):
@@ -40,8 +41,8 @@ class speedometer:
         GPIO.setup(self.hallForward.getPinNumber(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(self.hallBack.getPinNumber(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        self.hallForward.setPinState(GPIO.input(self.hallForward.getPinNumber()))
-        self.hallBack.setPinState(GPIO.input(self.hallBack.getPinNumber()))
+        self.hallForward.initPinState(GPIO.input(self.hallForward.getPinNumber()))
+        self.hallBack.initPinState(GPIO.input(self.hallBack.getPinNumber()))
         print("Start Werte Vorwaertshall:", self.hallForward.getPinState())
         print("Start Werte Backhall:", self.hallBack.getPinState())
         self.changeEdgeEventSpeedometer(self.hallForward.getPinNumber())
@@ -50,12 +51,12 @@ class speedometer:
     def changeEdgeEventSpeedometer(self, pin):
         GPIO.remove_event_detect(pin)
         if pin == 17:
-            if self.hallForward.pinState == 1:
+            if self.hallForward.getPinState() == 1:
                 GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=100)
             else:
                 GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=100)
         elif pin == 27:
-            if self.hallBack.pinState == 1:
+            if self.hallBack.getPinState() == 1:
                 GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackBackSpeedometer, bouncetime=100)
             else:
                 GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackBackSpeedometer, bouncetime=100)
@@ -73,12 +74,12 @@ class speedometer:
 
 def hallSensorCallbackForwardSpeedometer(channel):
     global speedometerOne
-
     #currentPinState = GPIO.input(speedometerOne.hallForward.pin)
     #print("Pinstate:", currentPinState)
     speedometerOne.addToCount()
     speedometerOne.hallForward.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
+    speedometerOne.hallForward.setPinState()
 
 
 def hallSensorCallbackBackSpeedometer(channel):
@@ -89,6 +90,7 @@ def hallSensorCallbackBackSpeedometer(channel):
     #speedometerOne.addToCount()
     speedometerOne.hallBack.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)
+    speedometerOne.hallBack.setPinState()
 
 try:
     speedometerOne = speedometer(17, 27)

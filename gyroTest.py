@@ -2,6 +2,7 @@
 import smbus
 import math
 import os
+import time
 
 # Register
 power_mgmt_1 = 0x6b
@@ -75,4 +76,5 @@ while True:
 
     print ("X Rotation: ", get_x_rotation(beschleunigung_xout_skaliert, beschleunigung_yout_skaliert, beschleunigung_zout_skaliert))
     print ("Y Rotation: ", get_y_rotation(beschleunigung_xout_skaliert, beschleunigung_yout_skaliert, beschleunigung_zout_skaliert))
+    time.sleep(0.3)
     os.system('clear')

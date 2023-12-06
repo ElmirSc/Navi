@@ -16,12 +16,24 @@ class speedometer:
         self.wheel = 0.11
         self.initSpeedometer()
 
-    def setDistance(self,newDistance):
+    def setDistance(self, newDistance):
         self.distance += newDistance
     def getDistance(self):
         return self.distance
     def getSpeed(self):
         return self.speed
+
+    def getCount(self):
+        return self.count
+
+    def setCount(self):
+        self.count = 0
+
+    def addToCount(self):
+        self.count += 1
+
+    def getWheel(self):
+        return self.wheel
 
     def initSpeedometer(self):
         GPIO.setmode(GPIO.BCM)
@@ -62,9 +74,9 @@ class speedometer:
 def hallSensorCallbackForwardSpeedometer(channel):
     global speedometerOne
 
-    currentPinState = GPIO.input(speedometerOne.hallForward.pin)
+    #currentPinState = GPIO.input(speedometerOne.hallForward.pin)
     #print("Pinstate:", currentPinState)
-    speedometerOne.count += 1
+    speedometerOne.addToCount()
     speedometerOne.hallForward.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
 
@@ -72,7 +84,7 @@ def hallSensorCallbackForwardSpeedometer(channel):
 def hallSensorCallbackBackSpeedometer(channel):
     global speedometerOne
 
-    currentPinState = GPIO.input(speedometerOne.hallBack.pin)
+    #currentPinState = GPIO.input(speedometerOne.hallBack.pin)
     #print("Pinstate:", currentPinState)
     #speedometerOne.count += 1
     speedometerOne.hallBack.timeSensor = time.time()
@@ -81,10 +93,10 @@ def hallSensorCallbackBackSpeedometer(channel):
 try:
     speedometerOne = speedometer(17, 27)
     while True:
-        speedometerOne.count = 0
+        speedometerOne.setCount()
         time.sleep(1)
         speedometerOne.checkDirectionTire()
-        currenDistance = (speedometerOne.count * ((speedometerOne.wheel * pi) / 4))
+        currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)
         speedometerOne.speed = currenDistance * 3.6 * speedometerOne.direction
         speedometerOne.printStats()

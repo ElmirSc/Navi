@@ -39,7 +39,7 @@ def hallSensorCallbackBack(channel):
 
     currentPinState = GPIO.input(hallSensorBack)
     #print("Pinstate:", currentPinState)
-    count += 1
+    #count += 1
     timeSensorBack = time.time()
     changeEdgeEvent(hallSensorBack, currentPinState)
 

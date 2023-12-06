@@ -74,7 +74,7 @@ def hallSensorCallbackBackSpeedometer(channel):
 
     currentPinState = GPIO.input(speedometerOne.hallBack.pin)
     #print("Pinstate:", currentPinState)
-    speedometerOne.count += 1
+    #speedometerOne.count += 1
     speedometerOne.hallBack.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)
 

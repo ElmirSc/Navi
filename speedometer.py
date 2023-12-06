@@ -91,7 +91,7 @@ def hallSensorCallbackBackSpeedometer(channel):
     #speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)
 
 try:
-    speedometerOne = speedometer(27, 17)
+    speedometerOne = speedometer(17, 27)
     while True:
         speedometerOne.setCount()
         time.sleep(1)

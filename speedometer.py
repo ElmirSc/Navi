@@ -51,14 +51,14 @@ class speedometer:
         GPIO.remove_event_detect(pin)
         if pin == 17:
             if self.hallForward.pinState == 1:
-                GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=10)
             else:
-                GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackForwardSpeedometer, bouncetime=10)
         elif pin == 27:
             if self.hallBack.pinState == 1:
-                GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackBackSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.FALLING, callback=hallSensorCallbackBackSpeedometer, bouncetime=10)
             else:
-                GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackBackSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.RISING, callback=hallSensorCallbackBackSpeedometer, bouncetime=10)
 
     def checkDirectionTire(self):
         if self.hallForward.timeSensor > self.hallBack.timeSensor:

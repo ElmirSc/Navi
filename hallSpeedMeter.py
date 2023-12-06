@@ -95,7 +95,7 @@ try:
         print("Zeit F:", timeSensorForward)
         print("Zeit B:", timeSensorBack)
         checkDirection()
-        currenDistance = ((count/2) * ((wheel * pi) / 4))
+        currenDistance = (count * ((wheel * pi) / 4))
         fullDistance = fullDistance + currenDistance
         speed = currenDistance * 3.6 * direction
         print("Zurckgelegte Strecke:", fullDistance)

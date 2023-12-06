@@ -74,8 +74,8 @@ class speedometer:
 def hallSensorCallbackForwardSpeedometer(channel):
     global speedometerOne
 
-    #currentPinState = GPIO.input(speedometerOne.hallForward.pin)
-    #print("Pinstate:", currentPinState)
+    currentPinState = GPIO.input(speedometerOne.hallForward.pin)
+    print("Pinstate:", currentPinState)
     speedometerOne.addToCount()
     speedometerOne.hallForward.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
@@ -84,8 +84,8 @@ def hallSensorCallbackForwardSpeedometer(channel):
 def hallSensorCallbackBackSpeedometer(channel):
     global speedometerOne
 
-    #currentPinState = GPIO.input(speedometerOne.hallBack.pin)
-    #print("Pinstate:", currentPinState)
+    currentPinState = GPIO.input(speedometerOne.hallBack.pin)
+    print("Pinstate:", currentPinState)
     speedometerOne.addToCount()
     speedometerOne.hallBack.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)
@@ -96,7 +96,7 @@ try:
         speedometerOne.setCount()
         time.sleep(1)
         speedometerOne.checkDirectionTire()
-        currenDistance = ((speedometerOne.getCount()/2) * ((speedometerOne.getWheel() * pi) / 4))
+        currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)
         speedometerOne.speed = currenDistance * 3.6 * speedometerOne.direction
         speedometerOne.printStats()

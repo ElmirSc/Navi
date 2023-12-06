@@ -2,6 +2,8 @@ import RPi.GPIO as GPIO
 import time
 from hallSensor import hallSensor
 
+pi = 3.1415
+
 class speedometer:
     def __init__(self, sensorOne, sensorTwo):
         self.hallForward = hallSensor(sensorOne)

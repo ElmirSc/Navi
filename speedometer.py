@@ -3,7 +3,7 @@ import time
 from hallSensor import hallSensor
 import os
 
-pi = 3.1415
+pi = 3.141592653
 
 class speedometer:
     def __init__(self, sensorOne, sensorTwo):
@@ -50,9 +50,9 @@ class speedometer:
 
     def checkDirectionTire(self):
         if self.hallForward.timeSensor > self.hallBack.timeSensor:
-            self.direction = -1
-        else:
             self.direction = 1
+        else:
+            self.direction = -1
 
     def printStats(self):
         print("Current Speed:", self.speed)
@@ -63,7 +63,7 @@ def hallSensorCallbackForwardSpeedometer(channel):
     global speedometerOne
 
     currentPinState = GPIO.input(speedometerOne.hallForward.pin)
-    print("Pinstate:", currentPinState)
+    #print("Pinstate:", currentPinState)
     speedometerOne.count += 1
     speedometerOne.hallForward.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
@@ -73,7 +73,7 @@ def hallSensorCallbackBackSpeedometer(channel):
     global speedometerOne
 
     currentPinState = GPIO.input(speedometerOne.hallBack.pin)
-    print("Pinstate:", currentPinState)
+    #print("Pinstate:", currentPinState)
     speedometerOne.count += 1
     speedometerOne.hallBack.timeSensor = time.time()
     speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)

@@ -92,8 +92,8 @@ try:
     while True:
         count = 0
         time.sleep(1)
-        #print("Zeit F:", timeSensorForward)
-        #print("Zeit B:", timeSensorBack)
+        print("Zeit F:", timeSensorForward)
+        print("Zeit B:", timeSensorBack)
         checkDirection()
         currenDistance = (count * ((wheel * pi) / 4))
         fullDistance = fullDistance + currenDistance

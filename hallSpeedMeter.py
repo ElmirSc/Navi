@@ -6,7 +6,7 @@ from hallSensor import hallSensor
 
 hallSensorForward = 17
 hallSensorBack = 27
-pi = 3.1415
+pi = 3.141592653
 wheel = 0.11
 speed = 0
 direction = 1

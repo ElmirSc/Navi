@@ -100,7 +100,7 @@ try:
         speed = currenDistance * 3.6 * direction
         print("Zurckgelegte Strecke:", fullDistance)
         print("Geschwindigkeit:", speed)
-        os.system('clear')
+        #os.system('clear')
 
 
 except KeyboardInterrupt:

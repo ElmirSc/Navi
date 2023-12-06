@@ -96,7 +96,7 @@ try:
         speedometerOne.setCount()
         time.sleep(1)
         speedometerOne.checkDirectionTire()
-        currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
+        currenDistance = ((speedometerOne.getCount()/2) * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)
         speedometerOne.speed = currenDistance * 3.6 * speedometerOne.direction
         speedometerOne.printStats()

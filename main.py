@@ -1,4 +1,4 @@
-from Navigation.Navigation import navigation
+#from Navigation.Navigation import navigation
 import RPi.GPIO as GPIO
 import sys
 

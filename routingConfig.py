@@ -13,3 +13,6 @@ for cord in node_coordinates:            # abspeichern der lon und lat Werte
 costRouteOne = 0
 costRouteTwo = 0
 costRouteThree = 0
+
+#1 ist die Zeit der Kosten
+#2 ist der Weg der Kosten

@@ -81,11 +81,12 @@ def hallSensorCallbackForwardSpeedometer(channel):
     currentPinState = GPIO.input(speedometerOne.hallForward.pin)
     #print("Pinstate:", currentPinState)
     if speedometerOne.hallForward.getNextPinState() == currentPinState:
-        speedometerOne.hallForward.timeSensor = time.time()
         speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
+        speedometerOne.hallForward.timeSensor = time.time()
         speedometerOne.hallForward.setPinState()
         print("Count++")
         speedometerOne.addToCount()
+
 
 
 def hallSensorCallbackBackSpeedometer(channel):

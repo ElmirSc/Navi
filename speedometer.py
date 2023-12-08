@@ -17,6 +17,7 @@ class speedometer:
         self.pinState = 1
         self.initSpeedometer()
 
+
     def setDistance(self, newDistance):
         self.distance += newDistance
     def getDistance(self):
@@ -77,13 +78,14 @@ class speedometer:
 
 def hallSensorCallbackForwardSpeedometer(channel):
     global speedometerOne
-    #currentPinState = GPIO.input(speedometerOne.hallForward.pin)
+    currentPinState = GPIO.input(speedometerOne.hallForward.pin)
     #print("Pinstate:", currentPinState)
-    print("Count++")
-    speedometerOne.addToCount()
-    speedometerOne.hallForward.timeSensor = time.time()
-    speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
-    speedometerOne.hallForward.setPinState()
+    if speedometerOne.hallForward.getNextPinState() == currentPinState:
+        speedometerOne.hallForward.timeSensor = time.time()
+        speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallForward.pin)
+        speedometerOne.hallForward.setPinState()
+        print("Count++")
+        speedometerOne.addToCount()
 
 
 def hallSensorCallbackBackSpeedometer(channel):

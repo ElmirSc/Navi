@@ -3,6 +3,7 @@ class hallSensor:
         self.pin = gpioNumber
         self.timeSensor = 0
         self.pinState = 1
+        self.nextPinState = 1
 
     def getTimeSensor(self):
         return self.timeSensor
@@ -17,7 +18,20 @@ class hallSensor:
         self.timeSensor = time
 
     def setPinState(self):
-        self.pinState *= -1
+        if self.pinState == 1:
+            self.pinState = 0
+            self.nextPinState = 1
+        else:
+            self.pinState = 1
+            self.nextPinState = 0
+
 
     def initPinState(self,state):
         self.pinState = state
+        if self.pinState == 1:
+            self.nextPinState = 0
+        else:
+            self.nextPinState = 1
+
+    def getNextPinState(self):
+        return self.nextPinState

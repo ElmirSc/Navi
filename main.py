@@ -1,8 +1,11 @@
-#from Navigation.Navigation import navigation
-import RPi.GPIO as GPIO
 import sys
-
 sys.path.append('/Navigation/Navigation.py')
+
+from Navigation.Navigation import navigation
+import RPi.GPIO as GPIO
+
+
+
 
 if __name__ == "__main__":
     navigation = navigation()

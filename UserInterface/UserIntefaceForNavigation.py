@@ -38,13 +38,13 @@ for i in range(3):
                 #frame = tk.Frame(root, width=800, height=500, bg="lightgreen")
                 frame.grid(row=i, column=j, columnspan=5)
 
-imageSign = Image.open("stopSign.png")
+imageSign = Image.open("../TrafficSigns/stopSign.png")
 resizedImageSign = imageSign.resize((30,30))
 imageTkSign = ImageTk.PhotoImage(resizedImageSign)
 imSign = tk.Label(root,image=imageTkSign,bg="lightgreen")
 imSign.grid(row=0,column=4,sticky="")
 
-image = Image.open("street.jpg")
+image = Image.open("../street.jpg")
 
 # Erstellen Sie ein Zeichen-Objekt
 draw = ImageDraw.Draw(image)
@@ -64,7 +64,7 @@ for x in range(point_coordinates[0] - point_size, point_coordinates[0] + point_s
         draw.point((x, y), fill=(255, 0, 0))  # Roter Punkt
 # Speichern Sie das bearbeitete Bild
 image.save('map_with_route.jpg')
-image = Image.open("map_with_route.jpg")
+image = Image.open("../map_with_route.jpg")
 
 resizedImage = image.resize((800,500))
 imageTk = ImageTk.PhotoImage(resizedImage)

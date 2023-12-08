@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
-import numpy as np
-
-from routingConfig import *
+from Routing.routingConfig import *
 
 def dijkstra(startNode, endNode, costType):
     permanent_nodes = []        #Array für die Permanent gesetzten Knoten

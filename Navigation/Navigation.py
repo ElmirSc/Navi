@@ -1,6 +1,6 @@
-from positioningSystem import positioningSystem
-from UserIntefaceForNavigation import userInterface
-from routing import dijkstra
+from PositioningSystem.positioningSystem import positioningSystem
+from UserInterface.UserIntefaceForNavigation import userInterface
+from Routing.routing import dijkstra
 from configNavigation import *
 
 class navigation:

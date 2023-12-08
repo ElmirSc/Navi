@@ -1,8 +1,5 @@
-import os
-
 import RPi.GPIO as GPIO
 import time
-from hallSensor import hallSensor
 
 hallSensorForward = 17
 hallSensorBack = 27

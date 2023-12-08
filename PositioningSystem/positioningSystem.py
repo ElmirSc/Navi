@@ -1,4 +1,4 @@
-from speedometer import speedometer
+from PositioningSystem.speedometer import speedometer
 from gyroskop import gyro
 
 class positioningSystem:

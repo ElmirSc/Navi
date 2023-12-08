@@ -52,6 +52,7 @@ class speedometer:
         print("Start Werte Backhall:", self.hallBack.getPinState())
         self.changeEdgeEventSpeedometer(self.hallForward.getPinNumber())
         self.changeEdgeEventSpeedometer(self.hallBack.getPinNumber())
+        self.setDefaultDirection()
 
     def changeEdgeEventSpeedometer(self, pin):
         GPIO.remove_event_detect(pin)
@@ -74,13 +75,16 @@ class speedometer:
 
     def printStats(self):
         print("Current Speed:", self.speed)
-        print("Current km:", self.distance)
+        print("Driven Meters:", self.distance)
 
     def getStartBool(self):
         return self.startBool
 
     def setStartBoolToTrue(self):
         self.startBool = True
+
+    def setDefaultDirection(self):
+        self.direction = 1
 
 
 def hallSensorCallbackForwardSpeedometer(channel):
@@ -110,7 +114,7 @@ try:
     while True:
         speedometerOne.setCount()
         time.sleep(1)
-        speedometerOne.checkDirectionTire()
+        #speedometerOne.checkDirectionTire()
         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
         speedometerOne.setDistance(currenDistance)
         speedometerOne.setSpeed(currenDistance * 3.6 * speedometerOne.direction)

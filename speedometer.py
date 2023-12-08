@@ -46,8 +46,8 @@ class speedometer:
 
         self.hallForward.initPinState(GPIO.input(self.hallForward.getPinNumber()))
         self.hallBack.initPinState(GPIO.input(self.hallBack.getPinNumber()))
-        print("Start Werte Vorwaertshall:", self.hallForward.getPinState())
-        print("Start Werte Backhall:", self.hallBack.getPinState())
+        #print("Start Werte Vorwaertshall:", self.hallForward.getPinState())
+        #print("Start Werte Backhall:", self.hallBack.getPinState())
         self.changeEdgeEventSpeedometer(self.hallForward.getPinNumber())
         self.changeEdgeEventSpeedometer(self.hallBack.getPinNumber())
 
@@ -71,7 +71,7 @@ class speedometer:
             self.direction = -1
 
     def printStats(self):
-        print("Current Speed:", self.speed)
+        #print("Current Speed:", self.speed)
         print("Current km:", self.distance)
 
 
@@ -101,8 +101,8 @@ try:
     while True:
         speedometerOne.setCount()
         time.sleep(1)
-        print("Pin Forward:", GPIO.input(17))
-        print("Pin Back:", GPIO.input(27))
+        #print("Pin Forward:", GPIO.input(17))
+        #print("Pin Back:", GPIO.input(27))
         print(speedometerOne.getCount())
         speedometerOne.checkDirectionTire()
         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))

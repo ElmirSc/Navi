@@ -104,7 +104,7 @@ try:
     while True:
         speedometerOne.setCount()
         time.sleep(1)
-        #print("Pin Forward:", GPIO.input(17))
+        print("Pin Forward:", GPIO.input(17))
         #print("Pin Back:", GPIO.input(27))
         print(speedometerOne.getCount())
         speedometerOne.checkDirectionTire()

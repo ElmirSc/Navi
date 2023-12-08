@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Navigation/Navigation.py')
 
-from Navigation.Navigation import navigation
+..from Navigation.Navigation import navigation
 import RPi.GPIO as GPIO
 
 

@@ -48,8 +48,8 @@ class speedometer:
 
         self.hallForward.initPinState(GPIO.input(self.hallForward.getPinNumber()))
         self.hallBack.initPinState(GPIO.input(self.hallBack.getPinNumber()))
-        print("Start Werte Vorwaertshall:", self.hallForward.getPinState())
-        print("Start Werte Backhall:", self.hallBack.getPinState())
+        #print("Start Werte Vorwaertshall:", self.hallForward.getPinState())
+        #print("Start Werte Backhall:", self.hallBack.getPinState())
         self.changeEdgeEventSpeedometer(self.hallForward.getPinNumber())
         self.changeEdgeEventSpeedometer(self.hallBack.getPinNumber())
         self.setDefaultDirection()

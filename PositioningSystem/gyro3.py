@@ -1,7 +1,6 @@
 import smbus
 import time
 
-# MPU6050-Register für Beschleunigungswerte
 ACCEL_XOUT_H = 0x3B
 ACCEL_XOUT_L = 0x3C
 ACCEL_YOUT_H = 0x3D

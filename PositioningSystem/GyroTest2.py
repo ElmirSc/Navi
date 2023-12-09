@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import smbus
+from time import sleep
 
 # Setup GPIO pins
 GPIO.setmode(GPIO.BCM)
@@ -92,3 +93,4 @@ while True:
     print("Gyro_X:", Gx)
     print("Gyro_Y:", Gy)
     print("Gyro_Z:", Gz)
+    sleep(0.08)

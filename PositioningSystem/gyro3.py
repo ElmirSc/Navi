@@ -14,8 +14,8 @@ bus = smbus.SMBus(1)  # Abhängig von der Raspberry Pi Version: 0 für Revision 
 
 
 def read_word(reg):
-    high = bus.read_byte_data(MPU6050_ADDR, reg)
-    low = bus.read_byte_data(MPU6050_ADDR, reg + 1)
+    high = bus.read_byte_data(0x68, reg)
+    low = bus.read_byte_data(0x68, reg + 1)
     value = (high << 8) + low
     return value
 

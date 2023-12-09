@@ -37,7 +37,7 @@ def read_acceleration_data():
 
 
 try:
-    initial_time = time.time()  # Startzeit für Zeitmessung
+    initial_time = time.time()  # Startzeit fuer Zeitmessung
     initial_velocity_x = 0  # Anfangsgeschwindigkeit für x-Achse
 
     while True:

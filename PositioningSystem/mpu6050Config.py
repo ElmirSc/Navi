@@ -11,17 +11,15 @@ GyroRange500DEG = 0x08
 GyroRange1000DEG = 0x10
 GyroRange2000DEG = 0x18
 
-FILTER_BW_256 = 0x00
-FILTER_BW_188 = 0x01
-FILTER_BW_98 = 0x02
-FILTER_BW_42 = 0x03
-FILTER_BW_20 = 0x04
-FILTER_BW_10 = 0x05
-FILTER_BW_5 = 0x06
+Filter256 = 0x00
+Filter188 = 0x01
+Filter98 = 0x02
+Filter42 = 0x03
+Filter20 = 0x04
+Filter10 = 0x05
+Filter5 = 0x06
 
-# MPU-6050 Registers
-PWR_MGMT_1 = 0x6B
-PWR_MGMT_2 = 0x6C
+PWRMGMT = 0x6B
 
 TemperautreOutReg = 0x41
 

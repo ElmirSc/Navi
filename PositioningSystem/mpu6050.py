@@ -6,7 +6,7 @@ class mpu6050:
     def __init__(self, gyroRange = 250):
         self.mpu6050Adress = mpu6050Address
         self.bus = smbus.SMBus(smbusPort)
-        self.bus.write_byte_data(self.mpu6050Adress,PWR_MGMT_1, 0x00) # Wake up MPU-6050
+        self.bus.write_byte_data(self.mpu6050Adress,PWRMGMT, 0x00) # Wake up MPU-6050
         self.gyroRange = gyroRange
 
     def readFromBus(self, register):
@@ -61,6 +61,25 @@ class mpu6050:
 
         return gyroZ
 
-    def setFilterRange(self, filter_range=FILTER_BW_256):
+    def setFilterRange(self, filterRange):
         EXT = self.bus.read_byte_data(self.mpu6050Adress, MPUConfig) & 0b00111000 # save current Filter Range
-        return self.bus.write_byte_data(self.mpu6050Adress, MPUConfig,  EXT | filter_range)
+        filterSetRange = 0
+        match filterRange:
+            case 256:
+                filterSetRange = Filter256
+            case 188:
+                filterSetRange = Filter188
+            case 98:
+                filterSetRange = Filter98
+            case 42:
+                filterSetRange = Filter42
+            case 20:
+                filterSetRange = Filter20
+            case 10:
+                filterSetRange = Filter10
+            case 5:
+                filterSetRange = Filter5
+            case _:
+                print("Parameter has wrong Filter Range!")
+
+        return self.bus.write_byte_data(self.mpu6050Adress, MPUConfig,  EXT | filterSetRange)

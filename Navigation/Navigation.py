@@ -8,5 +8,5 @@ class navigation:
         self.ui = userInterface()
         self.positioningSystem = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
 
-    def getRouteFromAlgorithm(self):
-        return dijkstra(1, 10, 1)  # Routen und Kosten berrechnung
+    def getRouteFromAlgorithm(self, startNode, endNode):
+        return dijkstra(startNode, endNode, 1)  # Routen und Kosten berrechnung

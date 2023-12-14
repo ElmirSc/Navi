@@ -1,15 +1,16 @@
-from .Navigation.Navigation import navigation
+from Navigation.Navigation import navigation
 import RPi.GPIO as GPIO
 
 
 
 
 if __name__ == "__main__":
-    navigation = navigation()
+    #navigation = navigation()
     try:
-        while True:
-            print("Geschwindigkeit des Fahrzeugs: ",navigation.positioningSystem.speedometer.getSpeed(),"km/h")
-            print("Gefahrene Distanz: ", navigation.positioningSystem.speedometer.getDistance(),"m")
+        #while True:
+            #print("Geschwindigkeit des Fahrzeugs: ",navigation.positioningSystem.speedometer.getSpeed(),"km/h")
+            #print("Gefahrene Distanz: ", navigation.positioningSystem.speedometer.getDistance(),"m")
+        print("hello")
 
     except KeyboardInterrupt:
         GPIO.cleanup()

@@ -47,8 +47,8 @@ def dijkstra(startNode, endNode, costType):
     #    datei.write("Startnode: " + str(startNode) + "\tEndnode: " + str(endNode) + "\tTime[h]: " + str(cost) + "\tRange[km]" + str(range) + '\n')
 
     route = getRoute(l_j,p_j,startNode,endNode)     #Route von Start bis Ende berrechnen
-
-    return route, range
+    drivingInstructions = getDrivingInstructions(route)
+    return route, range, drivingInstructions
 
 
 def getRange(arc):          #Range rausfiltern
@@ -161,3 +161,32 @@ def getIndexOfNodeInNodeList(node):             #Index für Knoten in Liste filt
             return i
     print("No Node found!!!!")
     return 0
+
+def getDrivingInstructions(route):
+    global drivingInstructions
+    drivingInstructionsFromRoute = []
+    previousNode = 0
+    currentNode = 0
+    nextNode = 0
+    for i in range(len(route)-1):
+        if i == 0:
+            previousNode = route[i]
+            currentNode = route[i]
+        else:
+            previousNode = route[i-1]
+            currentNode = route[i]
+        nextNode = route[i+1]
+        drivingInstructionsFromRoute.append(findDrivingInstructionInFile(previousNode,currentNode,nextNode))
+    return drivingInstructionsFromRoute
+
+def findDrivingInstructionInFile(previousNode,currentNode,nextNode):
+    global drivingInstructions
+    instruction = 0
+    for i in range(len(drivingInstructions)):
+        foundPreviousNode = int(drivingInstructions[i][0])
+        foundCurrentNode = int(drivingInstructions[i][1])
+        foundNextNode = int(drivingInstructions[i][2])
+        if foundPreviousNode == previousNode and foundCurrentNode == currentNode and foundNextNode == nextNode:
+            instruction = drivingInstructions[i][3]
+            break
+    return instruction

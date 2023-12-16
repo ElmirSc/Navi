@@ -22,6 +22,7 @@ class userInterface:
         self.dist = 0
         self.tkinterImage = 0
         self.endedProgramm = False
+        self.button = 0
 
     def initUI(self):
         print("init Gui started")
@@ -64,8 +65,8 @@ class userInterface:
         self.tkinterInstruction = self.tk.Label(self.root, text=str(self.instruction), bg="lightgreen", foreground="black", width=30, height=1)
         self.tkinterInstruction.grid(row=1, column=0, sticky="w")
 
-        button = self.tk.Button(self.root, text="Start",command=self.startButtonPressed)
-        button.grid(row=1, column=1, sticky="")
+        self.button = self.tk.Button(self.root, text="Start",command=self.startButtonPressed)
+        self.button.grid(row=1, column=1, sticky="")
 
         entry = self.tk.Entry(self.root)
         self.entry = entry
@@ -114,19 +115,30 @@ class userInterface:
         self.tkinterImage.config(image=imageTk)
         self.tkinterImage.image = imageTk
 
-    def updateUi(self):
+    def updateUiToStartAgain(self):
+        self.button.config(text="Start", command=self.startButtonPressed)
+        image = Image.open("../UserInterface/street.png")
+        resizedImage = image.resize((800, 500))
+        imageTk = ImageTk.PhotoImage(resizedImage)
+        self.tkinterImage.config(image=imageTk)
+        self.tkinterImage.image = imageTk
+        self.instruction = instructionStartPoint
+        self.updateInstructionInGUI()
+        self.userInputIsReady = False
+        self.setDistance(0)
         return
 
     def get_input(self,event):
-        user_input = self.entry.get()  # Hole die Eingabe aus dem Entry-Widget
+        userInput = self.entry.get()  # Hole die Eingabe aus dem Entry-Widget
+        print(userInput)
         if self.instruction == instructionStartPoint:
             self.instruction = instructionEndPoint
-            self.startPoint = user_input
+            self.startPoint = self.getDrivingPointFromInputAndConvertItToANumber(userInput)
         elif self.instruction == instructionEndPoint:
-            self.endPoint = user_input
+            self.endPoint = self.getDrivingPointFromInputAndConvertItToANumber(userInput)
             self.instruction = instructionWaitForStartButton
         else:
-            print("Benutzereingabe passt nicht:", user_input)
+            print("Benutzereingabe passt nicht:", userInput)
         self.updateInstructionInGUI()
         self.entry.delete(0,self.tk.END)
 
@@ -154,10 +166,53 @@ class userInterface:
         #self.dist = dist
         self.tkinterCurrentDrivenDistance.config(text="Distance: " + str(dist) + " m")
 
+    def updateButton(self):
+        if self.instruction == instructionDrive:
+            self.button.config(text="End",command=self.endButtonPressed)
+        elif self.instruction == instructionEndDriving:
+            self.updateUiToStartAgain()
+
+
     def startButtonPressed(self):
         self.userInputIsReady = True
         self.instruction = instructionDrive
         self.updateInstructionInGUI()
+        self.updateButton()
+
+    def endButtonPressed(self):
+        #self.userInputIsReady = True
+        self.instruction = instructionEndDriving
+        self.updateInstructionInGUI()
+        self.updateButton()
+
+    def getDrivingPointFromInputAndConvertItToANumber(self, input):
+        numb = 0
+        match input.lower():
+            case "a":
+                numb = 1
+            case "b":
+                numb = 2
+            case "c":
+                numb = 3
+            case "d":
+                numb = 4
+            case "e":
+                numb = 5
+            case "f":
+                numb = 6
+            case "g":
+                numb = 7
+            case "h":
+                numb = 8
+            case "i":
+                numb = 9
+            case "j":
+                numb = 10
+            case "k":
+                numb = 11
+            case "l":
+                numb = 12
+        return numb
 
 
 if __name__ == "__main__":

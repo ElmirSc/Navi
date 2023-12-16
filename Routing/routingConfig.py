@@ -6,6 +6,8 @@ node_list = np.loadtxt("../Routing/nodelist.txt").astype(int)     #laden der nod
 arc_list = np.loadtxt("../Routing/arclist.txt")               #laden der arc_list.txt
 node_coordinates_x = []       #array für die longitude Werte
 node_coordinates_y = []       #array für die latitude Werte
+drivingInstructions = np.loadtxt("../Routing/drivingInstructionsConfig.txt",dtype='str')      #Instruktionen welche richtungen eingeschlagen werden müssen
+
 #for cord in node_coordinates:            # abspeichern der lon und lat Werte
  #node_coordinates_x.append(cord[0])
  #node_coordinates_y.append(cord[1])

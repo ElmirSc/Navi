@@ -41,6 +41,7 @@ class navigation:
     def initNavigation(self):
         self.threadOne = Thread(target=self.startApplication)
         self.threadOne.start()
+        self.threadOne.lock()
         self.startUI()
 
     def startApplication(self):
@@ -49,15 +50,16 @@ class navigation:
                 if self.ui.getClosedProgramBool():
                     self.threadOne._stop()
                     self.threadOne.join()
+                elif not self.ui.userInputIsReady:
+                    self.state = beforNavigationState
                 match self.state:
                     case 1:
                         if self.ui.getIfUserInputIsReady():
                             self.state = afterInputState
-                        else:
-                            print("waiting for user input")
                     case 2:
                         print("calculating Route")
-                        route, cost = self.getRouteFromAlgorithm(self.ui.getStartPointForNavigation(), self.ui.getEndPointForNavigation())
+                        route, cost, drivingInstructions = self.getRouteFromAlgorithm(self.ui.getStartPointForNavigation(), self.ui.getEndPointForNavigation())
+                        print(drivingInstructions)
                         self.state = routingState
                         self.routingCost = cost
                         #self.routingCost = self.calcRealRangeFromCost(cost)
@@ -67,13 +69,15 @@ class navigation:
                         #if self.routingCost == self.positioningSystem.getDrivenDistanceFromSpeedometer():
                         #    self.state = drivingState
                         #else:
-                        print("waitingForStart")
+                        if 1 == 0:
+                            print("waitingForStart")
                     case 4:
                         print("finished driving")
                         self.state = drivingEndState
                     case 5:
                         print("next ride?")
                         self.state = beforNavigationState
+                        self.ui.updateUiToStartAgain()
 
                 # print("Geschwindigkeit des Fahrzeugs: ",navigation.positioningSystem.speedometer.getSpeed(),"km/h")
                 # print("Gefahrene Distanz: ", navigation.positioningSystem.speedometer.getDistance(),"m")

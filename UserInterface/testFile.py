@@ -1,16 +1,29 @@
 import tkinter as tk
 from PIL import Image,ImageTk, ImageDraw
+import cv2
+import numpy as np
+from Routing.routing import dijkstra
 
 speed = 10
 dist = 10
 
 if __name__ == "__main__":
-
+    img = cv2.imread("street.png", cv2.COLOR_BGR2GRAY)
+    nodeCoordsInMap = np.loadtxt("nodeCordOnMap.txt").astype(int)
+    route, cost = dijkstra(2,11,1)
+    for i in range(len(route)):
+        if i+1 < len(route):
+            first = route[i]-1
+            next = route[i+1]-1
+            cv2.line(img, (nodeCoordsInMap[first][0], nodeCoordsInMap[first][1]), (nodeCoordsInMap[next][0], nodeCoordsInMap[next][1]), (0, 0, 255), 1)
+    img = cv2.resize(img, (1000, 700))
+    cv2.imwrite("map_with_route.png",img)
+    #cv2.imshow("test", img)
     # Erstelle ein Hauptfenster
     root = tk.Tk()
     # Setze die Fenstergröße auf 800x600 Pixel
-    root.geometry("1000x530")
-    root.maxsize(800, 700)
+    root.geometry("1000x750")
+    root.maxsize(2000, 2000)
     # Ändern Sie die Hintergrundfarbe auf hellgrün
     root.configure(bg="#45BD6A")
     root.title("Navigation")
@@ -26,6 +39,8 @@ if __name__ == "__main__":
     root.rowconfigure(0,weight=5)
     root.rowconfigure(1,weight=2)
 
+
+    #wichtig um die zellen zu formatieren
     for i in range(2):
         for j in range(5):
             if i != 0:
@@ -35,7 +50,7 @@ if __name__ == "__main__":
             else:
                 if j == 0 and i == 0:
                     #frame = tk.Frame(root, borderwidth=1, relief="solid", width=800, height=500,bg="lightgreen")
-                    frame = tk.Frame(root, width=1000, height=500, bg="lightgreen")
+                    frame = tk.Frame(root, width=1000, height=700, bg="lightgreen")
                     frame.grid(row=i, column=j, columnspan=5)
 
     #imageSign = Image.open("../TrafficSigns/stopSign.png")
@@ -44,38 +59,20 @@ if __name__ == "__main__":
     #imSign = tk.Label(root,image=imageTkSign,bg="lightgreen")
     #imSign.grid(row=0,column=4,sticky="")
     #img = cv2.imread("street.png")
-    image = Image.open("street.png")
 
-    # Erstellen Sie ein Zeichen-Objekt
-    draw = ImageDraw.Draw(image)
-    # Definieren Sie Ihre Route als Liste von Koordinaten (x, y)
-    route = [(40,0),(100, 200), (100, 300), (100, 400)]  # Beispielkoordinaten
-    # Zeichnen Sie die Route als Linien
-    draw.line(route, fill=(255, 0, 0), width=3)  # Rote Linienbreite 3
-    # Definieren Sie die Koordinaten des Punktes (x, y)
-    point_coordinates = (100, 200)  # Beispielkoordinaten
-
-    # Größe des Punkts
-    point_size = 2
-
-    # Zeichnen Sie einen größeren Punkt
-    for x in range(point_coordinates[0] - point_size, point_coordinates[0] + point_size + 1):
-        for y in range(point_coordinates[1] - point_size, point_coordinates[1] + point_size + 1):
-            draw.point((x, y), fill=(255, 0, 0))  # Roter Punkt
-    # Speichern Sie das bearbeitete Bild
-    image.save('map_with_route.png')
+    #image.save('map_with_route.png')
     image = Image.open("map_with_route.png")
     #image = Image.open("street.png")
-
-    resizedImage = image.resize((800,500))
-    imageTk = ImageTk.PhotoImage(resizedImage)
+    #image = img
+    resizedImage = image.resize((700,540))
+    imageTk = ImageTk.PhotoImage(image)
     im = tk.Label(root,image=imageTk,bg="lightgreen")
     im.grid(row=0,column=0,columnspan=5,sticky="")
 
 
 
 
-    currentInstruction = tk.Label(root, text="Bitte wähle Startpunkt",bg="lightgreen", foreground = "black", width=30,height=1)
+    currentInstruction = tk.Label(root, text="Bitte wähle Startpunkt",bg="lightgreen", foreground = "black", width=20,height=1)
     currentInstruction.grid(row=1, column=0,sticky="w")
 
     button = tk.Button(root, text="Start")

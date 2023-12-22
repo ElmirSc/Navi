@@ -1,7 +1,7 @@
 #from PositioningSystem.positioningSystem import positioningSystem
 from UserInterface.UserIntefaceForNavigation import userInterface
 from Routing.routing import dijkstra
-from configNavigation import *
+from Navigation.configNavigation import *
 from threading import Thread
 
 class navigation:
@@ -41,15 +41,14 @@ class navigation:
     def initNavigation(self):
         self.threadOne = Thread(target=self.startApplication)
         self.threadOne.start()
-        self.threadOne.lock()
         self.startUI()
+        self.threadOne.join()
 
     def startApplication(self):
         try:
             while True:
                 if self.ui.getClosedProgramBool():
-                    self.threadOne._stop()
-                    self.threadOne.join()
+                    break
                 elif not self.ui.userInputIsReady:
                     self.state = beforNavigationState
                 match self.state:
@@ -81,7 +80,6 @@ class navigation:
 
                 # print("Geschwindigkeit des Fahrzeugs: ",navigation.positioningSystem.speedometer.getSpeed(),"km/h")
                 # print("Gefahrene Distanz: ", navigation.positioningSystem.speedometer.getDistance(),"m")
-            print("hello")
 
         except KeyboardInterrupt:
             GPIO.cleanup()

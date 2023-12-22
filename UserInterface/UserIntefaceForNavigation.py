@@ -56,7 +56,7 @@ class userInterface:
                         frame = self.tk.Frame(self.root, width=1000, height=500, bg="lightgreen")
                         frame.grid(row=i, column=j, columnspan=5)
 
-        image = Image.open("../UserInterface/street.png")
+        image = Image.open("UserInterface/street.png")
         resizedImage = image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resizedImage)
         self.tkinterImage = self.tk.Label(self.root, image=imageTk, bg="lightgreen")
@@ -98,8 +98,8 @@ class userInterface:
 
     def drawRouteInMap(self,routeCcoords):
         print("drawRoute")
-        img = cv2.imread("../UserInterface/street.PNG", cv2.COLOR_BGR2GRAY)
-        nodeCoordsInMap = np.loadtxt("../UserInterface/nodeCordOnMap.txt").astype(int)
+        img = cv2.imread("UserInterface/street.PNG", cv2.COLOR_BGR2GRAY)
+        nodeCoordsInMap = np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
         for i in range(len(routeCcoords)):
             if i + 1 < len(routeCcoords):
                 first = routeCcoords[i] - 1
@@ -107,9 +107,9 @@ class userInterface:
                 cv2.line(img, (nodeCoordsInMap[first][0], nodeCoordsInMap[first][1]),
                          (nodeCoordsInMap[next][0], nodeCoordsInMap[next][1]), (0, 0, 255), 1)
         #cv2.imshow("test", img)
-        cv2.imwrite("../UserInterface/map_with_route.png", img)
+        cv2.imwrite("UserInterface/map_with_route.png", img)
         # Bild in das Tkinter Label laden und aktualisieren
-        updated_image = Image.open("../UserInterface/map_with_route.png")
+        updated_image = Image.open("UserInterface/map_with_route.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
         self.tkinterImage.config(image=imageTk)
@@ -117,7 +117,7 @@ class userInterface:
 
     def updateUiToStartAgain(self):
         self.button.config(text="Start", command=self.startButtonPressed)
-        image = Image.open("../UserInterface/street.png")
+        image = Image.open("UserInterface/street.png")
         resizedImage = image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resizedImage)
         self.tkinterImage.config(image=imageTk)

@@ -11,6 +11,6 @@ routingState = 3
 drivingState = 4
 drivingEndState = 5
 
-nodeCoordsInMap = np.loadtxt("nodeCordOnMap.txt")
+nodeCoordsInMap = np.loadtxt("Navigation/nodeCordOnMap.txt")
 
 

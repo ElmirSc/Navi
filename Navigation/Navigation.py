@@ -64,6 +64,7 @@ class navigation:
                         #self.routingCost = self.calcRealRangeFromCost(cost)
                         self.ui.setDistance(cost)
                         self.ui.drawRouteInMap(route)
+                        print(self.ui.getDrivingInstructionsFromRoute(route))
                     case 3:
                         #if self.routingCost == self.positioningSystem.getDrivenDistanceFromSpeedometer():
                         #    self.state = drivingState

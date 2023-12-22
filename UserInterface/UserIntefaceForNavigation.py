@@ -96,10 +96,13 @@ class userInterface:
     def getClosedProgramBool(self):
         return self.endedProgramm
 
+    def loadNodeCoords(self):
+        return np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
+
     def drawRouteInMap(self,routeCcoords):
         print("drawRoute")
         img = cv2.imread("UserInterface/street.PNG", cv2.COLOR_BGR2GRAY)
-        nodeCoordsInMap = np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
+        nodeCoordsInMap = self.loadNodeCoords()
         for i in range(len(routeCcoords)):
             if i + 1 < len(routeCcoords):
                 first = routeCcoords[i] - 1
@@ -184,6 +187,48 @@ class userInterface:
         self.instruction = instructionEndDriving
         self.updateInstructionInGUI()
         self.updateButton()
+
+    def getDrivingInstructionsFromRoute(self,route):
+        drivingInstructions = []
+        nodeCoordsInMap = self.loadNodeCoords()
+        current = 0
+        prev = 0
+        next = 0
+        for i in range(0,len(route)):
+            if i + 1 < len(route):
+                if i == 0:
+                    prev = route[i] - 1
+                else:
+                    prev = current
+                current = route[i] - 1
+                next = route[i + 1] - 1
+                drivingInstructions.append(self.calcInstruction(nodeCoordsInMap[prev],nodeCoordsInMap[current], nodeCoordsInMap[next]))
+        return drivingInstructions
+
+    def calcInstruction(self,prev,cur,next):
+        vertical = False
+        horizontal = False
+
+        if cur[0] == next[0] == prev[0] or cur[1] == next[1] == prev[1]:
+            return "g"
+
+        if prev[0] == cur[0]:
+            vertical = True
+        elif prev[1] == cur[1]:
+            horizontal = True
+
+        if vertical:
+            if next[0] < cur[0]:
+                return "l"
+            elif next[0] > cur[0]:
+                return "r"
+        elif horizontal:
+            if next[1] < cur[1]:
+                return "l"
+            elif next[1] > cur[1]:
+                return "r"
+
+        return 0
 
     def getDrivingPointFromInputAndConvertItToANumber(self, input):
         numb = 0

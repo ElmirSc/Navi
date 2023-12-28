@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
 
 
-    currentInstruction = tk.Label(root, text="Bitte wähle Startpunkt",bg="lightgreen", foreground = "black", width=20,height=1)
+    currentInstruction = tk.Label(root, text="Bitte waehle Startpunkt",bg="lightgreen", foreground = "black", width=20,height=1)
     currentInstruction.grid(row=1, column=0,sticky="w")
 
     button = tk.Button(root, text="Start")

@@ -30,15 +30,15 @@ class mpu6050:
         # First change it to 0x00 to make sure we write the correct value later
         self.bus.write_byte_data(self.mpu6050Adress, GyroConfig, 0x00)
         gyroSetRange = 0
-        match gyroRange:
-            case 250:
-                gyroSetRange = GyroRange250DEG
-            case 500:
-                gyroSetRange = GyroRange500DEG
-            case 1000:
-                gyroSetRange = GyroRange1000DEG
-            case 2000:
-                gyroSetRange = GyroRange2000DEG
+        if gyroRange == 250:
+            gyroSetRange = GyroRange250DEG
+        elif gyroRange == 500:
+            gyroSetRange = GyroRange500DEG
+        elif gyroRange == 1000:
+            gyroSetRange = GyroRange1000DEG
+        elif gyroRange == 2000:
+            gyroSetRange = GyroRange2000DEG
+
 
         self.bus.write_byte_data(self.mpu6050Adress, GyroConfig, gyroSetRange) # Write new range to register
 
@@ -46,16 +46,14 @@ class mpu6050:
         gyroZ = self.readFromBus(GyroZ)
         gyroScale = 0
 
-        match self.gyroRange:
-            case 250:
-                gyroScale = GyroScale250DEG
-            case 500:
-                gyroScale = GyroScale500DEG
-            case 1000:
-                gyroScale = GyroScale1000DEG
-            case 2000:
-                gyroScale = GyroScale2000DEG
-
+        if self.gyroRange == 250:
+            gyroScale = GyroScale250DEG
+        elif self.gyroRange == 500:
+            gyroScale = GyroScale500DEG
+        elif self.gyroRange == 1000:
+            gyroScale = GyroScale1000DEG
+        elif self.gyroRange == 2000:
+            gyroScale = GyroScale2000DEG
 
         gyroZ = gyroZ / gyroScale
 
@@ -64,22 +62,22 @@ class mpu6050:
     def setFilterRange(self, filterRange):
         EXT = self.bus.read_byte_data(self.mpu6050Adress, MPUConfig) & 0b00111000 # save current Filter Range
         filterSetRange = 0
-        match filterRange:
-            case 256:
-                filterSetRange = Filter256
-            case 188:
-                filterSetRange = Filter188
-            case 98:
-                filterSetRange = Filter98
-            case 42:
-                filterSetRange = Filter42
-            case 20:
-                filterSetRange = Filter20
-            case 10:
-                filterSetRange = Filter10
-            case 5:
-                filterSetRange = Filter5
-            case _:
-                print("Parameter has wrong Filter Range!")
+
+        if filterRange == 256:
+            filterSetRange = Filter256
+        elif filterRange == 188:
+            filterSetRange = Filter188
+        elif filterRange == 98:
+            filterSetRange = Filter98
+        elif filterRange == 42:
+            filterSetRange = Filter42
+        elif filterRange == 20:
+            filterSetRange = Filter20
+        elif filterRange == 10:
+            filterSetRange = Filter10
+        elif filterRange == 5:
+            filterSetRange = Filter5
+        else:
+            print("Parameter has wrong Filter Range!")
 
         return self.bus.write_byte_data(self.mpu6050Adress, MPUConfig,  EXT | filterSetRange)

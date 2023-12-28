@@ -1,5 +1,5 @@
 import socket
-class Client:
+class client:
     def __init__(self):
         self.host = '172.20.10.5'
         self.port = 5555

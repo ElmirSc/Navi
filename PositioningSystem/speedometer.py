@@ -101,7 +101,7 @@ def hallSensorCallbackForwardSpeedometer(channel):
 
 
 def hallSensorCallbackBackSpeedometer(channel):
-    global speedometerOne
+    global pos_system
     currentPinState = GPIO.input(speedometerOne.hallBack.pin)
     if speedometerOne.hallBack.getNextPinState() == currentPinState:
         speedometerOne.hallBack.timeSensor = time.time()

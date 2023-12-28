@@ -31,7 +31,8 @@ class positioningSystem:
 
         return orientation
 
-    def init_client(self):
+    def init(self):
+        self.speedometer.initSpeedometer()
         self.client.create_socket()
 
     def getSpeedFromSpeedometer(self):

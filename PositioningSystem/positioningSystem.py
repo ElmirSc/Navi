@@ -53,7 +53,7 @@ class positioningSystem:
 
 
 if __name__ == "__main__":
-    pos_system = positioningSystem(hallPinForward,hallPinBackward)
+    pos_system = positioningSystem(hallPinForward, hallPinBackward)
     pos_system.init()
     try:
         while True:

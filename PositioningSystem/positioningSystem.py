@@ -4,7 +4,7 @@ import RPi.GPIO as GPIO
 from speedometer import speedometer
 from mpu6050 import mpu6050
 from positionigSystemConfig import *
-from client import client
+from client import client_for_connection
 
 gyroAddress = 0x68
 hallPinForward = 17
@@ -16,7 +16,7 @@ class positioningSystem:
         self.speedometer = speedometer(hallPinForward,hallPinBackward)
         self.defaultOrientationValue = self.mpu6050.getGyroZ()
         self.defaultOrientationValueRange = self.defaultOrientationValue * 0.1
-        self.client = client.create_socket()
+        self.client = client_for_connection.create_socket()
 
     def getOrientation(self):
         orientation = None

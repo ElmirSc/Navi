@@ -11,8 +11,8 @@ hallPinForward = 17
 hallPinBackward = 27
 
 class positioningSystem:
-    def __init__(self, mpu6050Address,hallPinForward,hallPinBackward):
-        self.mpu6050 = own_mpu6050(mpu6050Address,gyroRange=250)
+    def __init__(self,hallPinForward,hallPinBackward):
+        self.mpu6050 = own_mpu6050(gyroRange=250)
         self.speedometer = speedometer(hallPinForward,hallPinBackward)
         self.defaultOrientationValue = self.mpu6050.getGyroZ()
         self.defaultOrientationValueRange = self.defaultOrientationValue * 0.1
@@ -45,7 +45,7 @@ class positioningSystem:
 
 
 if __name__ == "__main__":
-    pos_system = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
+    pos_system = positioningSystem(hallPinForward,hallPinBackward)
     try:
         while True:
             pos_system.send_speed_distance_rotation_to_server()

@@ -54,7 +54,7 @@ class navigation:
     def startApplication(self):
         try:
             while True:
-                if self.ui.getClosedProgramBool():  #zum schließen des ganzen programms
+                if self.ui.getClosedProgramBool():  #zum schliessen des ganzen programms
                     break
                 elif not self.ui.userInputIsReady:  #erst wenn Input fertig ist wird state gesetzt
                     self.state = beforNavigationState

@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/root")
-
+import RPi.GPIO as GPIO
 from speedometer import speedometer
 from PositioningSystem.mpu6050 import mpu6050
 from positionigSystemConfig import *
@@ -51,3 +51,4 @@ if __name__ == "__main__":
             pos_system.send_speed_distance_rotation_to_server()
     except KeyboardInterrupt:
         pos_system.client.close_connection()
+        GPIO.cleanup()

@@ -109,18 +109,18 @@ def hallSensorCallbackBackSpeedometer(channel):
         speedometerOne.changeEdgeEventSpeedometer(speedometerOne.hallBack.pin)
 
 
-try:
-    speedometerOne = speedometer(17, 27)
-    while True:
-        speedometerOne.setCount()
-        time.sleep(1)
-        #speedometerOne.checkDirectionTire()
-        currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
-        speedometerOne.setDistance(currenDistance)
-        speedometerOne.setSpeed(currenDistance * 3.6 * speedometerOne.direction)
-        speedometerOne.printStats()
-
-
-
-except KeyboardInterrupt:
-    GPIO.cleanup()
+# try:
+#     speedometerOne = speedometer(17, 27)
+#     while True:
+#         speedometerOne.setCount()
+#         time.sleep(1)
+#         #speedometerOne.checkDirectionTire()
+#         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
+#         speedometerOne.setDistance(currenDistance)
+#         speedometerOne.setSpeed(currenDistance * 3.6 * speedometerOne.direction)
+#         speedometerOne.printStats()
+#
+#
+#
+# except KeyboardInterrupt:
+#     GPIO.cleanup()

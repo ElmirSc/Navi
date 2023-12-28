@@ -16,7 +16,8 @@ class positioningSystem:
         self.speedometer = speedometer(hallPinForward,hallPinBackward)
         self.defaultOrientationValue = self.mpu6050.getGyroZ()
         self.defaultOrientationValueRange = self.defaultOrientationValue * 0.1
-        self.client = client.create_socket()
+        self.client = client()
+
 
     def getOrientation(self):
         orientation = None
@@ -29,6 +30,9 @@ class positioningSystem:
             orientation = noTurn
 
         return orientation
+
+    def init_client(self):
+        self.client.create_socket()
 
     def getSpeedFromSpeedometer(self):
         return self.speedometer.speed

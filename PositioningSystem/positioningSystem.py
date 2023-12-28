@@ -60,9 +60,9 @@ if __name__ == "__main__":
             pos_system.speedometer.setCount()
             time.sleep(1)
             pos_system.speedometer.checkDirectionTire()
-            currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
+            currenDistance = (pos_system.speedometer.getCount() * ((pos_system.speedometer.getWheel() * pi) / 4))
             pos_system.speedometer.setDistance(currenDistance)
-            pos_system.speedometer.setSpeed(currenDistance * 3.6 * speedometerOne.direction)
+            pos_system.speedometer.setSpeed(currenDistance * 3.6 * pos_system.speedometer.direction)
             pos_system.speedometer.printStats()
             pos_system.send_speed_distance_rotation_to_server()
     except KeyboardInterrupt:

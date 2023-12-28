@@ -30,17 +30,17 @@ class navigation:
         return self.calcRealRangeFromCost() - driven_distance
 
     def setNextState(self):
-        match self.state:
-            case 1:
-                self.state = afterInputState
-            case 2:
-                self.state = routingState
-            case 3:
-                self.state = drivingState
-            case 4:
-                self.state = drivingEndState
-            case 5:
-                self.state = beforNavigationState
+        if self.state == 1:
+            self.state = afterInputState
+        elif self.state == 2:
+            self.state = routingState
+        elif self.state == 3:
+            self.state = drivingState
+        elif self.state == 4:
+            self.state = drivingEndState
+        elif self.state == 5:
+            self.state = beforNavigationState
+
 
     def startUI(self):
         self.ui.initUI()
@@ -73,21 +73,21 @@ class navigation:
                     self.ui.position_car_on_map(0)
                     print(self.ui.getDrivingInstructionsFromRoute(route))
                 elif self.state == 3:
-                    # if self.calc_distance_to_drive(self,
-                    #                                self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
-                    #     self.state = drivingState
-                    # else:
-                    #     self.ui.setDistance(
-                    #         self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()))
-                    #     self.ui.updateSpeed(self, self.positioningSystem.getSpeedFromSpeedometer())
-                    #     self.current_node_cost = self.positioningSystem.getDrivenDistanceFromSpeedometer() * self.factor_for_real_distance - self.old_cost
-                    #     if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
-                    #         update_nodes(self.next_node, get_next_node_from_route(self, route))
-                    #         self.old_cost = self.current_node_cost
-                    #         self.current_node_cost = 0
-                    #     self.ui.update_position_of_car_on_map(self.current_node, self.next_node, 0,
-                    #                                           self.current_node_cost,
-                    #                                           self.find_next_cost_between_two_nodes())
+                    if self.calc_distance_to_drive(self,
+                                                   self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
+                        self.state = drivingState
+                    else:
+                        self.ui.setDistance(
+                            self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()))
+                        self.ui.updateSpeed(self, self.positioningSystem.getSpeedFromSpeedometer())
+                        self.current_node_cost = self.positioningSystem.getDrivenDistanceFromSpeedometer() * self.factor_for_real_distance - self.old_cost
+                        if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
+                            update_nodes(self.next_node, get_next_node_from_route(self, route))
+                            self.old_cost = self.current_node_cost
+                            self.current_node_cost = 0
+                        self.ui.update_position_of_car_on_map(self.current_node, self.next_node, 0,
+                                                              self.current_node_cost,
+                                                              self.find_next_cost_between_two_nodes())
                     if 1 == 0:
                         print("waitingForStart")
                 elif self.state == 4:

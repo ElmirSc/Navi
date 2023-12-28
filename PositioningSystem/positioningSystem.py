@@ -36,18 +36,15 @@ class positioningSystem:
         self.client.create_socket()
 
     def getSpeedFromSpeedometer(self):
-        return self.speedometer.speed
+        return self.speedometer.getSpeed()
 
     def getDrivenDistanceFromSpeedometer(self):
-        return self.speedometer.distance
+        return self.speedometer.getDistance()
 
     def send_speed_distance_rotation_to_server(self):
         speed = self.getSpeedFromSpeedometer()
-        print("Speed:",speed)
         dist = self.getSpeedFromSpeedometer()
-        print("Distance:", dist)
         orientation = self.getOrientation()
-        print("Orientation:", orientation)
         message = (str(speed)+" "+str(dist)+" "+str(orientation))
         self.client.send_message(message)
 

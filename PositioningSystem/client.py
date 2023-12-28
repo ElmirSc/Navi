@@ -11,11 +11,11 @@ class Client:
 
     def send_message(self, message):
         self.connected_client.sendall(message.encode())
-        print(f"Nachricht gesendet: {message}")
+
 
     def receive_message(self):
         data = self.connected_client.recv(1024)
-        print(f"Empfangene Daten: {data.decode()}")
+
 
     def close_connection(self):
         self.connected_client.close()

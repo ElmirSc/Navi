@@ -1,4 +1,4 @@
-import tkinter as tk
+import Tkinter as tk
 from PIL import Image,ImageTk, ImageDraw
 import cv2
 import numpy as np

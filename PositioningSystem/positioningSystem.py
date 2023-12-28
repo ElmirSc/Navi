@@ -43,7 +43,7 @@ class positioningSystem:
 
     def send_speed_distance_rotation_to_server(self):
         speed = self.getSpeedFromSpeedometer()
-        dist = self.getSpeedFromSpeedometer()
+        dist = self.getDrivenDistanceFromSpeedometer()
         orientation = self.getOrientation()
         message = (str(speed)+" "+str(dist)+" "+str(orientation))
         self.client.send_message(message)

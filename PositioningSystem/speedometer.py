@@ -4,6 +4,7 @@ from hallSensor import hallSensor
 import os
 
 pi = 3.141592653
+speedometerOne = 0
 
 class speedometer:
     def __init__(self, sensorOne, sensorTwo):
@@ -85,7 +86,7 @@ class speedometer:
         self.direction = 1
 
 
-    def hallSensorCallbackForwardSpeedometer(channel):
+    def hallSensorCallbackForwardSpeedometer(self,channel):
         global speedometerOne
         print("test")
         currentPinState = GPIO.input(speedometerOne.hallForward.pin)
@@ -99,7 +100,7 @@ class speedometer:
                 speedometerOne.setStartBoolToTrue()
 
 
-    def hallSensorCallbackBackSpeedometer(channel):
+    def hallSensorCallbackBackSpeedometer(self,channel):
         global pos_system
         print("test")
         currentPinState = GPIO.input(speedometerOne.hallBack.pin)

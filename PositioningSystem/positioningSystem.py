@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/root")
 import RPi.GPIO as GPIO
-from speedometer import speedometer
+from speedometer import *
 from own_mpu6050 import own_mpu6050
 from positionigSystemConfig import *
 from client import client
@@ -42,8 +42,11 @@ class positioningSystem:
 
     def send_speed_distance_rotation_to_server(self):
         speed = self.getSpeedFromSpeedometer()
+        print("Speed:",speed)
         dist = self.getSpeedFromSpeedometer()
+        print("Distance:", dist)
         orientation = self.getOrientation()
+        print("Orientation:", orientation)
         message = (str(speed)+" "+str(dist)+" "+str(orientation))
         self.client.send_message(message)
 

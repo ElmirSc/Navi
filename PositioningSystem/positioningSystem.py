@@ -2,7 +2,7 @@ import sys
 sys.path.append("/root")
 import RPi.GPIO as GPIO
 from speedometer import speedometer
-from PositioningSystem.mpu6050 import mpu6050
+from mpu6050 import mpu6050
 from positionigSystemConfig import *
 from client import client
 

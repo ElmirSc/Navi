@@ -50,6 +50,7 @@ class positioningSystem:
 
 if __name__ == "__main__":
     pos_system = positioningSystem(hallPinForward,hallPinBackward)
+    pos_system.init_client()
     try:
         while True:
             pos_system.send_speed_distance_rotation_to_server()

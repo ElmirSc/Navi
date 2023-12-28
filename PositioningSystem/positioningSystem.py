@@ -1,6 +1,11 @@
 from PositioningSystem.speedometer import speedometer
 from PositioningSystem.mpu6050 import mpu6050
 from positionigSystemConfig import *
+from client import client
+
+gyroAddress = 0x68
+hallPinForward = 17
+hallPinBackward = 27
 
 class positioningSystem:
     def __init__(self, mpu6050Address,hallPinForward,hallPinBackward):
@@ -8,6 +13,7 @@ class positioningSystem:
         self.speedometer = speedometer(hallPinForward,hallPinBackward)
         self.defaultOrientationValue = self.mpu6050.getGyroZ()
         self.defaultOrientationValueRange = self.defaultOrientationValue * 0.1
+        self.client = client.create_socket()
 
     def getOrientation(self):
         orientation = None
@@ -26,3 +32,19 @@ class positioningSystem:
 
     def getDrivenDistanceFromSpeedometer(self):
         return self.speedometer.distance
+
+    def send_speed_distance_rotation_to_server(self):
+        speed = self.getSpeedFromSpeedometer()
+        dist = self.getSpeedFromSpeedometer()
+        orientation = self.getOrientation()
+        message = str(speed+" "+dist+" "+orientation)
+        client.send_message(message)
+
+
+if __name__ == "__main__":
+    pos_system = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
+    try:
+        while True:
+            pos_system.send_speed_distance_rotation_to_server()
+    except KeyboardInterrupt:
+        pos_system.client.close_connection()

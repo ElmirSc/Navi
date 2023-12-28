@@ -1,4 +1,4 @@
-#from PositioningSystem.positioningSystem import positioningSystem
+from PositioningSystem.positioningSystem import positioningSystem
 from UserInterface.UserIntefaceForNavigation import userInterface
 from Routing.routing import dijkstra, arc_list, node_list
 from Navigation.configNavigation import *
@@ -7,7 +7,7 @@ from threading import Thread
 class navigation:
     def __init__(self):
         self.ui = userInterface()
-        #self.positioningSystem = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
+        self.positioningSystem = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
         self.state = beforNavigationState
         self.routingCost = 0
         self.threadOne = 0
@@ -15,6 +15,7 @@ class navigation:
         self.current_node = 0
         self.current_node_cost = 0
         self.next_node = 0
+        self.old_cost = 0
 
     def getRouteFromAlgorithm(self, startNode, endNode):
         return dijkstra(startNode, endNode, 1)  # Routen und Kosten berrechnung
@@ -68,20 +69,23 @@ class navigation:
                         self.routingCost = cost
                         self.ui.setDistance(self.calcRealRangeFromCost())
                         self.ui.drawRouteInMap(route)
-                        self.ui.position_car_on_map(1)
+                        self.ui.position_car_on_map(0)
                         print(self.ui.getDrivingInstructionsFromRoute(route))
                     case 3:
-                        #if self.calc_distance_to_drive(self,self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
-                        #   self.state = drivingState
-                        #else:
-                        #   self.ui.setDistance(self.calc_distance_to_drive(self,self.positioningSystem.getDrivenDistanceFromSpeedometer()))
-                        #   self.ui.updateSpeed(self,self.positioningSystem.getSpeedFromSpeedometer())
-                        #
-                        #   self.ui.update_position_of_car_on_map(1,1,1,1)
+                        if self.calc_distance_to_drive(self,self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
+                          self.state = drivingState
+                        else:
+                          self.ui.setDistance(self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()))
+                          self.ui.updateSpeed(self,self.positioningSystem.getSpeedFromSpeedometer())
+                          self.current_node_cost = self.positioningSystem.getDrivenDistanceFromSpeedometer() * self.factor_for_real_distance - self.old_cost
+                          if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
+                              update_nodes(self.next_node, get_next_node_from_route(self,route))
+                              self.old_cost = self.current_node_cost
+                              self.current_node_cost = 0
+                          self.ui.update_position_of_car_on_map(self.current_node,self.next_node,0,self.current_node_cost,self.find_next_cost_between_two_nodes())
                         if 1 == 0:
                             print("waitingForStart")
-                        #if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
-                        #    update_nodes(self.next_node, get_next_node_from_route(self,route))
+
                     case 4:
                         print("finished driving")
                         self.state = drivingEndState
@@ -89,9 +93,6 @@ class navigation:
                         print("next ride?")
                         self.state = beforNavigationState
                         self.ui.updateUiToStartAgain()
-
-                # print("Geschwindigkeit des Fahrzeugs: ",navigation.positioningSystem.speedometer.getSpeed(),"km/h")
-                # print("Gefahrene Distanz: ", navigation.positioningSystem.speedometer.getDistance(),"m")
 
         except KeyboardInterrupt:
             GPIO.cleanup()

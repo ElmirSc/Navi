@@ -128,7 +128,7 @@ class userInterface:
         self.tkinterImage.config(image=imageTk)
         self.tkinterImage.image = imageTk
 
-    def update_position_of_car_on_map(self,current_node, next_node, standing_of_car_on_map,current_cost,cost_between_nodes):
+    def update_position_of_car_on_map(self,current_node, next_node, standing_of_car_on_map,current_cost, cost_between_nodes):
         car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
         car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
@@ -295,7 +295,7 @@ class userInterface:
                 next = route[i + 1] - 1
                 drivingInstructions.append(self.calcInstruction(nodeCoordsInMap[prev],nodeCoordsInMap[current], nodeCoordsInMap[next]))
         return drivingInstructions
-#testcase e nach d ist falsch zu lange strecke
+
     def calcInstruction(self,prev,cur,next):
         vertical = False
         horizontal = False

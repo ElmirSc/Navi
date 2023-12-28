@@ -21,10 +21,10 @@ if __name__ == "__main__":
     #cv2.imshow("test", img)
     # Erstelle ein Hauptfenster
     root = tk.Tk()
-    # Setze die Fenstergröße auf 800x600 Pixel
+
     root.geometry("1000x750")
     root.maxsize(2000, 2000)
-    # Ändern Sie die Hintergrundfarbe auf hellgrün
+
     root.configure(bg="#45BD6A")
     root.title("Navigation")
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     root.rowconfigure(1,weight=2)
 
 
-    #wichtig um die zellen zu formatieren
+
     for i in range(2):
         for j in range(5):
             if i != 0:
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     currentDrivenDistance = tk.Label(root, text="Distance: "+str(dist)+" m", foreground = "black",bg="lightgreen")
     currentDrivenDistance.grid(row=1, column=4, sticky="")
 
-    # Hier können Sie Widgets in die Zellen des Grid-Layouts legen
+
 
     root.mainloop()
 

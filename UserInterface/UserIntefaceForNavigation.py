@@ -56,7 +56,7 @@ class userInterface:
                         frame = self.tk.Frame(self.root, width=1000, height=500, bg="lightgreen")
                         frame.grid(row=i, column=j, columnspan=5)
 
-        image = Image.open("UserInterface/street.png")
+        image = Image.open("UserInterface/street_with_node_nummeration.png")
         resizedImage = image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resizedImage)
         self.tkinterImage = self.tk.Label(self.root, image=imageTk, bg="lightgreen")
@@ -96,12 +96,103 @@ class userInterface:
     def getClosedProgramBool(self):
         return self.endedProgramm
 
+    def position_car_on_map(self,standing_of_car_on_map):
+        car = cv2.imread("UserInterface/car2.png",cv2.IMREAD_UNCHANGED)
+        car_resized = cv2.resize(car,(10, 20))
+        car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
+
+        map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
+        # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
+        height, width = map.shape[:2]
+        alpha_channel = np.ones((height, width),
+                                dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
+
+        # Füge den Alphakanal dem Bild hinzu
+        map = cv2.merge((map, alpha_channel))
+
+        nodeCoordsInMap = self.loadNodeCoords()
+
+        car_height, car_width = car_resized.shape[:2]
+
+        x_position = nodeCoordsInMap[self.startPoint-1][0] - int(car_width/2)
+        y_position = nodeCoordsInMap[self.startPoint-1][1] - int(car_height/2)
+
+        # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
+        map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
+
+        # Speichern des resultierenden Bildes mit dem platzierten Auto
+        cv2.imwrite("UserInterface/map_with_route.png", map)
+        updated_image = Image.open("UserInterface/map_with_route.png")
+        resized_image = updated_image.resize((800, 500))
+        imageTk = ImageTk.PhotoImage(resized_image)
+        self.tkinterImage.config(image=imageTk)
+        self.tkinterImage.image = imageTk
+
+    def update_position_of_car_on_map(self,current_node, next_node, standing_of_car_on_map,current_cost,cost_between_nodes):
+        car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
+        car_resized = cv2.resize(car, (10, 20))
+        car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
+
+        pixels_between_two_nodes_x = 0
+        pixels_between_two_nodes_y = 0
+        pixel_of_one_cost = 0
+        current_pixel_cost_on_map = 0
+        y_position = 0
+        x_position = 0
+
+        if current_node[0] == next_node[0]:
+            pixels_between_two_nodes_y = current_node[1] - next_node[1]
+            x_position = current_node[0]
+            pixel_of_one_cost = pixels_between_two_nodes_y / cost_between_nodes
+            current_pixel_cost_on_map = pixel_of_one_cost * current_cost
+            y_position = y_position + current_pixel_cost_on_map
+
+        if current_node[1] == next_node[1]:
+            pixels_between_two_nodes_x = current_node[0] - next_node[0]
+            y_position = current_node[1]
+            pixel_of_one_cost = pixels_between_two_nodes_x / cost_between_nodes
+            current_pixel_cost_on_map = pixel_of_one_cost * current_cost
+            x_position = x_position + current_pixel_cost_on_map
+
+        map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
+        # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
+        height, width = map.shape[:2]
+        alpha_channel = np.ones((height, width),
+                                dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
+
+        # Füge den Alphakanal dem Bild hinzu
+        map = cv2.merge((map, alpha_channel))
+
+        car_height, car_width = car_resized.shape[:2]
+
+        # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
+        map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
+
+        # Speichern des resultierenden Bildes mit dem platzierten Auto
+        cv2.imwrite("UserInterface/map_with_route.png", map)
+
+        updated_image = Image.open("UserInterface/map_with_route.png")
+        resized_image = updated_image.resize((800, 500))
+        imageTk = ImageTk.PhotoImage(resized_image)
+        self.tkinterImage.config(image=imageTk)
+        self.tkinterImage.image = imageTk
+
+    def get_rotated_car(self,standing_of_car_on_map,car_resized):
+        match standing_of_car_on_map:
+            case 1:
+                car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_COUNTERCLOCKWISE)
+            case 2:
+                car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_CLOCKWISE)
+            case 3:
+                car_resized = cv2.rotate(car_resized, cv2.ROTATE_180)
+
+        return car_resized
     def loadNodeCoords(self):
         return np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
 
     def drawRouteInMap(self,routeCcoords):
         print("drawRoute")
-        img = cv2.imread("UserInterface/street.PNG", cv2.COLOR_BGR2GRAY)
+        img = cv2.imread("UserInterface/street_with_node_nummeration.png", cv2.COLOR_BGR2GRAY)
         nodeCoordsInMap = self.loadNodeCoords()
         for i in range(len(routeCcoords)):
             if i + 1 < len(routeCcoords):
@@ -120,7 +211,7 @@ class userInterface:
 
     def updateUiToStartAgain(self):
         self.button.config(text="Start", command=self.startButtonPressed)
-        image = Image.open("UserInterface/street.png")
+        image = Image.open("UserInterface/street_with_node_nummeration.png")
         resizedImage = image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resizedImage)
         self.tkinterImage.config(image=imageTk)
@@ -204,7 +295,7 @@ class userInterface:
                 next = route[i + 1] - 1
                 drivingInstructions.append(self.calcInstruction(nodeCoordsInMap[prev],nodeCoordsInMap[current], nodeCoordsInMap[next]))
         return drivingInstructions
-
+#testcase e nach d ist falsch zu lange strecke
     def calcInstruction(self,prev,cur,next):
         vertical = False
         horizontal = False
@@ -218,14 +309,14 @@ class userInterface:
             horizontal = True
 
         if vertical:
-            if next[0] < cur[0]:
+            if next[0] < cur[0] and cur[1] < prev[1] or next[0] > cur[0] and cur[1] > prev[1]:
                 return "l"
-            elif next[0] > cur[0]:
+            elif next[0] < cur[0] and cur[1] > prev[1] or next[0] > cur[0] and cur[1] < prev[1]:
                 return "r"
         elif horizontal:
-            if next[1] < cur[1]:
+            if next[1] < cur[1] and cur[0] > prev[0] or next[1] > cur[1] and cur[0] < prev[0]:
                 return "l"
-            elif next[1] > cur[1]:
+            elif next[1] > cur[1] and cur[0] > prev[0] or next[1] < cur[1] and cur[0] < prev[0]:
                 return "r"
 
         return 0

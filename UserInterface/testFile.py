@@ -1,5 +1,5 @@
 import Tkinter as tk
-from PIL import Image,ImageTk, ImageDraw
+from pillow import Image,ImageTk, ImageDraw
 import cv2
 import numpy as np
 from Routing.routing import dijkstra

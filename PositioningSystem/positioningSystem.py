@@ -41,7 +41,7 @@ class positioningSystem:
         dist = self.getSpeedFromSpeedometer()
         orientation = self.getOrientation()
         message = str(speed+" "+dist+" "+orientation)
-        client.send_message(message)
+        self.client.send_message(message)
 
 
 if __name__ == "__main__":

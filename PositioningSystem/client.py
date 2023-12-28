@@ -25,5 +25,5 @@ if __name__ == "__main__":
     client.create_socket()
     client.send_message("Hallo vom Raspberry Pi!")
     client.send_message("Hallo vom Raspberry P2!")
-    client.receive_message()
+    #client.receive_message()
     client.close_connection()

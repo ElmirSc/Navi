@@ -2,7 +2,7 @@ from mpu6050Config import *
 import time
 import smbus
 
-class mpu6050:
+class own_mpu6050:
     def __init__(self, gyroRange = 250):
         self.mpu6050Adress = mpu6050Address
         self.bus = smbus.SMBus(smbusPort)

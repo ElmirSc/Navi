@@ -2,7 +2,7 @@ import sys
 sys.path.append("/root")
 import RPi.GPIO as GPIO
 from speedometer import speedometer
-from mpu6050 import mpu6050
+from own_mpu6050 import own_mpu6050
 from positionigSystemConfig import *
 from client import client
 
@@ -12,7 +12,7 @@ hallPinBackward = 27
 
 class positioningSystem:
     def __init__(self, mpu6050Address,hallPinForward,hallPinBackward):
-        self.mpu6050 = mpu6050(mpu6050Address, gyroRange = 250)
+        self.mpu6050 = own_mpu6050(mpu6050Address,gyroRange=250)
         self.speedometer = speedometer(hallPinForward,hallPinBackward)
         self.defaultOrientationValue = self.mpu6050.getGyroZ()
         self.defaultOrientationValueRange = self.defaultOrientationValue * 0.1

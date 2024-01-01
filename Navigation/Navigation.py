@@ -1,13 +1,14 @@
-from PositioningSystem.positioningSystem import positioningSystem
+#from PositioningSystem.positioningSystem import positioningSystem
 from UserInterface.UserIntefaceForNavigation import userInterface
 from Routing.routing import dijkstra, arc_list, node_list
 from Navigation.configNavigation import *
 from threading import Thread
+from Navigation.server import server
 
 class navigation:
     def __init__(self):
         self.ui = userInterface()
-        self.positioningSystem = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
+        #self.positioningSystem = positioningSystem(gyroAddress,hallPinForward,hallPinBackward)
         self.state = beforNavigationState
         self.routingCost = 0
         self.threadOne = 0
@@ -16,6 +17,9 @@ class navigation:
         self.current_node_cost = 0
         self.next_node = 0
         self.old_cost = 0
+        self.server = server()
+        self.total_cost_of_current_and_previous_nodes = 0
+        self.node_coords_list = np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
 
     def getRouteFromAlgorithm(self, startNode, endNode):
         return dijkstra(startNode, endNode, 1)  # Routen und Kosten berrechnung
@@ -46,6 +50,8 @@ class navigation:
         self.ui.initUI()
 
     def initNavigation(self):
+        self.server.create_socket()
+        self.server.set_socket_to_listen_mode()
         self.threadOne = Thread(target=self.startApplication)
         self.threadOne.start()
         self.startUI()
@@ -59,97 +65,68 @@ class navigation:
                 elif not self.ui.userInputIsReady:  #erst wenn Input fertig ist wird state gesetzt
                     self.state = beforNavigationState
 
-                if self.state == 1:
-                    if self.ui.getIfUserInputIsReady():
-                        self.state = afterInputState
-                elif self.state == 2:
-                    route, cost, drivingInstructions = self.getRouteFromAlgorithm(self.ui.getStartPointForNavigation(),
-                                                                                  self.ui.getEndPointForNavigation())
-                    self.state = routingState
-                    self.update_nodes(route[0], route[1])
-                    self.routingCost = cost
-                    self.ui.setDistance(self.calcRealRangeFromCost())
-                    self.ui.drawRouteInMap(route)
-                    self.ui.position_car_on_map(0)
-                    print(self.ui.getDrivingInstructionsFromRoute(route))
-                elif self.state == 3:
-                    if self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
-                        self.state = drivingState
-                    else:
-                        self.ui.setDistance(
-                            self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()))
-                        self.ui.updateSpeed(self.positioningSystem.getSpeedFromSpeedometer())
-                        self.current_node_cost = self.positioningSystem.getDrivenDistanceFromSpeedometer() * self.factor_for_real_distance - self.old_cost
-                        if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
-                            update_nodes(self.next_node, get_next_node_from_route(self, route))
-                            self.old_cost = self.current_node_cost
-                            self.current_node_cost = 0
-                        self.ui.update_position_of_car_on_map(self.current_node, self.next_node, 0,
-                                                              self.current_node_cost,
-                                                              self.find_next_cost_between_two_nodes())
-                    if 1 == 0:
-                        print("waitingForStart")
-                elif self.state == 4:
-                    print("finished driving")
-                    self.state = drivingEndState
-                elif self.state == 5:
-                    print("next ride?")
-                    self.state = beforNavigationState
-                    self.ui.updateUiToStartAgain()
+                match self.state:
+                    case 1:
+                        if self.ui.getIfUserInputIsReady():
+                            self.state = afterInputState
+                    case 2:
+                        route, cost, drivingInstructions = self.getRouteFromAlgorithm(self.ui.getStartPointForNavigation(), self.ui.getEndPointForNavigation())
+                        self.state = routingState
+                        self.update_nodes(route[0], route[1])
+                        self.routingCost = cost
+                        self.ui.setDistance(self.calcRealRangeFromCost())
+                        self.ui.drawRouteInMap(route)
+                        self.ui.position_car_on_map(0)
+                        print(self.ui.getDrivingInstructionsFromRoute(route))
+                    case 3:
+                        self.server.accept_connection()
+                        self.server.receive_data()
+                        self.server.handle_data()
+                        self.ui.calc_distance_to_drive(self.server.dist)
+                        self.ui.updateSpeed(self.server.speed * self.factor_for_real_distance)
+                        if self.ui.dist_to_drive == 0:
+                            self.state = drivingState
+                            self.ui.updateSpeed(0)
 
-                # match self.state:
-                #     case 1:
-                #         if self.ui.getIfUserInputIsReady():
-                #             self.state = afterInputState
-                #     case 2:
-                #         route, cost, drivingInstructions = self.getRouteFromAlgorithm(self.ui.getStartPointForNavigation(), self.ui.getEndPointForNavigation())
-                #         self.state = routingState
-                #         self.update_nodes(route[0], route[1])
-                #         self.routingCost = cost
-                #         self.ui.setDistance(self.calcRealRangeFromCost())
-                #         self.ui.drawRouteInMap(route)
-                #         self.ui.position_car_on_map(0)
-                #         print(self.ui.getDrivingInstructionsFromRoute(route))
-                #     case 3:
-                #         if self.calc_distance_to_drive(self,self.positioningSystem.getDrivenDistanceFromSpeedometer()) == 0:
-                #           self.state = drivingState
-                #         else:
-                #           self.ui.setDistance(self.calc_distance_to_drive(self.positioningSystem.getDrivenDistanceFromSpeedometer()))
-                #           self.ui.updateSpeed(self,self.positioningSystem.getSpeedFromSpeedometer())
-                #           self.current_node_cost = self.positioningSystem.getDrivenDistanceFromSpeedometer() * self.factor_for_real_distance - self.old_cost
-                #           if self.positioningSystem.getDrivenDistanceFromSpeedometer() > self.find_next_cost_between_two_nodes():
-                #               update_nodes(self.next_node, get_next_node_from_route(self,route))
-                #               self.old_cost = self.current_node_cost
-                #               self.current_node_cost = 0
-                #           self.ui.update_position_of_car_on_map(self.current_node,self.next_node,0,self.current_node_cost,self.find_next_cost_between_two_nodes())
-                #         if 1 == 0:
-                #             print("waitingForStart")
-                #
-                #     case 4:
-                #         print("finished driving")
-                #         self.state = drivingEndState
-                #     case 5:
-                #         print("next ride?")
-                #         self.state = beforNavigationState
-                #         self.ui.updateUiToStartAgain()
+
+
+                        self.current_node_cost = self.find_next_cost_between_two_nodes()
+                        # self.current_node_cost = self.server.dist * self.factor_for_real_distance - self.old_cost
+                        if self.server.dist * self.factor_for_real_distance >= self.current_node_cost + self.old_cost:
+                            print(self.current_node_cost)
+                            self.update_nodes(self.next_node, self.get_next_node_from_route(route))
+                            self.old_cost += self.current_node_cost
+                        driven_distance_between_nodes = self.server.dist * self.factor_for_real_distance - self.old_cost
+                        self.ui.update_position_of_car_on_map(self.node_coords_list[self.current_node-1],self.node_coords_list[self.next_node-1],0,driven_distance_between_nodes,self.current_node_cost)
+
+                    case 4:
+                        print("finished driving")
+                        self.ui.updateUiToStartAgain()
 
         except KeyboardInterrupt:
-            GPIO.cleanup()
+            print("progamm closed!")
+
+#
+
+    def start_server(self):
+        return
 
     def update_nodes(self,new_current_node, new_next_node):
         self.next_node = new_next_node
         self.current_node = new_current_node
 
     def find_next_cost_between_two_nodes(self):
-        max_edges_for_node = node_list[self.current_node + 1] - node_list[self.current_node]
-        for i in range(node_list[self.current_node],node_list[self.current_node]+max_edges_for_node):
-            edge = arc_list[i]
+        max_edges_for_node = node_list[self.current_node] - node_list[self.current_node - 1]
+        for i in range(node_list[self.current_node - 1], node_list[self.current_node - 1] + max_edges_for_node):
+            edge = arc_list[i-1]
             if edge[0] == self.next_node:
-                return edge[1]
+                return int(edge[1])
         return 0
 
     def get_next_node_from_route(self,route):
         for i in range(0,len(route)):
+            if i == len(route)-1:
+                return route[i]
             if route[i] == self.next_node:
                 return route[i+1]
         return 0

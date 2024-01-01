@@ -1,7 +1,8 @@
 import socket
+import time
 class client:
     def __init__(self):
-        self.host = '172.20.10.5'
+        self.host = '192.168.0.12'
         self.port = 5555
         self.connected_client = None
 
@@ -21,9 +22,24 @@ class client:
         self.connected_client.close()
 
 if __name__ == "__main__":
-    client = Client()
-    client.create_socket()
-    client.send_message("Hallo vom Raspberry Pi!")
-    client.send_message("Hallo vom Raspberry P2!")
-    #client.receive_message()
-    client.close_connection()
+    #testing socket connection
+    client = client()
+    #client.create_socket()
+    counter = 1
+    speed = 0
+    dist = 0
+    rot = 1
+    while True:
+        client.create_socket()
+        speed = speed + counter
+        dist = dist + counter
+        message = str(speed)+" "+str(dist)+" "+str(rot)
+        print(dist)
+        client.send_message(message)
+        client.close_connection()
+        if speed == 20:
+            counter = -1
+        elif speed == 0:
+            counter = 1
+        time.sleep(4)
+

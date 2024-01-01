@@ -20,6 +20,7 @@ class userInterface:
         self.tkinterInstruction = 0
         self.speed = 0
         self.dist = 0
+        self.dist_to_drive = 0
         self.tkinterImage = 0
         self.endedProgramm = False
         self.button = 0
@@ -121,8 +122,8 @@ class userInterface:
         map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
 
         # Speichern des resultierenden Bildes mit dem platzierten Auto
-        cv2.imwrite("UserInterface/map_with_route.png", map)
-        updated_image = Image.open("UserInterface/map_with_route.png")
+        cv2.imwrite("UserInterface/map_with_route_and_car_position.png", map)
+        updated_image = Image.open("UserInterface/map_with_route_and_car_position.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
         self.tkinterImage.config(image=imageTk)
@@ -142,17 +143,17 @@ class userInterface:
 
         if current_node[0] == next_node[0]:
             pixels_between_two_nodes_y = current_node[1] - next_node[1]
-            x_position = current_node[0]
+            x_position = int(current_node[0])
             pixel_of_one_cost = pixels_between_two_nodes_y / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
-            y_position = y_position + current_pixel_cost_on_map
+            y_position = int(y_position + current_pixel_cost_on_map)
 
         if current_node[1] == next_node[1]:
             pixels_between_two_nodes_x = current_node[0] - next_node[0]
-            y_position = current_node[1]
+            y_position = int(current_node[1])
             pixel_of_one_cost = pixels_between_two_nodes_x / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
-            x_position = x_position + current_pixel_cost_on_map
+            x_position = int(x_position + current_pixel_cost_on_map)
 
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
@@ -169,9 +170,9 @@ class userInterface:
         map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
 
         # Speichern des resultierenden Bildes mit dem platzierten Auto
-        cv2.imwrite("UserInterface/map_with_route.png", map)
+        cv2.imwrite("UserInterface/map_with_route_and_car_position.png", map)
 
-        updated_image = Image.open("UserInterface/map_with_route.png")
+        updated_image = Image.open("UserInterface/map_with_route_and_car_position.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
         self.tkinterImage.config(image=imageTk)
@@ -247,7 +248,13 @@ class userInterface:
 
     def setDistance(self,cost):
         self.dist = int(cost)
+        self.dist_to_drive = self.dist
         self.updateDrivenDistance(self.dist)
+
+    def calc_distance_to_drive(self,dist):
+        self.dist_to_drive = self.dist - dist
+        #new_cost = self.dist - range_to_drive
+        self.updateDrivenDistance(self.dist_to_drive)
 
     def updateInstructionInGUI(self):
         self.tkinterInstruction.config(text = self.instruction)
@@ -264,6 +271,7 @@ class userInterface:
         if self.instruction == instructionDrive:
             self.button.config(text="End",command=self.endButtonPressed)
         elif self.instruction == instructionEndDriving:
+            #self.instruction = instructionStartPoint
             self.updateUiToStartAgain()
 
 
@@ -274,9 +282,7 @@ class userInterface:
         self.updateButton()
 
     def endButtonPressed(self):
-        #self.userInputIsReady = True
         self.instruction = instructionEndDriving
-        self.updateInstructionInGUI()
         self.updateButton()
 
     def getDrivingInstructionsFromRoute(self,route):
@@ -295,6 +301,10 @@ class userInterface:
                 next = route[i + 1] - 1
                 drivingInstructions.append(self.calcInstruction(nodeCoordsInMap[prev],nodeCoordsInMap[current], nodeCoordsInMap[next]))
         return drivingInstructions
+
+    def set_instruction_to_wait_for_end_button(self):
+        self.instruction = instructionEndDriving
+        self.updateInstructionInGUI()
 
     def calcInstruction(self,prev,cur,next):
         vertical = False

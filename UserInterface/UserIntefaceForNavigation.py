@@ -97,10 +97,42 @@ class userInterface:
     def getClosedProgramBool(self):
         return self.endedProgramm
 
-    def position_car_on_map(self,standing_of_car_on_map):
+    def get_initial_orientation_of_car_on_map(self, route):
+        match self.startPoint:
+            case 1, 2:
+                return 4
+            case 3, 7:
+                return 1
+            case 11, 12:
+                return 2
+            case 6, 10:
+                return 0
+            case _:
+                node_coords = self.loadNodeCoords() # 0 counter   1 clockwise    2 180grad
+                current_node_index = route[0]
+                next_node_index = route[1]
+                current_node = node_coords[current_node_index-1]
+                next_node = node_coords[next_node_index-1]
+                if current_node[0] == next_node[0]:
+                    if current_node[1] < next_node[1]:
+                        return 2
+                    else:
+                        return 4
+                elif current_node[1] == next_node[1]:
+                    if current_node[0] < next_node[0]:
+                        return 1
+                    elif current_node[0] > next_node[0]:
+                        return 0
+                return 4
+
+
+
+    def position_car_on_map(self,route):
         car = cv2.imread("UserInterface/car2.png",cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car,(10, 20))
-        car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
+        rotation = self.get_initial_orientation_of_car_on_map(route)
+        car_resized = self.get_rotated_car(rotation, car_resized)
+        cv2.imwrite("UserInterface/car_current_orientation.png", car_resized)
 
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
@@ -114,7 +146,6 @@ class userInterface:
         nodeCoordsInMap = self.loadNodeCoords()
 
         car_height, car_width = car_resized.shape[:2]
-        print(self.startPoint)
 
         x_position = nodeCoordsInMap[self.startPoint-1][0] - int(car_width/2)
         y_position = nodeCoordsInMap[self.startPoint-1][1] - int(car_height/2)
@@ -131,7 +162,7 @@ class userInterface:
         self.tkinterImage.image = imageTk
 
     def update_position_of_car_on_map(self,current_node, next_node, standing_of_car_on_map,current_cost, cost_between_nodes):
-        car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
+        car = cv2.imread("UserInterface/car_current_orientation.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
         car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
 
@@ -161,8 +192,6 @@ class userInterface:
             pixel_of_one_cost = pixels_between_two_nodes_x / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
             x_position = int(current_node[0] + current_pixel_cost_on_map)
-        print(x_position)
-        print(y_position)
 
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
@@ -259,7 +288,7 @@ class userInterface:
         return int(self.endPoint)
 
     def setDistance(self,cost):
-        self.dist = int(cost)
+        self.dist = float(cost)
         self.dist_to_drive = self.dist
         self.updateDrivenDistance(self.dist)
 
@@ -277,7 +306,8 @@ class userInterface:
 
     def updateDrivenDistance(self,dist):
         #self.dist = dist
-        self.tkinterCurrentDrivenDistance.config(text="Distance: " + str(dist) + " m")
+        rounded_dist = round(dist, 1)
+        self.tkinterCurrentDrivenDistance.config(text="Distance: " + str(rounded_dist) + " m")
 
     def updateButton(self):
         if self.instruction == instructionDrive:

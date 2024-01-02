@@ -142,7 +142,16 @@ def getAdjecentList(currentNode,oldList):           # Arcs vom bestimmten Knoten
     adjacentList2 = []
 
     if currentNode == len(node_list)-1:
-        return 0
+        indexOfNextNode = currentNode - 1
+        rangeArc = node_list[currentNode - 1] - node_list[indexOfNextNode - 1]
+        start = node_list[currentNode - 1]
+
+        for i in range(start - rangeArc, start):
+            arc = arc_list[i]
+            adjacentList2.append(arc)
+
+        return adjacentList2
+
 
     indexOfNextNode = currentNode + 1
     rangeArc = node_list[indexOfNextNode-1]-node_list[currentNode-1]

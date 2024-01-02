@@ -40,21 +40,14 @@ class server:
     def handle_data(self):
         if len(self.data) > 0:
             string = self.data.split()
+            print(string)
+
             counter = 0
-            for i in string:
-                if i.isnumeric():
-                    match counter:
-                        case 0:
-                            self.speed = int(i)
-                            counter += 1
-                        case 1:
-                            self.dist = int(i)
-                            counter += 1
-                        case 2:
-                            self.rotation = int(i)
-                            counter += 1
-                        case 3:
-                            break
+
+            if len(string) > 0:
+                self.speed = int(string[0])
+                self.dist = float(string[1])
+                self.rotation = int(string[2])
 
     def close_connection(self):
         self.server_socket.connection.close()

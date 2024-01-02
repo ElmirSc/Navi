@@ -45,6 +45,13 @@ class positioningSystem:
         speed = self.getSpeedFromSpeedometer()
         dist = self.getDrivenDistanceFromSpeedometer()
         orientation = self.getOrientation()
+        orientation_value_to_send = 0
+        if orientation + 20 < self.defaultOrientationValue or orientation - 20 > self.defaultOrientationValue:
+            orientation_value_to_send = 4
+        elif orientation + 20 > self.defaultOrientationValue:
+            orientation_value_to_send = 1
+        elif orientation - 20 < self.defaultOrientationValue:
+            orientation_value_to_send = 0
         message = (str(speed)+" "+str(dist)+" "+str(orientation))
         self.client.send_message(message)
 

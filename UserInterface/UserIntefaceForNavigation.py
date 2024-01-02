@@ -114,6 +114,7 @@ class userInterface:
         nodeCoordsInMap = self.loadNodeCoords()
 
         car_height, car_width = car_resized.shape[:2]
+        print(self.startPoint)
 
         x_position = nodeCoordsInMap[self.startPoint-1][0] - int(car_width/2)
         y_position = nodeCoordsInMap[self.startPoint-1][1] - int(car_height/2)
@@ -142,18 +143,26 @@ class userInterface:
         x_position = 0
 
         if current_node[0] == next_node[0]:
-            pixels_between_two_nodes_y = current_node[1] - next_node[1]
             x_position = int(current_node[0])
+            if current_node[1] > next_node[1]:
+                pixels_between_two_nodes_y = next_node[1] - current_node[1]
+            elif current_node[1] < next_node[1]:
+                pixels_between_two_nodes_y = current_node[1] - next_node[1]
             pixel_of_one_cost = pixels_between_two_nodes_y / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
-            y_position = int(y_position + current_pixel_cost_on_map)
+            y_position = int(current_node[1] + current_pixel_cost_on_map)
 
         if current_node[1] == next_node[1]:
-            pixels_between_two_nodes_x = current_node[0] - next_node[0]
             y_position = int(current_node[1])
+            if current_node[0] > next_node[0]:
+                pixels_between_two_nodes_x = next_node[0] - current_node[0]
+            elif current_node[0] < next_node[0]:
+                pixels_between_two_nodes_x = next_node[0] - current_node[0]
             pixel_of_one_cost = pixels_between_two_nodes_x / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
-            x_position = int(x_position + current_pixel_cost_on_map)
+            x_position = int(current_node[0] + current_pixel_cost_on_map)
+        print(x_position)
+        print(y_position)
 
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
@@ -165,6 +174,9 @@ class userInterface:
         map = cv2.merge((map, alpha_channel))
 
         car_height, car_width = car_resized.shape[:2]
+
+        x_position = x_position - int(car_width / 2)
+        y_position = y_position - int(car_height / 2)
 
         # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
         map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
@@ -180,11 +192,11 @@ class userInterface:
 
     def get_rotated_car(self,standing_of_car_on_map,car_resized):
         match standing_of_car_on_map:
-            case 1:
+            case 0:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_COUNTERCLOCKWISE)
-            case 2:
+            case 1:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_CLOCKWISE)
-            case 3:
+            case 2:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_180)
 
         return car_resized

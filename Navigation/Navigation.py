@@ -76,28 +76,26 @@ class navigation:
                         self.routingCost = cost
                         self.ui.setDistance(self.calcRealRangeFromCost())
                         self.ui.drawRouteInMap(route)
-                        self.ui.position_car_on_map(0)
+                        #funktion machen die anhand der nodes auswählt wie die anfangsrotation des Fahrzeugs ist
+                        self.ui.position_car_on_map(4)
                         print(self.ui.getDrivingInstructionsFromRoute(route))
                     case 3:
-                        self.server.accept_connection()
-                        self.server.receive_data()
-                        self.server.handle_data()
-                        self.ui.calc_distance_to_drive(self.server.dist)
-                        self.ui.updateSpeed(self.server.speed * self.factor_for_real_distance)
-                        if self.ui.dist_to_drive == 0:
-                            self.state = drivingState
-                            self.ui.updateSpeed(0)
-
-
-
-                        self.current_node_cost = self.find_next_cost_between_two_nodes()
-                        # self.current_node_cost = self.server.dist * self.factor_for_real_distance - self.old_cost
-                        if self.server.dist * self.factor_for_real_distance >= self.current_node_cost + self.old_cost:
-                            print(self.current_node_cost)
-                            self.update_nodes(self.next_node, self.get_next_node_from_route(route))
-                            self.old_cost += self.current_node_cost
-                        driven_distance_between_nodes = self.server.dist * self.factor_for_real_distance - self.old_cost
-                        self.ui.update_position_of_car_on_map(self.node_coords_list[self.current_node-1],self.node_coords_list[self.next_node-1],0,driven_distance_between_nodes,self.current_node_cost)
+                        if self.server.accept_connection():
+                            self.server.receive_data()
+                            self.server.handle_data()
+                            self.ui.calc_distance_to_drive(self.server.dist)
+                            self.ui.updateSpeed(self.server.speed * self.factor_for_real_distance)
+                            if self.ui.dist_to_drive == 0:
+                                self.state = drivingState
+                                self.ui.updateSpeed(0)
+                            self.current_node_cost = self.find_next_cost_between_two_nodes()
+                            # self.current_node_cost = self.server.dist * self.factor_for_real_distance - self.old_cost
+                            if self.server.dist * self.factor_for_real_distance >= self.current_node_cost + self.old_cost:
+                                print(self.current_node_cost)
+                                self.update_nodes(self.next_node, self.get_next_node_from_route(route))
+                                self.old_cost += self.current_node_cost
+                            driven_distance_between_nodes = self.server.dist * self.factor_for_real_distance - self.old_cost
+                            self.ui.update_position_of_car_on_map(self.node_coords_list[self.current_node-1],self.node_coords_list[self.next_node-1],self.server.rotation,driven_distance_between_nodes,self.current_node_cost)
 
                     case 4:
                         print("finished driving")

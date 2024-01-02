@@ -14,6 +14,7 @@ class server:
 
     def create_socket(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.settimeout(10)
         self.server_socket.bind((self.host, self.port))
     def set_socket_to_listen_mode(self):
         self.server_socket.listen()
@@ -21,13 +22,15 @@ class server:
     def accept_connection(self):
         conn = 0
         addr = 0
-        conn, addr = self.server_socket.accept()
-        self.connection = conn
-        self.address = addr
-        if conn == 0 and addr == 0:
-            return False
-        else:
+        try:
+            conn, addr = self.server_socket.accept()
+            self.connection = conn
+            self.address = addr
             return True
+        except OSError as e:
+            if isinstance(e, socket.timeout):
+                return False
+
 
     def receive_data(self):
         self.data = self.connection.recv(1024)

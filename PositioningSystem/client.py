@@ -1,25 +1,27 @@
 import socket
 import time
-class client:
+
+
+class Client:
     def __init__(self):
-        self.host = '192.168.0.12'
-        self.port = 5555
+        self.host_ip = '192.168.0.12'
+        self.port_number = 5555
         self.connected_client = None
+        self.data = None
 
     def create_socket(self):
         self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connected_client.connect((self.host, self.port))
+        self.connected_client.connect((self.host_ip, self.port_number))
 
-    def send_message(self, message):
-        self.connected_client.sendall(message.encode())
-
+    def send_message(self, current_message_to_send):
+        self.connected_client.sendall(current_message_to_send.encode())
 
     def receive_message(self):
-        data = self.connected_client.recv(1024)
-
+        self.data = self.connected_client.recv(1024)
 
     def close_connection(self):
         self.connected_client.close()
+
 
 def a_f_way(client):
     # client.create_socket()
@@ -42,6 +44,7 @@ def a_f_way(client):
         elif speed == 0:
             counter = 1
         time.sleep(0.5)
+
 
 def a_g_way(client):
     # client.create_socket()
@@ -67,11 +70,11 @@ def a_g_way(client):
 
 
 if __name__ == "__main__":
-    #testing socket connection
-    client = client()
+    # testing socket connection
+    client = Client()
     a_f_way(client)
-    #a_g_way(client)
-    #client.create_socket()
+    # a_g_way(client)
+    # client.create_socket()
     counter = 1
     speed = 0
     dist = 0
@@ -82,7 +85,7 @@ if __name__ == "__main__":
             rot = 1
         speed = speed + counter
         dist = dist + counter
-        message = str(speed)+" "+str(dist)+" "+str(rot)
+        message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
         client.close_connection()
@@ -91,4 +94,3 @@ if __name__ == "__main__":
         elif speed == 0:
             counter = 1
         time.sleep(4)
-

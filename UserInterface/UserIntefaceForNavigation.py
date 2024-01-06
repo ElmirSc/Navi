@@ -1,104 +1,106 @@
 import tkinter as tk
-from PIL import Image,ImageTk, ImageDraw
+from PIL import Image, ImageTk, ImageDraw
 import cv2
 import numpy as np
 from .UserInterfaceConfig import *
 from .StreetSign import *
 
-class userInterface:
+
+class Userinterface:
     def __init__(self):
-        self.root = tk.Tk()
+        self.tk_root_window = tk.Tk()
         self.tk = tk
-        self.instruction = instructionStartPoint
-        self.tkinterSpeed = 0
-        self.tkinterCurrentDrivenDistance = 0
-        self.streetSign = streetSign()
-        self.entry = None
-        self.startPoint = 0
-        self.endPoint = 0
-        self.userInputIsReady = False
-        self.tkinterInstruction = 0
+        self.current_instruction = instruction_start_point
+        self.tk_current_instruction_window = 0
         self.speed = 0
-        self.dist = 0
-        self.dist_to_drive = 0
-        self.tkinterImage = 0
-        self.endedProgramm = False
-        self.button = 0
+        self.tk_current_speed_window = 0
+        self.distance = 0
+        self.distance_to_drive = 0
+        self.tk_current_driven_distance_window = 0
+        self.street_sign = streetSign()
+        self.tk_entry_for_input = None
+        self.start_point = 0
+        self.end_point = 0
+        self.user_input_check_if_ready = False
+        self.tk_image_window = 0
+        self.end_application_check = False
+        self.tk_button_window = 0
 
-    def initUI(self):
+    def init_ui(self):
         print("init Gui started")
-        # Setze die Fenstergröße auf 800x600 Pixel
-        self.root.geometry("1000x530")
-        self.root.maxsize(800, 700)
-        # Ändern Sie die Hintergrundfarbe auf hellgrün
-        self.root.configure(bg="#45BD6A")
-        self.root.title("Navigation")
+        # Setze die Fenstergröße auf 1000x530 Pixel
+        self.tk_root_window.geometry("1000x530")
+        self.tk_root_window.maxsize(800, 700)
+        # Ändern der Hintergrundfarbe auf hellgrün
+        self.tk_root_window.configure(bg="#45BD6A")
+        self.tk_root_window.title("Navigation")
 
-        self.root.columnconfigure(0, weight=1)
-        self.root.columnconfigure(1, weight=1)
-        self.root.columnconfigure(2, weight=1)
-        self.root.columnconfigure(3, weight=1)
-        self.root.columnconfigure(4, weight=1)
+        self.tk_root_window.columnconfigure(0, weight=1)
+        self.tk_root_window.columnconfigure(1, weight=1)
+        self.tk_root_window.columnconfigure(2, weight=1)
+        self.tk_root_window.columnconfigure(3, weight=1)
+        self.tk_root_window.columnconfigure(4, weight=1)
 
         # root.rowconfigure(0,weight=2)
-        self.root.rowconfigure(0, weight=5)
-        self.root.rowconfigure(1, weight=2)
+        self.tk_root_window.rowconfigure(0, weight=5)
+        self.tk_root_window.rowconfigure(1, weight=2)
 
-        #Zellen einstellen
+        # Zellen einstellen
         for i in range(2):
             for j in range(5):
                 if i != 0:
                     # frame = tk.Frame(root, borderwidth=1, relief="solid", width=160, height=50,bg="lightgreen")
-                    frame = self.tk.Frame(self.root, width=200, height=50, bg="lightgreen")
+                    frame = self.tk.Frame(self.tk_root_window, width=200, height=50, bg="lightgreen")
                     frame.grid(row=i, column=j)
                 else:
                     if j == 0 and i == 0:
                         # frame = tk.Frame(root, borderwidth=1, relief="solid", width=800, height=500,bg="lightgreen")
-                        frame = self.tk.Frame(self.root, width=1000, height=500, bg="lightgreen")
+                        frame = self.tk.Frame(self.tk_root_window, width=1000, height=500, bg="lightgreen")
                         frame.grid(row=i, column=j, columnspan=5)
 
         image = Image.open("UserInterface/street_with_node_nummeration.png")
-        resizedImage = image.resize((800, 500))
-        imageTk = ImageTk.PhotoImage(resizedImage)
-        self.tkinterImage = self.tk.Label(self.root, image=imageTk, bg="lightgreen")
-        self.tkinterImage.grid(row=0, column=0, columnspan=5, sticky="")
+        resized_image = image.resize((800, 500))
+        image_tk = ImageTk.PhotoImage(resized_image)
+        self.tk_image_window = self.tk.Label(self.tk_root_window, image=image_tk, bg="lightgreen")
+        self.tk_image_window.grid(row=0, column=0, columnspan=5, sticky="")
 
-        self.tkinterInstruction = self.tk.Label(self.root, text=str(self.instruction), bg="lightgreen", foreground="black", width=30, height=1)
-        self.tkinterInstruction.grid(row=1, column=0, sticky="w")
+        self.tk_current_instruction_window = self.tk.Label(self.tk_root_window, text=str(self.current_instruction), bg="lightgreen",
+                                                           foreground="black", width=30, height=1)
+        self.tk_current_instruction_window.grid(row=1, column=0, sticky="w")
 
-        self.button = self.tk.Button(self.root, text="Start",command=self.startButtonPressed)
-        self.button.grid(row=1, column=1, sticky="")
+        self.tk_button_window = self.tk.Button(self.tk_root_window, text="Start", command=self.start_button_pressed)
+        self.tk_button_window.grid(row=1, column=1, sticky="")
 
-        entry = self.tk.Entry(self.root)
-        self.entry = entry
-        #entry.pack()
+        entry = self.tk.Entry(self.tk_root_window)
+        self.tk_entry_for_input = entry
         # Füge Event-Binding für die Enter-Taste hinzu
         entry.bind("<Return>", self.get_input)
         # Setze den Fokus auf das Entry-Widget, damit die Enter-Taste funktioniert
         entry.focus_set()
         entry.grid(row=1, column=2, sticky="")
 
+        self.tk_current_speed_window = self.tk.Label(self.tk_root_window, text="Speed: " + str(self.speed) + " (km/h)", foreground="black",
+                                                     bg="lightgreen", width=20, height=1)
+        self.tk_current_speed_window.grid(row=1, column=3, sticky="")
 
-        self.tkinterSpeed = self.tk.Label(self.root, text="Speed: " + str(self.speed) + " (km/h)", foreground="black", bg="lightgreen", width=20, height=1)
-        self.tkinterSpeed.grid(row=1, column=3, sticky="")
-
-        self.tkinterCurrentDrivenDistance = self.tk.Label(self.root, text="Distance: " + str(self.dist) + " m", foreground="black", bg="lightgreen")
-        self.tkinterCurrentDrivenDistance.grid(row=1, column=4, sticky="")
+        self.tk_current_driven_distance_window = self.tk.Label(self.tk_root_window, text="Distance: " + str(self.distance) + " m",
+                                                               foreground="black", bg="lightgreen")
+        self.tk_current_driven_distance_window.grid(row=1, column=4, sticky="")
 
         # Definiere die Funktion, die ausgeführt wird, wenn das Fenster geschlossen wird
-        self.root.protocol("WM_DELETE_WINDOW", self.setClosedProgramm)
+        self.tk_root_window.protocol("WM_DELETE_WINDOW", self.set_closed_programm)
 
-        self.root.mainloop()
+        self.tk_root_window.mainloop()
 
-    def setClosedProgramm(self):
-        self.endedProgramm = True
-        self.root.destroy()
+    def set_closed_programm(self):
+        self.end_application_check = True
+        self.tk_root_window.destroy()
 
-    def getClosedProgramBool(self):
-        return self.endedProgramm
+    def get_closed_program_bool(self):
+        return self.end_application_check
 
     def get_initial_orientation_of_car_on_map(self, route):
-        match self.startPoint:
+        match self.start_point:
             case 1, 2:
                 return 4
             case 3, 7:
@@ -108,11 +110,11 @@ class userInterface:
             case 6, 10:
                 return 0
             case _:
-                node_coords = self.loadNodeCoords() # 0 counter   1 clockwise    2 180grad
+                node_coords = self.load_node_coords()  # 0 counter   1 clockwise    2 180grad
                 current_node_index = route[0]
                 next_node_index = route[1]
-                current_node = node_coords[current_node_index-1]
-                next_node = node_coords[next_node_index-1]
+                current_node = node_coords[current_node_index - 1]
+                next_node = node_coords[next_node_index - 1]
                 if current_node[0] == next_node[0]:
                     if current_node[1] < next_node[1]:
                         return 2
@@ -125,13 +127,11 @@ class userInterface:
                         return 0
                 return 4
 
-
-
-    def position_car_on_map(self,route):
-        car = cv2.imread("UserInterface/car2.png",cv2.IMREAD_UNCHANGED)
-        car_resized = cv2.resize(car,(10, 20))
-        rotation = self.get_initial_orientation_of_car_on_map(route)
-        car_resized = self.get_rotated_car(rotation, car_resized)
+    def position_car_on_map(self, route):
+        car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
+        car_resized = cv2.resize(car, (10, 20))
+        rotation_of_car = self.get_initial_orientation_of_car_on_map(route)
+        car_resized = self.get_rotated_car(rotation_of_car, car_resized)
         cv2.imwrite("UserInterface/car_current_orientation.png", car_resized)
 
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
@@ -143,12 +143,12 @@ class userInterface:
         # Füge den Alphakanal dem Bild hinzu
         map = cv2.merge((map, alpha_channel))
 
-        nodeCoordsInMap = self.loadNodeCoords()
+        node_coords_in_map = self.load_node_coords()
 
         car_height, car_width = car_resized.shape[:2]
 
-        x_position = nodeCoordsInMap[self.startPoint-1][0] - int(car_width/2)
-        y_position = nodeCoordsInMap[self.startPoint-1][1] - int(car_height/2)
+        x_position = node_coords_in_map[self.start_point - 1][0] - int(car_width / 2)
+        y_position = node_coords_in_map[self.start_point - 1][1] - int(car_height / 2)
 
         # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
         map[y_position:y_position + car_height, x_position:x_position + car_width] = car_resized
@@ -158,10 +158,11 @@ class userInterface:
         updated_image = Image.open("UserInterface/map_with_route_and_car_position.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
-        self.tkinterImage.config(image=imageTk)
-        self.tkinterImage.image = imageTk
+        self.tk_image_window.config(image=imageTk)
+        self.tk_image_window.image = imageTk
 
-    def update_position_of_car_on_map(self,current_node, next_node, standing_of_car_on_map,current_cost, cost_between_nodes):
+    def update_position_of_car_on_map(self, current_node, next_node, standing_of_car_on_map, current_cost,
+                                      cost_between_nodes):
         car = cv2.imread("UserInterface/car_current_orientation.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
         car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
@@ -216,10 +217,11 @@ class userInterface:
         updated_image = Image.open("UserInterface/map_with_route_and_car_position.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
-        self.tkinterImage.config(image=imageTk)
-        self.tkinterImage.image = imageTk
+        self.tk_image_window.config(image=imageTk)
+        self.tk_image_window.image = imageTk
 
-    def get_rotated_car(self,standing_of_car_on_map,car_resized):
+    @staticmethod
+    def get_rotated_car(standing_of_car_on_map, car_resized):
         match standing_of_car_on_map:
             case 0:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_COUNTERCLOCKWISE)
@@ -229,111 +231,114 @@ class userInterface:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_180)
 
         return car_resized
-    def loadNodeCoords(self):
+
+    @staticmethod
+    def load_node_coords():
         return np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
 
-    def drawRouteInMap(self,routeCcoords):
+    def draw_route_in_map(self, route_ccoords):
         print("drawRoute")
         img = cv2.imread("UserInterface/street_with_node_nummeration.png", cv2.COLOR_BGR2GRAY)
-        nodeCoordsInMap = self.loadNodeCoords()
-        for i in range(len(routeCcoords)):
-            if i + 1 < len(routeCcoords):
-                first = routeCcoords[i] - 1
-                next = routeCcoords[i + 1] - 1
+        nodeCoordsInMap = self.load_node_coords()
+        for i in range(len(route_ccoords)):
+            if i + 1 < len(route_ccoords):
+                first = route_ccoords[i] - 1
+                next = route_ccoords[i + 1] - 1
                 cv2.line(img, (nodeCoordsInMap[first][0], nodeCoordsInMap[first][1]),
                          (nodeCoordsInMap[next][0], nodeCoordsInMap[next][1]), (0, 0, 255), 1)
-        #cv2.imshow("test", img)
+        # cv2.imshow("test", img)
         cv2.imwrite("UserInterface/map_with_route.png", img)
         # Bild in das Tkinter Label laden und aktualisieren
         updated_image = Image.open("UserInterface/map_with_route.png")
         resized_image = updated_image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resized_image)
-        self.tkinterImage.config(image=imageTk)
-        self.tkinterImage.image = imageTk
+        self.tk_image_window.config(image=imageTk)
+        self.tk_image_window.image = imageTk
 
-    def updateUiToStartAgain(self):
-        self.button.config(text="Start", command=self.startButtonPressed)
+    def update_ui_to_start_again(self):
+        self.tk_button_window.config(text="Start", command=self.start_button_pressed)
         image = Image.open("UserInterface/street_with_node_nummeration.png")
         resizedImage = image.resize((800, 500))
         imageTk = ImageTk.PhotoImage(resizedImage)
-        self.tkinterImage.config(image=imageTk)
-        self.tkinterImage.image = imageTk
-        self.instruction = instructionStartPoint
-        self.updateInstructionInGUI()
-        self.userInputIsReady = False
-        self.setDistance(0)
+        self.tk_image_window.config(image=imageTk)
+        self.tk_image_window.image = imageTk
+        self.current_instruction = instruction_start_point
+        self.update_instruction_in_gui()
+        self.user_input_check_if_ready = False
+        self.set_distance(0)
         return
 
-    def get_input(self,event):
-        userInput = self.entry.get()  # Hole die Eingabe aus dem Entry-Widget
+    def get_input(self, event):
+        userInput = self.tk_entry_for_input.get()  # Hole die Eingabe aus dem Entry-Widget
         print(userInput)
-        if self.instruction == instructionStartPoint:
-            self.instruction = instructionEndPoint
-            self.startPoint = self.getDrivingPointFromInputAndConvertItToANumber(userInput)
-        elif self.instruction == instructionEndPoint:
-            self.endPoint = self.getDrivingPointFromInputAndConvertItToANumber(userInput)
-            self.instruction = instructionWaitForStartButton
+        if self.current_instruction == instruction_start_point or self.current_instruction == instruction_wrong_input_one:
+            self.current_instruction = instruction_end_point
+            self.start_point = self.get_driving_point_from_input_and_convert_it_to_a_number(userInput)
+        elif self.current_instruction == instruction_end_point or self.current_instruction == instruction_wrong_input_two:
+            self.end_point = self.get_driving_point_from_input_and_convert_it_to_a_number(userInput)
+            self.current_instruction = instruction_wait_for_start_button
         else:
             print("Benutzereingabe passt nicht:", userInput)
-        self.updateInstructionInGUI()
-        self.entry.delete(0,self.tk.END)
+        if self.start_point == 13:
+            self.current_instruction = instruction_wrong_input_one
+        elif self.end_point == 13:
+            self.current_instruction = instruction_wrong_input_two
 
-    def getIfUserInputIsReady(self):
-        return self.userInputIsReady
+        self.update_instruction_in_gui()
+        self.tk_entry_for_input.delete(0, self.tk.END)
 
-    def getStartPointForNavigation(self):
-        return int(self.startPoint)
+    def get_start_point_for_navigation(self):
+        return int(self.start_point)
 
-    def getEndPointForNavigation(self):
-        return int(self.endPoint)
+    def get_end_point_for_navigation(self):
+        return int(self.end_point)
 
-    def setDistance(self,cost):
-        self.dist = float(cost)
-        self.dist_to_drive = self.dist
-        self.updateDrivenDistance(self.dist)
+    def set_distance(self, cost):
+        self.distance = float(cost)
+        self.distance_to_drive = self.distance
+        self.update_driven_distance(self.distance)
 
-    def calc_distance_to_drive(self,dist):
-        self.dist_to_drive = self.dist - dist
-        #new_cost = self.dist - range_to_drive
-        self.updateDrivenDistance(self.dist_to_drive)
+    def calc_distance_to_drive(self, dist):
+        self.distance_to_drive = self.distance - dist
+        # new_cost = self.dist - range_to_drive
+        self.update_driven_distance(self.distance_to_drive)
 
-    def updateInstructionInGUI(self):
-        self.tkinterInstruction.config(text = self.instruction)
+    def update_instruction_in_gui(self):
+        self.tk_current_instruction_window.config(text=self.current_instruction)
 
-    def updateSpeed(self,currentSpeed):
+    def update_speed(self, currentSpeed):
         self.speed = currentSpeed
-        self.tkinterSpeed.config(text="Speed: " + str(currentSpeed) + " (km/h)")
+        self.tk_current_speed_window.config(text="Speed: " + str(currentSpeed) + " (km/h)")
 
-    def updateDrivenDistance(self,dist):
-        #self.dist = dist
+    def update_driven_distance(self, dist):
+        # self.dist = dist
         rounded_dist = round(dist, 1)
-        self.tkinterCurrentDrivenDistance.config(text="Distance: " + str(rounded_dist) + " m")
+        self.tk_current_driven_distance_window.config(text="Distance: " + str(rounded_dist) + " m")
 
-    def updateButton(self):
-        if self.instruction == instructionDrive:
-            self.button.config(text="End",command=self.endButtonPressed)
-        elif self.instruction == instructionEndDriving:
-            #self.instruction = instructionStartPoint
-            self.updateUiToStartAgain()
+    def update_button(self):
+        if self.current_instruction == instruction_drive:
+            self.tk_button_window.config(text="End", command=self.end_button_pressed)
+        elif self.current_instruction == instruction_end_driving:
+            # self.instruction = instructionStartPoint
+            self.update_ui_to_start_again()
 
+    def start_button_pressed(self):
+        self.user_input_check_if_ready = True
+        self.current_instruction = instruction_drive
+        self.update_instruction_in_gui()
+        self.update_button()
 
-    def startButtonPressed(self):
-        self.userInputIsReady = True
-        self.instruction = instructionDrive
-        self.updateInstructionInGUI()
-        self.updateButton()
+    def end_button_pressed(self):
+        self.current_instruction = instruction_end_driving
+        self.update_button()
 
-    def endButtonPressed(self):
-        self.instruction = instructionEndDriving
-        self.updateButton()
-
-    def getDrivingInstructionsFromRoute(self,route):
+    def get_driving_instructions_from_route(self, route):
         drivingInstructions = []
-        nodeCoordsInMap = self.loadNodeCoords()
+        nodeCoordsInMap = self.load_node_coords()
         current = 0
         prev = 0
         next = 0
-        for i in range(0,len(route)):
+        for i in range(0, len(route)):
             if i + 1 < len(route):
                 if i == 0:
                     prev = route[i] - 1
@@ -341,14 +346,15 @@ class userInterface:
                     prev = current
                 current = route[i] - 1
                 next = route[i + 1] - 1
-                drivingInstructions.append(self.calcInstruction(nodeCoordsInMap[prev],nodeCoordsInMap[current], nodeCoordsInMap[next]))
+                drivingInstructions.append(
+                    self.calc_instruction(nodeCoordsInMap[prev], nodeCoordsInMap[current], nodeCoordsInMap[next]))
         return drivingInstructions
 
     def set_instruction_to_wait_for_end_button(self):
-        self.instruction = instructionEndDriving
-        self.updateInstructionInGUI()
+        self.current_instruction = instruction_end_driving
+        self.update_instruction_in_gui()
 
-    def calcInstruction(self,prev,cur,next):
+    def calc_instruction(self, prev, cur, next):
         vertical = False
         horizontal = False
 
@@ -373,7 +379,7 @@ class userInterface:
 
         return 0
 
-    def getDrivingPointFromInputAndConvertItToANumber(self, input):
+    def get_driving_point_from_input_and_convert_it_to_a_number(self, input):
         numb = 0
         match input.lower():
             case "a":
@@ -400,11 +406,13 @@ class userInterface:
                 numb = 11
             case "l":
                 numb = 12
+            case _:
+                numb = 13
         return numb
 
 
 if __name__ == "__main__":
-    ui = userInterface()
-    ui.initUI()
-    #while(True):
+    ui = Userinterface()
+    ui.init_ui()
+    # while(True):
     #    ui.drawRouteInMap(1,2)

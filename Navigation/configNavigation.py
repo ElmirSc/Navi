@@ -1,16 +1,8 @@
-import numpy as np
-
-gyroAddress = 0x68
-hallPinForward = 17
-hallPinBackward = 27
-
 #state manager
-beforNavigationState = 1
-afterInputState = 2
-routingState = 3
-drivingState = 4
-drivingEndState = 5
+before_navigation_state = 1
+after_input_state = 2
+driving_state = 3
+driving_end_state = 4
 
-nodeCoordsInMap = np.loadtxt("Navigation/nodeCordOnMap.txt")
 
 

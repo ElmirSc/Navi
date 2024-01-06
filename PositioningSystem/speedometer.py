@@ -1,110 +1,111 @@
 import RPi.GPIO as GPIO
 import time
 from hallSensor import hallSensor
-import os
 
 pi = 3.141592653
 speedometerOne = 0
 
-class speedometer:
-    def __init__(self, sensorOne, sensorTwo):
-        self.hallForward = hallSensor(sensorOne)
-        self.hallBack = hallSensor(sensorTwo)
-        self.count = 0
-        self.speed = 0
+
+class Speedometer:
+    def __init__(self, sensor_one, sensor_two):
+        self.hall_forward_sensor = hallSensor(sensor_one)
+        self.hall_back_sensor = hallSensor(sensor_two)
+        self.counter_for_speed_and_dist = 0
+        self.current_speed = 0
         self.direction = 1
-        self.distance = 0
-        self.wheel = 0.11
-        self.pinState = 1
-        self.initSpeedometer()
-        self.startBool = False
+        self.current_distance = 0
+        self.wheel_diameter = 0.11
+        self.pin_state = 1
+        self.init_speedometer()
+        self.start_bool = False
 
+    def set_distance(self, new_distance):
+        self.current_distance += new_distance
 
-    def setDistance(self, newDistance):
-        self.distance += newDistance
-    def getDistance(self):
-        return self.distance
-    def getSpeed(self):
-        return self.speed
+    def get_distance(self):
+        return self.current_distance
 
-    def setSpeed(self,curSpeed):
-        self.speed = curSpeed
+    def get_speed(self):
+        return self.current_speed
 
-    def getCount(self):
-        return self.count
+    def set_speed(self, cur_speed):
+        self.current_speed = cur_speed
 
-    def setCount(self):
-        self.count = 0
+    def get_count(self):
+        return self.counter_for_speed_and_dist
 
-    def addToCount(self):
-        self.count += 1
+    def set_count(self):
+        self.counter_for_speed_and_dist = 0
 
-    def getWheel(self):
-        return self.wheel
+    def add_to_count(self):
+        self.counter_for_speed_and_dist += 1
 
-    def initSpeedometer(self):
+    def get_wheel(self):
+        return self.wheel_diameter
+
+    def init_speedometer(self):
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.hallForward.getPinNumber(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.hallBack.getPinNumber(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.hall_forward_sensor.get_pin_number(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.hall_back_sensor.get_pin_number(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        self.hallForward.initPinState(GPIO.input(self.hallForward.getPinNumber()))
-        self.hallBack.initPinState(GPIO.input(self.hallBack.getPinNumber()))
-        self.changeEdgeEventSpeedometer(self.hallForward.getPinNumber())
-        self.changeEdgeEventSpeedometer(self.hallBack.getPinNumber())
-        self.setDefaultDirection()
+        self.hall_forward_sensor.init_pin_state(GPIO.input(self.hall_forward_sensor.get_pin_number()))
+        self.hall_back_sensor.init_pin_state(GPIO.input(self.hall_back_sensor.get_pin_number()))
+        self.change_edge_event_speedometer(self.hall_forward_sensor.get_pin_number())
+        self.change_edge_event_speedometer(self.hall_back_sensor.get_pin_number())
+        self.set_default_direction()
 
-    def changeEdgeEventSpeedometer(self, pin):
+    def change_edge_event_speedometer(self, pin):
         GPIO.remove_event_detect(pin)
         if pin == 17:
-            if self.hallForward.getPinState() == 1:
-                GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.hallSensorCallbackForwardSpeedometer, bouncetime=100)
+            if self.hall_forward_sensor.get_pin_state() == 1:
+                GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.hall_sensor_callback_forward_speedometer,
+                                      bouncetime=100)
             else:
-                GPIO.add_event_detect(pin, GPIO.RISING, callback=self.hallSensorCallbackForwardSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.RISING, callback=self.hall_sensor_callback_forward_speedometer,
+                                      bouncetime=100)
         elif pin == 27:
-            if self.hallBack.getPinState() == 1:
-                GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.hallSensorCallbackBackSpeedometer, bouncetime=100)
+            if self.hall_back_sensor.get_pin_state() == 1:
+                GPIO.add_event_detect(pin, GPIO.FALLING, callback=self.hall_sensor_callback_back_speedometer,
+                                      bouncetime=100)
             else:
-                GPIO.add_event_detect(pin, GPIO.RISING, callback=self.hallSensorCallbackBackSpeedometer, bouncetime=100)
+                GPIO.add_event_detect(pin, GPIO.RISING, callback=self.hall_sensor_callback_back_speedometer, bouncetime=100)
 
-    def checkDirectionTire(self):
-        if self.hallForward.timeSensor > self.hallBack.timeSensor:
+    def check_direction_tire(self):
+        if self.hall_forward_sensor.time_sensor > self.hall_back_sensor.time_sensor:
             self.direction = 1
         else:
             self.direction = -1
 
-    def printStats(self):
-        print("Current Speed:", self.speed)
-        print("Driven Meters:", self.distance)
+    def print_stats(self):
+        print("Current Speed:", self.current_speed)
+        print("Driven Meters:", self.current_distance)
 
-    def getStartBool(self):
-        return self.startBool
+    def get_start_bool(self):
+        return self.start_bool
 
-    def setStartBoolToTrue(self):
-        self.startBool = True
+    def set_start_bool_to_true(self):
+        self.start_bool = True
 
-    def setDefaultDirection(self):
+    def set_default_direction(self):
         self.direction = 1
 
-
-    def hallSensorCallbackForwardSpeedometer(self,channel):
-        currentPinState = GPIO.input(self.hallForward.pin)
-        if self.hallForward.getNextPinState() == currentPinState:
-            self.hallForward.timeSensor = time.time()
-            self.hallForward.setPinState()
-            self.changeEdgeEventSpeedometer(self.hallForward.pin)
-            if self.getStartBool():
-                self.addToCount()
+    def hall_sensor_callback_forward_speedometer(self, channel):
+        current_pin_state = GPIO.input(self.hall_forward_sensor.pin)
+        if self.hall_forward_sensor.get_next_pin_state() == current_pin_state:
+            self.hall_forward_sensor.time_sensor = time.time()
+            self.hall_forward_sensor.set_pin_state()
+            self.change_edge_event_speedometer(self.hall_forward_sensor.pin)
+            if self.get_start_bool():
+                self.add_to_count()
             else:
-                self.setStartBoolToTrue()
+                self.set_start_bool_to_true()
 
-
-    def hallSensorCallbackBackSpeedometer(self,channel):
-        currentPinState = GPIO.input(self.hallBack.pin)
-        if self.hallBack.getNextPinState() == currentPinState:
-            self.hallBack.timeSensor = time.time()
-            self.hallBack.setPinState()
-            self.changeEdgeEventSpeedometer(self.hallBack.pin)
-
+    def hall_sensor_callback_back_speedometer(self, channel):
+        current_pin_state = GPIO.input(self.hall_back_sensor.pin)
+        if self.hall_back_sensor.get_next_pin_state() == current_pin_state:
+            self.hall_back_sensor.time_sensor = time.time()
+            self.hall_back_sensor.set_pin_state()
+            self.change_edge_event_speedometer(self.hall_back_sensor.pin)
 
 # try:
 #     speedometerOne = speedometer(17, 27)

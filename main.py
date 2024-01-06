@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/root")
-from Navigation.Navigation import navigation
+from Navigation.Navigation import Navigation
 
 if __name__ == "__main__":
-    navigation = navigation()
-    navigation.initNavigation()
+    navigation = Navigation()
+    navigation.init_navigation()

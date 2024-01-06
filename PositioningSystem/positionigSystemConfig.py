@@ -1,3 +1,3 @@
-turnRight = 1
-turnLeft = 2
-noTurn = 0
+turn_right = 1
+turn_left = 2
+no_turn = 0

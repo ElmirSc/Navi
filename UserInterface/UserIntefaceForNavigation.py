@@ -6,25 +6,26 @@ from .UserInterfaceConfig import *
 from .StreetSign import *
 
 
+# ui class
 class Userinterface:
     def __init__(self):
-        self.tk_root_window = tk.Tk()
-        self.tk = tk
-        self.current_instruction = instruction_start_point
-        self.tk_current_instruction_window = 0
+        self.tk_root_window = tk.Tk()  # tkinter window of application
+        self.tk = tk  # tkinter object
+        self.current_instruction = instruction_start_point  # instruction
+        self.tk_current_instruction_window = 0  # tkinter instruction in application
         self.speed = 0
-        self.tk_current_speed_window = 0
+        self.tk_current_speed_window = 0  # tkinter speed in application
         self.distance = 0
         self.distance_to_drive = 0
-        self.tk_current_driven_distance_window = 0
+        self.tk_current_driven_distance_window = 0  # tkinter distance in application
         self.street_sign = streetSign()
-        self.tk_entry_for_input = None
+        self.tk_entry_for_input = None  # tkinter input window
         self.start_point = 0
         self.end_point = 0
-        self.user_input_check_if_ready = False
-        self.tk_image_window = 0
+        self.user_input_check_if_ready = False  # bool to check if start and end point are given
+        self.tk_image_window = 0  # tkinter map in application
         self.end_application_check = False
-        self.tk_button_window = 0
+        self.tk_button_window = 0  # tkinter startbutton in application
 
     def init_ui(self):
         print("init Gui started")
@@ -35,6 +36,7 @@ class Userinterface:
         self.tk_root_window.configure(bg="#45BD6A")
         self.tk_root_window.title("Navigation")
 
+        # setting window in rows and columns
         self.tk_root_window.columnconfigure(0, weight=1)
         self.tk_root_window.columnconfigure(1, weight=1)
         self.tk_root_window.columnconfigure(2, weight=1)
@@ -45,7 +47,7 @@ class Userinterface:
         self.tk_root_window.rowconfigure(0, weight=5)
         self.tk_root_window.rowconfigure(1, weight=2)
 
-        # Zellen einstellen
+        # initializing every cell
         for i in range(2):
             for j in range(5):
                 if i != 0:
@@ -58,19 +60,24 @@ class Userinterface:
                         frame = self.tk.Frame(self.tk_root_window, width=1000, height=500, bg="lightgreen")
                         frame.grid(row=i, column=j, columnspan=5)
 
+        # setting default map in application
         image = Image.open("UserInterface/street_with_node_nummeration.png")
         resized_image = image.resize((800, 500))
         image_tk = ImageTk.PhotoImage(resized_image)
         self.tk_image_window = self.tk.Label(self.tk_root_window, image=image_tk, bg="lightgreen")
         self.tk_image_window.grid(row=0, column=0, columnspan=5, sticky="")
 
-        self.tk_current_instruction_window = self.tk.Label(self.tk_root_window, text=str(self.current_instruction), bg="lightgreen",
+        # setting instruction window in application
+        self.tk_current_instruction_window = self.tk.Label(self.tk_root_window, text=str(self.current_instruction),
+                                                           bg="lightgreen",
                                                            foreground="black", width=30, height=1)
         self.tk_current_instruction_window.grid(row=1, column=0, sticky="w")
 
+        # setting button window in application
         self.tk_button_window = self.tk.Button(self.tk_root_window, text="Start", command=self.start_button_pressed)
         self.tk_button_window.grid(row=1, column=1, sticky="")
 
+        # setting input window in application
         entry = self.tk.Entry(self.tk_root_window)
         self.tk_entry_for_input = entry
         # Füge Event-Binding für die Enter-Taste hinzu
@@ -79,35 +86,40 @@ class Userinterface:
         entry.focus_set()
         entry.grid(row=1, column=2, sticky="")
 
-        self.tk_current_speed_window = self.tk.Label(self.tk_root_window, text="Speed: " + str(self.speed) + " (km/h)", foreground="black",
+        # setting speed window in application
+        self.tk_current_speed_window = self.tk.Label(self.tk_root_window, text="Speed: " + str(self.speed) + " (km/h)",
+                                                     foreground="black",
                                                      bg="lightgreen", width=20, height=1)
         self.tk_current_speed_window.grid(row=1, column=3, sticky="")
 
-        self.tk_current_driven_distance_window = self.tk.Label(self.tk_root_window, text="Distance: " + str(self.distance) + " m",
+        # setting distance window in application
+        self.tk_current_driven_distance_window = self.tk.Label(self.tk_root_window,
+                                                               text="Distance: " + str(self.distance) + " m",
                                                                foreground="black", bg="lightgreen")
         self.tk_current_driven_distance_window.grid(row=1, column=4, sticky="")
 
-        # Definiere die Funktion, die ausgeführt wird, wenn das Fenster geschlossen wird
+        # function to be called after closing application
         self.tk_root_window.protocol("WM_DELETE_WINDOW", self.set_closed_programm)
 
+        # starting ui
         self.tk_root_window.mainloop()
 
-    def set_closed_programm(self):
+    def set_closed_programm(self):  # function to close full application and the navigation thread
         self.end_application_check = True
         self.tk_root_window.destroy()
 
-    def get_closed_program_bool(self):
+    def get_closed_program_bool(self):  # function to return bool if application has to be closed
         return self.end_application_check
 
-    def get_initial_orientation_of_car_on_map(self, route):
+    def get_initial_orientation_of_car_on_map(self, route):  # function to get initial orientation of car on the map
         match self.start_point:
-            case 1, 2:
+            case 1, 2:  # if node 1 or 2
                 return 4
-            case 3, 7:
+            case 3, 7:  # if node 3 or 7
                 return 1
-            case 11, 12:
+            case 11, 12:  # if node 11 or 12
                 return 2
-            case 6, 10:
+            case 6, 10:  # if node 6 or 10
                 return 0
             case _:
                 node_coords = self.load_node_coords()  # 0 counter   1 clockwise    2 180grad
@@ -127,7 +139,7 @@ class Userinterface:
                         return 0
                 return 4
 
-    def position_car_on_map(self, route):
+    def position_car_on_map(self, route):  # function to position car on map
         car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
         rotation_of_car = self.get_initial_orientation_of_car_on_map(route)
@@ -162,7 +174,7 @@ class Userinterface:
         self.tk_image_window.image = imageTk
 
     def update_position_of_car_on_map(self, current_node, next_node, standing_of_car_on_map, current_cost,
-                                      cost_between_nodes):
+                                      cost_between_nodes):  # function to update car position during runtime
         car = cv2.imread("UserInterface/car_current_orientation.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
         car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
@@ -221,7 +233,7 @@ class Userinterface:
         self.tk_image_window.image = imageTk
 
     @staticmethod
-    def get_rotated_car(standing_of_car_on_map, car_resized):
+    def get_rotated_car(standing_of_car_on_map, car_resized):  # function to rotate car
         match standing_of_car_on_map:
             case 0:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_COUNTERCLOCKWISE)
@@ -233,10 +245,10 @@ class Userinterface:
         return car_resized
 
     @staticmethod
-    def load_node_coords():
+    def load_node_coords():  # function to load node coordinates
         return np.loadtxt("UserInterface/nodeCordOnMap.txt").astype(int)
 
-    def draw_route_in_map(self, route_ccoords):
+    def draw_route_in_map(self, route_ccoords):  # function to draw route in map
         print("drawRoute")
         img = cv2.imread("UserInterface/street_with_node_nummeration.png", cv2.COLOR_BGR2GRAY)
         nodeCoordsInMap = self.load_node_coords()
@@ -255,7 +267,7 @@ class Userinterface:
         self.tk_image_window.config(image=imageTk)
         self.tk_image_window.image = imageTk
 
-    def update_ui_to_start_again(self):
+    def update_ui_to_start_again(self):  # function to restart navigation
         self.tk_button_window.config(text="Start", command=self.start_button_pressed)
         image = Image.open("UserInterface/street_with_node_nummeration.png")
         resizedImage = image.resize((800, 500))
@@ -268,7 +280,7 @@ class Userinterface:
         self.set_distance(0)
         return
 
-    def get_input(self, event):
+    def get_input(self, event):  # function to get the input from user
         userInput = self.tk_entry_for_input.get()  # Hole die Eingabe aus dem Entry-Widget
         print(userInput)
         if self.current_instruction == instruction_start_point or self.current_instruction == instruction_wrong_input_one:
@@ -287,52 +299,52 @@ class Userinterface:
         self.update_instruction_in_gui()
         self.tk_entry_for_input.delete(0, self.tk.END)
 
-    def get_start_point_for_navigation(self):
+    def get_start_point_for_navigation(self):  # function to get starting point of navigation
         return int(self.start_point)
 
-    def get_end_point_for_navigation(self):
+    def get_end_point_for_navigation(self):  # function to get end point of navigation
         return int(self.end_point)
 
-    def set_distance(self, cost):
+    def set_distance(self, cost):  # function to set new distance in ui
         self.distance = float(cost)
         self.distance_to_drive = self.distance
         self.update_driven_distance(self.distance)
 
-    def calc_distance_to_drive(self, dist):
+    def calc_distance_to_drive(self, dist):  # function to calculate current distance to drive
         self.distance_to_drive = self.distance - dist
         # new_cost = self.dist - range_to_drive
         self.update_driven_distance(self.distance_to_drive)
 
-    def update_instruction_in_gui(self):
+    def update_instruction_in_gui(self):  # function to update instruction in ui
         self.tk_current_instruction_window.config(text=self.current_instruction)
 
-    def update_speed(self, currentSpeed):
+    def update_speed(self, currentSpeed):  # function to update speed in ui
         self.speed = currentSpeed
         self.tk_current_speed_window.config(text="Speed: " + str(currentSpeed) + " (km/h)")
 
-    def update_driven_distance(self, dist):
+    def update_driven_distance(self, dist):  # function to update distance in ui
         # self.dist = dist
         rounded_dist = round(dist, 1)
         self.tk_current_driven_distance_window.config(text="Distance: " + str(rounded_dist) + " m")
 
-    def update_button(self):
+    def update_button(self):  # function to set new button function
         if self.current_instruction == instruction_drive:
             self.tk_button_window.config(text="End", command=self.end_button_pressed)
         elif self.current_instruction == instruction_end_driving:
             # self.instruction = instructionStartPoint
             self.update_ui_to_start_again()
 
-    def start_button_pressed(self):
+    def start_button_pressed(self):  # function for start button
         self.user_input_check_if_ready = True
         self.current_instruction = instruction_drive
         self.update_instruction_in_gui()
         self.update_button()
 
-    def end_button_pressed(self):
+    def end_button_pressed(self):  # function for end button
         self.current_instruction = instruction_end_driving
         self.update_button()
 
-    def get_driving_instructions_from_route(self, route):
+    def get_driving_instructions_from_route(self, route):  # function to get driving instructions from given route
         drivingInstructions = []
         nodeCoordsInMap = self.load_node_coords()
         current = 0
@@ -354,7 +366,7 @@ class Userinterface:
         self.current_instruction = instruction_end_driving
         self.update_instruction_in_gui()
 
-    def calc_instruction(self, prev, cur, next):
+    def calc_instruction(self, prev, cur, next):  # function to calculate instruction where to drive for the car
         vertical = False
         horizontal = False
 
@@ -379,7 +391,8 @@ class Userinterface:
 
         return 0
 
-    def get_driving_point_from_input_and_convert_it_to_a_number(self, input):
+    @staticmethod
+    def get_driving_point_from_input_and_convert_it_to_a_number(input):  # function to get node number where to drive after input
         numb = 0
         match input.lower():
             case "a":

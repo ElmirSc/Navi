@@ -3,14 +3,15 @@ import time
 import smbus
 
 
+# self implemented mpu6050 class
 class OwnMpu6050:
     def __init__(self, gyro_range=250):
-        self.mpu6050_address = mpu6050Address
-        self.bus = smbus.SMBus(smbusPort)
-        self.bus.write_byte_data(self.mpu6050_address, pwrmgmt, 0x00)  # Wake up MPU-6050
-        self.gyroRange = gyro_range
+        self.mpu6050_address = mpu6050Address  # mpu6050 address
+        self.bus = smbus.SMBus(smbusPort)  # creating smbus port
+        self.bus.write_byte_data(self.mpu6050_address, pwrmgmt, 0x00)  # wake up MPU-6050
+        self.gyroRange = gyro_range  # gyro range for mpu6050
 
-    def read_from_bus(self, register):
+    def read_from_bus(self, register):  # function to read data from bus between raspberry and mpu6050
         # Read data
         high = self.bus.read_byte_data(self.mpu6050_address, register)
         low = self.bus.read_byte_data(self.mpu6050_address, register + 1)
@@ -22,12 +23,12 @@ class OwnMpu6050:
         else:
             return value
 
-    def get_temperature(self):
+    def get_temperature(self):  # function to get temperature of mpu6050
         raw = self.read_from_bus(temperautre_out_reg)
         temp = (raw / 340.0) + 36.53
         return temp
 
-    def set_gyro_range(self, gyro_range):
+    def set_gyro_range(self, gyro_range):  # function to set gyroskope range on mpu6050
         # First change it to 0x00 to make sure we write the correct value later
         self.bus.write_byte_data(self.mpu6050_address, gyro_config, 0x00)
         gyro_set_range = 0
@@ -42,7 +43,7 @@ class OwnMpu6050:
 
         self.bus.write_byte_data(self.mpu6050_address, gyro_config, gyro_set_range)  # Write new range to register
 
-    def get_gyro_z(self):
+    def get_gyro_z(self):  # function to get z rotation data from gyroskope
         gyro_z_value = self.read_from_bus(gyro_z)
         gyro_scale = 0
 
@@ -59,7 +60,7 @@ class OwnMpu6050:
 
         return gyro_z_value
 
-    def set_filter_range(self, filterRange):
+    def set_filter_range(self, filterRange):  # function to set the filter range of mpu6050
         ext = self.bus.read_byte_data(self.mpu6050_address, mpu_config) & 0b00111000  # save current Filter Range
         filter_set_range = 0
 

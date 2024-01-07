@@ -2,28 +2,29 @@ import socket
 import time
 
 
+# class to create a client to communicate to server
 class Client:
     def __init__(self):
-        self.host_ip = '192.168.0.12'
-        self.port_number = 5555
-        self.connected_client = None
+        self.host_ip = '192.168.0.12'  # host ip address
+        self.port_number = 5555  # communication port
+        self.connected_client = None  # object which is the real socket
         self.data = None
 
-    def create_socket(self):
+    def create_socket(self):  # function to create the client
         self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected_client.connect((self.host_ip, self.port_number))
 
-    def send_message(self, current_message_to_send):
+    def send_message(self, current_message_to_send):  # function to send messages to server
         self.connected_client.sendall(current_message_to_send.encode())
 
-    def receive_message(self):
+    def receive_message(self):  # function to receive messages
         self.data = self.connected_client.recv(1024)
 
-    def close_connection(self):
+    def close_connection(self):  # function to close the connection to server
         self.connected_client.close()
 
 
-def a_f_way(client):
+def a_f_way(client):  # test function for route a -> f
     # client.create_socket()
     counter = 1
     speed = 0
@@ -46,7 +47,7 @@ def a_f_way(client):
         time.sleep(0.5)
 
 
-def a_g_way(client):
+def a_g_way(client):  # test function for route a -> g
     # client.create_socket()
     counter = 1
     speed = 0

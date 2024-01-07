@@ -1,3 +1,4 @@
+# instruction for user interface
 instruction_start_point = "Please choose start node!"
 instruction_end_point = "Please choose end node!"
 instruction_drive = "Car is driving to end node!"

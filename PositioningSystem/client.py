@@ -15,6 +15,7 @@ class Client:
         self.connected_client.connect((self.host_ip, self.port_number))
 
     def send_message(self, current_message_to_send):  # function to send messages to server
+        self.connected_client.create_socket()
         self.connected_client.sendall(current_message_to_send.encode())
 
     def receive_message(self):  # function to receive messages

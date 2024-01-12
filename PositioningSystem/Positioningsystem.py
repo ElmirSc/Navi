@@ -42,7 +42,7 @@ class Positioningsystem:
         return self.speedometer.get_distance()
 
     def send_speed_distance_rotation_to_server(self):  # function to send speed, distance and rotation to navigation
-        speed = self.get_speed_from_speedometer()
+        speed = int(self.get_speed_from_speedometer())
         dist = self.get_driven_distance_from_speedometer()
         orientation = self.get_orientation()
         if orientation == 0:

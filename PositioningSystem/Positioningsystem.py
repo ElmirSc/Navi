@@ -33,7 +33,7 @@ class Positioningsystem:
 
     def init_positioning_system(self):  # function to initialilze positioning system
         self.speedometer.init_speedometer()
-        self.client.create_socket()
+        #self.client.create_socket()
 
     def get_speed_from_speedometer(self):  # function to get speed of speedometer
         return self.speedometer.get_speed()

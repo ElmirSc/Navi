@@ -30,7 +30,7 @@ class Speedometer:
         return self.current_speed
 
     def set_speed(self, cur_speed):  # function to set speed value
-        self.current_speed = cur_speed
+        self.current_speed = int(cur_speed)
 
     def get_count(self):  # function to get counter value
         return self.counter_for_speed_and_dist

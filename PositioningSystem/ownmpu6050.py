@@ -6,7 +6,7 @@ import mpu6050
 
 # self implemented mpu6050 class
 class OwnMpu6050:
-    def __init__(self, gyro_range=250, filter_range=5):
+    def __init__(self, gyro_range=250, filter_range=10):
         self.mpu6050_address = mpu6050Address  # mpu6050 address
         self.bus = smbus.SMBus(smbusPort)  # creating smbus port
         self.bus.write_byte_data(self.mpu6050_address, pwrmgmt, 0x00)  # wake up MPU-6050

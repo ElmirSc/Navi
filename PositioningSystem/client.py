@@ -30,6 +30,7 @@ def a_f_way(client):  # test function for route a -> f
     speed = 0
     dist = 0.0
     rot = 4
+
     while True:
         client.create_socket()
         if dist > 2.0:
@@ -80,6 +81,7 @@ if __name__ == "__main__":
     speed = 0
     dist = 0
     rot = 4
+
     while True:
         client.create_socket()
         if dist == 2:

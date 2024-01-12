@@ -24,6 +24,7 @@ class Positioningsystem:
 
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
+        print(gyro_z_value)
         if gyro_z_value < (self.default_orientation_value - self.default_orientation_value_range):
             orientation = turn_left
         elif gyro_z_value > (self.default_orientation_value + self.default_orientation_value_range):

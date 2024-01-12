@@ -42,8 +42,10 @@ class Positioningsystem:
         return self.speedometer.get_distance()
 
     def send_speed_distance_rotation_to_server(self):  # function to send speed, distance and rotation to navigation
-        speed = int(self.get_speed_from_speedometer())
-        dist = self.get_driven_distance_from_speedometer()
+        speed = int(self.speedometer.current_speed)
+        dist = self.speedometer.current_distance
+        print("Speed: ", speed)
+        print("Dist: ", dist)
         orientation = self.get_orientation()
         if orientation == 0:
             print("Keine Drehung")
@@ -67,7 +69,7 @@ def start_positioning_system():  # function to start the positioning system
             curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
-            pos_system.speedometer.print_stats()
+            #pos_system.speedometer.print_stats()
             pos_system.send_speed_distance_rotation_to_server()
     except KeyboardInterrupt:
         pos_system.client.close_connection()

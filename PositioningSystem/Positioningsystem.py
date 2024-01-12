@@ -54,8 +54,8 @@ class Positioningsystem:
         elif orientation == 2:
             print("Linksdrehung")
         message = (str(speed) + " " + str(dist) + " " + str(orientation))
-        self.client.create_socket()
-        self.client.send_message(message)
+        #self.client.create_socket()
+        #self.client.send_message(message)
 
 
 def start_positioning_system():  # function to start the positioning system

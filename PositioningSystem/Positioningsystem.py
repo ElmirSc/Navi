@@ -62,7 +62,7 @@ def start_positioning_system():  # function to start the positioning system
         while True:
             pos_system.speedometer.set_count()
             time.sleep(1)
-            pos_system.speedometer.check_direction_tire()
+            #pos_system.speedometer.check_direction_tire()
             curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)

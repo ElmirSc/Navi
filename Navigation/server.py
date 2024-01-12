@@ -64,6 +64,7 @@ if __name__ == "__main__":
             server.handle_data()
             print("Speed: ", server.current_speed)
             print("Dist: ", server.driven_distance)
+            print("rotation: ", server.current_rotation)
         else:
             print("waiting for connection")
     server.connection.close()

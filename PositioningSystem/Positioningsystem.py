@@ -45,13 +45,12 @@ class Positioningsystem:
         speed = self.get_speed_from_speedometer()
         dist = self.get_driven_distance_from_speedometer()
         orientation = self.get_orientation()
-        match orientation:
-            case 0:
-                print("Keine Drehung")
-            case 1:
-                print("Rechtsdrehung")
-            case 2:
-                print("Linksdrehung")
+        if orientation == 0:
+            print("Keine Drehung")
+        elif orientation == 1:
+            print("Rechtsdrehung")
+        elif orientation == 2:
+            print("Linksdrehung")
         message = (str(speed) + " " + str(dist) + " " + str(orientation))
         self.client.send_message(message)
 

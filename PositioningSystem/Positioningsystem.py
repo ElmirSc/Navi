@@ -16,7 +16,7 @@ hall_pin_backward = 27
 # positioning system class for whole system
 class Positioningsystem:
     def __init__(self, hall_pin_forward, hall_pin_backward):
-        self.mpu6050 = OwnMpu6050(gyro_range=250)  # mpu6050 object
+        self.mpu6050 = OwnMpu6050(gyro_range=2000,filter_range=256)  # mpu6050 object
         self.speedometer = Speedometer(hall_pin_forward, hall_pin_backward)  # speedometer object
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
@@ -25,12 +25,6 @@ class Positioningsystem:
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
         print(gyro_z_value)
-        # if gyro_z_value < (self.default_orientation_value - self.default_orientation_value_range):
-        #     orientation = turn_left
-        # elif gyro_z_value > (self.default_orientation_value + self.default_orientation_value_range):
-        #     orientation = turn_right
-        # else:
-        #     orientation = no_turn
         if gyro_z_value < -5:
             orientation = turn_right
         elif gyro_z_value > 5:
@@ -41,7 +35,7 @@ class Positioningsystem:
 
     def init_positioning_system(self):  # function to initialilze positioning system
         self.speedometer.init_speedometer()
-        #self.client.create_socket()
+        self.mpu6050.init_gyroskop()
 
     def get_speed_from_speedometer(self):  # function to get speed of speedometer
         return self.speedometer.get_speed()

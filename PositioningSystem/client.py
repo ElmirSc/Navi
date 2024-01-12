@@ -5,7 +5,7 @@ import time
 # class to create a client to communicate to server
 class Client:
     def __init__(self):
-        self.host_ip = '192.168.0.12'  # host ip address
+        self.host_ip = '172.20.10.5'  # host ip address
         self.port_number = 5555  # communication port
         self.connected_client = None  # object which is the real socket
         self.data = None

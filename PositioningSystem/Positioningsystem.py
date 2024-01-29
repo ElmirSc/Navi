@@ -63,6 +63,9 @@ class Positioningsystem:
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
+    if pos_system.client.accept_connection():
+        pos_system.client.receive_message()
+    print(pos_system.client.data)
     try:
         while True:
             pos_system.speedometer.set_count()

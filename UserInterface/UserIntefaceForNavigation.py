@@ -191,7 +191,7 @@ class Userinterface:
             if current_node[1] > next_node[1]:
                 pixels_between_two_nodes_y = next_node[1] - current_node[1]
             elif current_node[1] < next_node[1]:
-                pixels_between_two_nodes_y = current_node[1] - next_node[1]
+                pixels_between_two_nodes_y = next_node[1] - current_node[1]
             pixel_of_one_cost = pixels_between_two_nodes_y / cost_between_nodes
             current_pixel_cost_on_map = pixel_of_one_cost * current_cost
             y_position = int(current_node[1] + current_pixel_cost_on_map)
@@ -241,6 +241,7 @@ class Userinterface:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_CLOCKWISE)
             case 2:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_180)
+
 
         return car_resized
 

@@ -4,8 +4,8 @@ import socket
 # class which creates a socket an allows connections
 class Server:
     def __init__(self):
-        self.host_ip = '172.20.10.5'  # host ip address
-        self.port_number = 5555  # communication port
+        self.host_ip = '10.27.100.19'  # host ip address
+        self.port_number = 5556  # communication port
         self.server_socket = None  # object which is the real socket
         self.connection = None
         self.address = None
@@ -40,7 +40,6 @@ class Server:
     def handle_data(self):  # function to split every number of the data pack to get speed, distance and rotation
         if len(self.data) > 0:
             string = self.data.split()
-
             if len(string) > 0:
                 self.current_speed = int(string[0])
                 self.driven_distance = float(string[1])
@@ -48,6 +47,17 @@ class Server:
 
     def close_connection(self):  # function to close the connection to other
         self.server_socket.connection.close()
+
+    def send_data(self, data):
+        data = self.change_data_into_string(data)
+        if self.server_socket.connect:
+            self.connection.sendall(data.encode())
+
+    def change_data_into_string(self,data):
+        data_to_send = ""
+        for i in data:
+            data_to_send = data_to_send + str(i) + " "
+        return data_to_send
 
 
 if __name__ == "__main__":
@@ -59,12 +69,14 @@ if __name__ == "__main__":
             print(f"Verbunden mit {server.address}")
             # while True:
             server.receive_data()
+            print(server.data)
             # if not server.data:
             #    break
-            server.handle_data()
-            print("Speed: ", server.current_speed)
-            print("Dist: ", server.driven_distance)
-            print("rotation: ", server.current_rotation)
+            #server.handle_data()
+            #print("Speed: ", server.current_speed)
+            #print("Dist: ", server.driven_distance)
+            #print("rotation: ", server.current_rotation)
+            server.send_data("hallo")
         else:
             print("waiting for connection")
     server.connection.close()

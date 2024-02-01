@@ -21,17 +21,20 @@ class Positioningsystem:
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
         self.client = Client()  # client object
+        self.orientation_of_car = no_turn
+        self.prev_gyro_z_value = 0
 
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
         print(gyro_z_value)
-        if gyro_z_value < -20:
-            orientation = turn_right
-        elif gyro_z_value > 20:
-            orientation = turn_left
+        if gyro_z_value < -20 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -20:
+            self.orientation_of_car = turn_right
+        elif gyro_z_value > 20 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 20:
+            self.orientation_of_car = turn_left
         else:
-            orientation = no_turn
-        return orientation
+            self.orientation_of_car = no_turn
+        self.prev_gyro_z_value = gyro_z_value
+
 
     def init_positioning_system(self):  # function to initialilze positioning system
         self.speedometer.init_speedometer()
@@ -48,14 +51,14 @@ class Positioningsystem:
         dist = self.speedometer.current_distance
         print("Speed: ", speed)
         print("Dist: ", dist)
-        orientation = self.get_orientation()
-        if orientation == 0:
+        self.get_orientation()
+        if self.orientation_of_car == no_turn:
             print("Keine Drehung")
-        elif orientation == 1:
+        elif self.orientation_of_car == turn_right:
             print("Rechtsdrehung")
-        elif orientation == 2:
+        elif self.orientation_of_car == turn_left:
             print("Linksdrehung")
-        message = (str(speed) + " " + str(dist) + " " + str(orientation))
+        message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
         self.client.create_socket()
         self.client.send_message(message)
 

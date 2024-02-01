@@ -119,7 +119,7 @@ def a_b_way(client):  # test function for route a -> b
 if __name__ == "__main__":
     # testing socket connection
     client = Client()
-    client.create_socket()
+    #client.create_socket()
     #client.send_message("Test")
     #client.set_socket_to_listen_mode()
     #while True:

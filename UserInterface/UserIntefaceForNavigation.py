@@ -173,11 +173,11 @@ class Userinterface:
         self.tk_image_window.config(image=imageTk)
         self.tk_image_window.image = imageTk
 
-    def update_position_of_car_on_map(self, current_node, next_node, standing_of_car_on_map, current_cost,
+    def update_position_of_car_on_map(self, current_node, next_node, current_rotation_from_mpu6050, current_cost,
                                       cost_between_nodes):  # function to update car position during runtime
         car = cv2.imread("UserInterface/car_current_orientation.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
-        car_resized = self.get_rotated_car(standing_of_car_on_map, car_resized)
+        car_resized = self.get_rotated_car(current_rotation_from_mpu6050, car_resized)
 
         pixels_between_two_nodes_x = 0
         pixels_between_two_nodes_y = 0
@@ -241,7 +241,6 @@ class Userinterface:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_CLOCKWISE)
             case 2:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_180)
-
 
         return car_resized
 

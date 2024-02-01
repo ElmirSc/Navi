@@ -13,6 +13,12 @@ class OwnMpu6050:
         self.gyroRange = gyro_range  # gyro range for mpu6050
         self.filter_range = filter_range
 
+    def init_mpu6050(self, new_gyro_range, new_filter_range):
+        self.filter_range = new_filter_range
+        self.gyroRange = new_gyro_range
+        self.set_gyro_range()
+        self.set_filter_range()
+
     def read_from_bus(self, register):  # function to read data from bus between raspberry and mpu6050
         # Read data
         high = self.bus.read_byte_data(self.mpu6050_address, register)
@@ -88,3 +94,13 @@ class OwnMpu6050:
     def init_gyroskop(self):
         self.set_gyro_range()
         self.set_filter_range()
+
+
+if __name__ == "__main__":
+    mpu6050 = OwnMpu6050()
+    mpu6050.init_mpu6050(250, 20)
+    try:
+        print(mpu6050.get_gyro_z())
+    except KeyboardInterrupt:
+        print("Finish")
+

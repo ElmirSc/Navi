@@ -62,7 +62,6 @@ class Positioningsystem:
         elif self.orientation_of_car == turn_left:
             print("Linksdrehung")
         message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
-
         self.client.send_message(message)
 
 def drive_car_with_keyboard(car):

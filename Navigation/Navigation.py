@@ -139,9 +139,9 @@ class Navigation:
             case "g":
                 return 2
             case "r":
-                return 1.5
+                return 1.6
             case "l":
-                return 1.5
+                return 1.6
             case _:
                 return 0
 

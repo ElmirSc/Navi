@@ -7,13 +7,12 @@ class Client:
     def __init__(self):
         self.host_ip = '172.20.10.5'  # host ip address
         self.port_number = 5556  # communication port
-        self.connected_client = None  # object which is the real socket
+        self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.data = None
         self.connection = None
         self.address = None
 
     def create_socket(self):  # function to create the client
-        self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected_client.settimeout(10)
         self.connected_client.connect((self.host_ip, self.port_number))
 

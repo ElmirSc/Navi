@@ -1,6 +1,9 @@
 import RPi.GPIO as GPIO
 import time
 import keyboard
+import sys
+
+sys.path.append('/usr/local/lib/python3.7')
 
 class RCModellAuto:
     def __init__(self, motor_pin, steering_pin):

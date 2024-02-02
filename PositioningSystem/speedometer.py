@@ -47,12 +47,12 @@ class Speedometer:
     def init_speedometer(self):  # function to initialize speedometer
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.hall_forward_sensor.get_pin_number(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(self.hall_back_sensor.get_pin_number(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        #GPIO.setup(self.hall_back_sensor.get_pin_number(), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         self.hall_forward_sensor.init_pin_state(GPIO.input(self.hall_forward_sensor.get_pin_number()))
-        self.hall_back_sensor.init_pin_state(GPIO.input(self.hall_back_sensor.get_pin_number()))
+        #self.hall_back_sensor.init_pin_state(GPIO.input(self.hall_back_sensor.get_pin_number()))
         self.change_edge_event_speedometer(self.hall_forward_sensor.get_pin_number())
-        self.change_edge_event_speedometer(self.hall_back_sensor.get_pin_number())
+        #self.change_edge_event_speedometer(self.hall_back_sensor.get_pin_number())
         self.set_default_direction()
 
     def change_edge_event_speedometer(self, pin):  # function to change the edge event of pins

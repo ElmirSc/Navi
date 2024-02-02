@@ -48,7 +48,7 @@ class RCModellAuto:
 def control_car(car):
     while True:
         if keyboard.is_pressed('w'):
-            car.drive(7.5)
+            car.drive(8.0)
         elif keyboard.is_pressed('s'):
             car.drive(4.0)
         elif keyboard.is_pressed('a'):
@@ -63,7 +63,12 @@ def control_car(car):
 
 if __name__ == "__main__":
     car = RCModellAuto(motor_pin=13, steering_pin=19)
-    car.drive(8.0)
+    print("Drücke 'q' zum Beenden")
+    while True:
+        if keyboard.is_pressed('q'):
+            print("Du hast 'q' gedrückt. Beenden.")
+            break
+    #car.drive(8.0)
     try:
         control_car(car)
     finally:

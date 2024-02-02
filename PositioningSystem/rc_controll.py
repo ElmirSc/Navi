@@ -3,7 +3,7 @@ import time
 import keyboard
 import sys
 
-sys.path.append('/usr/local/lib/python2.7')
+sys.path.append('/usr/local/lib/python3.7/dist-packages')
 
 class RCModellAuto:
     def __init__(self, motor_pin, steering_pin):

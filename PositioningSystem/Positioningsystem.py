@@ -62,7 +62,7 @@ class Positioningsystem:
         elif self.orientation_of_car == turn_left:
             print("Linksdrehung")
         message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
-        self.client.create_socket()
+
         self.client.send_message(message)
 
 def drive_car_with_keyboard(car):
@@ -93,6 +93,7 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
+    pos_system.client.create_socket()
     try:
         while True:
             pos_system.speedometer.set_count()

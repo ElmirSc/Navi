@@ -92,13 +92,13 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
-    thread_for_socket_connection = Thread(target=handle_connection_to_socket, args=(pos_system,))
+    #thread_for_socket_connection = Thread(target=handle_connection_to_socket, args=(pos_system,))
     thread_for_process_all_data = Thread(target=process_hall_and_mpu6050, args=(pos_system,))
 
-    thread_for_socket_connection.start()
+    #thread_for_socket_connection.start()
     thread_for_process_all_data.start()
 
-    thread_for_socket_connection.join()
+    #thread_for_socket_connection.join()
     thread_for_process_all_data.join()
 
     #car = RCModellAuto(motor_pin=13, steering_pin=19)

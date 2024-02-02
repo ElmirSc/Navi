@@ -47,15 +47,16 @@ class RCModellAuto:
 
 def control_car(car):
     while True:
-        if keyboard.is_pressed('w'):
+        pressed_button = str(input())
+        if pressed_button == "w":
             car.drive(8.0)
-        elif keyboard.is_pressed('s'):
+        elif pressed_button == "s":
             car.drive(4.0)
-        elif keyboard.is_pressed('a'):
+        elif pressed_button == "a":
             car.steer(5.0)
-        elif keyboard.is_pressed('d'):
+        elif pressed_button == "d":
             car.steer(10.0)
-        elif keyboard.is_pressed('x'):
+        elif pressed_button == "x":
             car.stop()
             break
         time.sleep(0.1)
@@ -63,12 +64,6 @@ def control_car(car):
 
 if __name__ == "__main__":
     car = RCModellAuto(motor_pin=13, steering_pin=19)
-    print("Drücke 'q' zum Beenden")
-    while True:
-        if keyboard.is_pressed('q'):
-            print("Du hast 'q' gedrückt. Beenden.")
-            break
-    #car.drive(8.0)
     try:
         control_car(car)
     finally:

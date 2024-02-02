@@ -44,20 +44,20 @@ class RCModellAuto:
 
 def control_car(car):
     while True:
-        if keyboard.is_pressed('w'):  # Vorwärts fahren, wenn W gedrückt wird
+        if keyboard.is_pressed('w'):
             car.drive(7.5)
-        elif keyboard.is_pressed('s'):  # Rückwärts fahren, wenn S gedrückt wird
+        elif keyboard.is_pressed('s'):
             car.drive(4.0)
-        elif keyboard.is_pressed('a'):  # Nach links steuern, wenn A gedrückt wird
+        elif keyboard.is_pressed('a'):
             car.steer(5.0)
-        elif keyboard.is_pressed('d'):  # Nach rechts steuern, wenn D gedrückt wird
+        elif keyboard.is_pressed('d'):
             car.steer(10.0)
-        elif keyboard.is_pressed('x'):  # Stoppen, wenn X gedrückt wird
+        elif keyboard.is_pressed('x'):
             car.stop()
             break
-        time.sleep(0.1)  # Kurze Pause, um das Polling zu begrenzen
+        time.sleep(0.1)
 
-# Beispiel zur Verwendung der Klasse
+
 if __name__ == "__main__":
     car = RCModellAuto(motor_pin=13, steering_pin=19)
 

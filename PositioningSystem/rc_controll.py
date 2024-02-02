@@ -51,11 +51,11 @@ def control_car(car):
         if pressed_button == "s":#nach hinten
             car.drive(7.0)
         elif pressed_button == "w": #nach vorne
-            car.drive(5.4)
+            car.drive(5.3)
         elif pressed_button == "a":#links
             car.steer(5.3)
         elif pressed_button == "d":#rechts
-            car.steer(8.0)
+            car.steer(8.5)
         elif pressed_button == "g":#gerade
             car.steer(7.0)
         elif pressed_button == "q":#stehen bleiben

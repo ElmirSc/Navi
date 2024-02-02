@@ -63,7 +63,7 @@ def control_car(car):
 
 if __name__ == "__main__":
     car = RCModellAuto(motor_pin=13, steering_pin=19)
-
+    car.drive(8.0)
     try:
         control_car(car)
     finally:

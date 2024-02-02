@@ -45,7 +45,7 @@ class RCModellAuto:
 
 # Beispiel zur Verwendung der Klasse
 if __name__ == "__main__":
-    car = RCModellAuto(motor_pin=17, steering_pin=27)
+    car = RCModellAuto(motor_pin=13, steering_pin=19)
 
     try:
         car.forward(5)  # Geschwindigkeit anpassen

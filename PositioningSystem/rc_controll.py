@@ -55,7 +55,9 @@ def control_car(car):
         elif pressed_button == "a":
             car.steer(5.0)
         elif pressed_button == "d":
-            car.steer(8.0)
+            car.steer(9.0)
+        elif pressed_button == "g":
+            car.steer(7.0)
         elif pressed_button == "x":
             car.stop()
             break

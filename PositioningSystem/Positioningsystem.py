@@ -77,7 +77,7 @@ def process_hall_and_mpu6050(pos_system):
             time.sleep(1)
             os.system('clear')
             #pos_system.speedometer.check_direction_tire()
-            curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
+            curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.wheel_diameter * pi) / 4))
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
             #pos_system.speedometer.print_stats()

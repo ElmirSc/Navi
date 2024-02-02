@@ -15,7 +15,7 @@ class Speedometer:
         self.current_speed = 0
         self.direction = 1
         self.current_distance = 0
-        self.wheel_diameter = 0.11
+        self.wheel_diameter = 0.113
         self.pin_state = 1
         self.init_speedometer()
         self.start_bool = False

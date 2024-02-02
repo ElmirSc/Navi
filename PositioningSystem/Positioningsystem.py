@@ -77,10 +77,10 @@ def start_positioning_system():  # function to start the positioning system
     car = RCModellAuto(motor_pin=13, steering_pin=19)
     thread_one = Thread(target=drive_car_with_keyboar(car))
     thread_one.start()
-
-    if pos_system.client.accept_connection():
-        pos_system.client.receive_message()
-    print(pos_system.client.data)
+    thread_one.join()
+    #if pos_system.client.accept_connection():
+    #    pos_system.client.receive_message()
+    #print(pos_system.client.data)
     try:
         while True:
             pos_system.speedometer.set_count()

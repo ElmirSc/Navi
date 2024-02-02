@@ -48,14 +48,14 @@ class RCModellAuto:
 def control_car(car):
     while True:
         pressed_button = str(input())
-        if pressed_button == "w":
+        if pressed_button == "s":
             car.drive(7.0)
-        elif pressed_button == "s":
-            car.drive(5.0)
+        elif pressed_button == "w":
+            car.drive(5.2)
         elif pressed_button == "a":
             car.steer(5.0)
         elif pressed_button == "d":
-            car.steer(7.3)
+            car.steer(8.0)
         elif pressed_button == "x":
             car.stop()
             break

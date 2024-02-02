@@ -1,7 +1,5 @@
 from mpu6050Config import *
-import time
 import smbus
-import mpu6050
 
 
 # self implemented mpu6050 class

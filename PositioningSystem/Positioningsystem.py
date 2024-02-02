@@ -7,6 +7,8 @@ from speedometer import *
 from ownmpu6050 import OwnMpu6050
 from positionigSystemConfig import *
 from client import Client
+from rc_controll import RCModellAuto, control_car
+from threading import Thread
 
 gyroAddress = 0x68
 hall_pin_forward = 17
@@ -62,10 +64,20 @@ class Positioningsystem:
         self.client.create_socket()
         self.client.send_message(message)
 
+def drive_car_with_keyboar(car):
+    try:
+        control_car(car)
+    finally:
+        car.cleanup()
+
 
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
+    car = RCModellAuto(motor_pin=13, steering_pin=19)
+    thread_one = Thread(target=drive_car_with_keyboar(car))
+    thread_one.start()
+
     if pos_system.client.accept_connection():
         pos_system.client.receive_message()
     print(pos_system.client.data)
@@ -83,6 +95,7 @@ def start_positioning_system():  # function to start the positioning system
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()
+        thread_one.join()
 
 
 if __name__ == "__main__":

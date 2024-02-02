@@ -94,8 +94,11 @@ def start_positioning_system():  # function to start the positioning system
     car = RCModellAuto(motor_pin=13, steering_pin=19)
     thread_one = Thread(target=drive_car_with_keyboard, args=(car,))
     thread_one.start()
-    process_hall_and_mpu6050(pos_system)
+    thread_two = Thread(target=process_hall_and_mpu6050, args=(pos_system,))
+    thread_two.start()
+    #process_hall_and_mpu6050(pos_system)
     thread_one.join()
+    thread_two.join()
 
     #if pos_system.client.accept_connection():
     #    pos_system.client.receive_message()

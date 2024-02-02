@@ -122,6 +122,7 @@ if __name__ == '__main__':
             curren_distance = (speedometer.get_count() * ((speedometer.wheel_diameter * pi) / 4))
             speedometer.set_distance(curren_distance)
             speedometer.set_speed(curren_distance * 3.6 * speedometer.direction)
+            speedometer.print_stats()
     except KeyboardInterrupt:
         GPIO.cleanup()
 

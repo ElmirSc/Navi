@@ -23,11 +23,11 @@ class RCModellAuto:
         sleep(10)
 
     def forward(self, speed):
-        # Bewegt das Auto vorwärts
+        # Bewegt das Auto vorwerts
         self.pwm_motor.ChangeDutyCycle(speed)
 
     def reverse(self, speed):
-        # Bewegt das Auto rückwärts
+        # Bewegt das Auto rueckwerts
         return 0
 
     def steer(self, angle):
@@ -35,7 +35,7 @@ class RCModellAuto:
         self.pwm_servo.ChangeDutyCycle(angle)
 
     def stop(self):
-        # Hält das Auto an
+        # Haelt das Auto an
         self.pwm_servo.stop()
         self.pwm_motor.stop()
 

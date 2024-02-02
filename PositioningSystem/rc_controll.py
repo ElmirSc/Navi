@@ -47,7 +47,7 @@ class RCModellAuto:
 
 def control_car(car):
     while True:
-        pressed_button = str(input())
+        pressed_button = input()
         if pressed_button == "s":#nach hinten
             car.drive(7.0)
         elif pressed_button == "w": #nach vorne

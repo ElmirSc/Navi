@@ -18,9 +18,9 @@ class RCModellAuto:
         self.pwm_servo = GPIO.PWM(self.steering_pin, self.pwm_frequency)
         self.pwm_motor = GPIO.PWM(self.motor_pin, self.pwm_frequency)
         self.pwm_servo.start(7.0)
-        sleep(1)
+        time.sleep(1)
         self.pwm_motor.start(6.0)
-        sleep(10)
+        time.sleep(10)
 
     def forward(self, speed):
         # Bewegt das Auto vorwerts

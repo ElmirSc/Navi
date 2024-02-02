@@ -92,13 +92,20 @@ def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
     #car = RCModellAuto(motor_pin=13, steering_pin=19)
-    #thread_one = Thread(target=drive_car_with_keyboard, args=(car,))
-    #thread_one.start()
-    thread_two = Thread(target=process_hall_and_mpu6050, args=(pos_system,))
-    thread_two.start()
-    #process_hall_and_mpu6050(pos_system)
-    #thread_one.join()
-    thread_two.join()
+    try:
+        while True:
+            pos_system.speedometer.set_count()
+            time.sleep(1)
+            os.system('clear')
+            #pos_system.speedometer.check_direction_tire()
+            curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
+            pos_system.speedometer.set_distance(curren_distance)
+            pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
+            #pos_system.speedometer.print_stats()
+            pos_system.send_speed_distance_rotation_to_server()
+    except KeyboardInterrupt:
+        pos_system.client.close_connection()
+        GPIO.cleanup()
 
     #if pos_system.client.accept_connection():
     #    pos_system.client.receive_message()

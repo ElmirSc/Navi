@@ -39,6 +39,7 @@ class Positioningsystem:
 
 
     def init_positioning_system(self):  # function to initialilze positioning system
+        print("Initializing system")
         self.speedometer.init_speedometer()
         self.mpu6050.init_gyroskop()
 

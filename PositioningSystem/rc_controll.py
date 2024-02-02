@@ -12,6 +12,7 @@ class RCModellAuto:
 
     def setup(self):
         # Initialisiert die GPIO-Pins
+        GPIO.cleanup()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.motor_pin, GPIO.OUT)
         GPIO.setup(self.steering_pin, GPIO.OUT)

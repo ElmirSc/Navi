@@ -70,17 +70,7 @@ def drive_car_with_keyboar(car):
     finally:
         car.cleanup()
 
-
-def start_positioning_system():  # function to start the positioning system
-    pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
-    pos_system.init_positioning_system()
-    car = RCModellAuto(motor_pin=13, steering_pin=19)
-    thread_one = Thread(target=drive_car_with_keyboar(car))
-    thread_one.start()
-    thread_one.join()
-    #if pos_system.client.accept_connection():
-    #    pos_system.client.receive_message()
-    #print(pos_system.client.data)
+def process_hall_and_mpu6050(pos_system):
     try:
         while True:
             pos_system.speedometer.set_count()
@@ -95,7 +85,22 @@ def start_positioning_system():  # function to start the positioning system
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()
-        thread_one.join()
+
+
+
+def start_positioning_system():  # function to start the positioning system
+    pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
+    pos_system.init_positioning_system()
+    car = RCModellAuto(motor_pin=13, steering_pin=19)
+    thread_one = Thread(target=drive_car_with_keyboar(car))
+    thread_one.start()
+    process_hall_and_mpu6050(pos_system)
+    thread_one.join()
+
+    #if pos_system.client.accept_connection():
+    #    pos_system.client.receive_message()
+    #print(pos_system.client.data)
+
 
 
 if __name__ == "__main__":

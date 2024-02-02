@@ -49,13 +49,13 @@ def control_car(car):
     while True:
         pressed_button = str(input())
         if pressed_button == "w":
-            car.drive(8.0)
+            car.drive(6.5)
         elif pressed_button == "s":
-            car.drive(4.0)
+            car.drive(5.5)
         elif pressed_button == "a":
-            car.steer(5.0)
+            car.steer(6.0)
         elif pressed_button == "d":
-            car.steer(10.0)
+            car.steer(7.3)
         elif pressed_button == "x":
             car.stop()
             break

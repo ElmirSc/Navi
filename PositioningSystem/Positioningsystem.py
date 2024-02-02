@@ -64,7 +64,7 @@ class Positioningsystem:
         self.client.create_socket()
         self.client.send_message(message)
 
-def drive_car_with_keyboar(car):
+def drive_car_with_keyboard(car):
     try:
         control_car(car)
     finally:
@@ -91,11 +91,11 @@ def process_hall_and_mpu6050(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
-    #car = RCModellAuto(motor_pin=13, steering_pin=19)
-    #thread_one = Thread(target=drive_car_with_keyboar(car))
-    #thread_one.start()
+    car = RCModellAuto(motor_pin=13, steering_pin=19)
+    thread_one = Thread(target=drive_car_with_keyboard, args=(car,))
+    thread_one.start()
     process_hall_and_mpu6050(pos_system)
-    #thread_one.join()
+    thread_one.join()
 
     #if pos_system.client.accept_connection():
     #    pos_system.client.receive_message()

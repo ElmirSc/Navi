@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-import keyboard
+#import keyboard
 import sys
 
 sys.path.append('/usr/local/lib/python3.7/dist-packages')

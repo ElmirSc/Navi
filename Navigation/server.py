@@ -4,7 +4,7 @@ import socket
 # class which creates a socket an allows connections
 class Server:
     def __init__(self):
-        self.host_ip = '10.27.100.19'  # host ip address
+        self.host_ip = '172.20.10.5'  # host ip address
         self.port_number = 5556  # communication port
         self.server_socket = None  # object which is the real socket
         self.connection = None

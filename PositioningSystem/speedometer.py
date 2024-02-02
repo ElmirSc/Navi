@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 from Hallsensor import Hallsensor
+import os
 
 pi = 3.141592653
 speedometerOne = 0
@@ -15,9 +16,8 @@ class Speedometer:
         self.current_speed = 0
         self.direction = 1
         self.current_distance = 0
-        self.wheel_diameter = 0.113
+        self.wheel_diameter = 0.114
         self.pin_state = 1
-        self.init_speedometer()
         self.start_bool = False
 
     def set_distance(self, new_distance):  # function to set the distance
@@ -111,18 +111,17 @@ class Speedometer:
             self.hall_back_sensor.set_pin_state()
             self.change_edge_event_speedometer(self.hall_back_sensor.pin)
 
-# try:
-#     speedometerOne = speedometer(17, 27)
-#     while True:
-#         speedometerOne.setCount()
-#         time.sleep(1)
-#         #speedometerOne.checkDirectionTire()
-#         currenDistance = (speedometerOne.getCount() * ((speedometerOne.getWheel() * pi) / 4))
-#         speedometerOne.setDistance(currenDistance)
-#         speedometerOne.setSpeed(currenDistance * 3.6 * speedometerOne.direction)
-#         speedometerOne.printStats()
-#
-#
-#
-# except KeyboardInterrupt:
-#     GPIO.cleanup()
+if __name__ == '__main__':
+    speedometer = Speedometer(17,27)
+    speedometer.init_speedometer()
+    try:
+        while True:
+            speedometer.set_count()
+            time.sleep(1)
+            os.system('clear')
+            curren_distance = (speedometer.get_count() * ((speedometer.wheel_diameter * pi) / 4))
+            speedometer.set_distance(curren_distance)
+            speedometer.set_speed(curren_distance * 3.6 * speedometer.direction)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+

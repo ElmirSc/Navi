@@ -104,17 +104,6 @@ def start_positioning_system():  # function to start the positioning system
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()
-    #thread_for_socket_connection = Thread(target=handle_connection_to_socket, args=(pos_system,))
-    #thread_for_process_all_data = Thread(target=process_hall_and_mpu6050, args=(pos_system,))
-
-    #thread_for_socket_connection.start()
-    #thread_for_process_all_data.start()
-
-    #thread_for_socket_connection.join()
-    #thread_for_process_all_data.join()
-
-    #car = RCModellAuto(motor_pin=13, steering_pin=19)
-
     #if pos_system.client.accept_connection():
     #    pos_system.client.receive_message()
     #print(pos_system.client.data)

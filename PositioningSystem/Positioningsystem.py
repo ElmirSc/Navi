@@ -74,6 +74,7 @@ class Positioningsystem:
             print("Keine drehung")
         print(self.test_var)
         message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
+        self.orientation_of_car = no_turn
         self.client.send_message(message)
 
 def drive_car_with_keyboard(car):
@@ -119,7 +120,7 @@ def start_positioning_system():  # function to start the positioning system
                 print("Received Data: ", pos_system.client.data)
                 if pos_system.client.data == 0:
                     pos_system.speedometer.current_distance = 0
-                    pos_system.client.data = None
+                pos_system.client.data = None
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()

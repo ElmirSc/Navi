@@ -6,7 +6,7 @@ class Server:
     def __init__(self):
         self.host_ip = '172.20.10.5'  # host ip address
         self.port_number = 5556  # communication port
-        self.server_socket = None  # object which is the real socket
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # object which is the real socket
         self.connection = None
         self.address = None
         self.data = None
@@ -15,8 +15,7 @@ class Server:
         self.current_rotation = 0
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
-        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.settimeout(10)
+        #self.server_socket.settimeout(10)
         self.server_socket.bind((self.host_ip, self.port_number))
 
     def set_socket_to_listen_mode(self):  # function to set the socket into listen mode
@@ -64,10 +63,9 @@ if __name__ == "__main__":
     server = Server()
     server.create_socket()
     server.set_socket_to_listen_mode()
-    while True:
-        if server.accept_connection():
-            print(f"Verbunden mit {server.address}")
-            # while True:
+    if server.accept_connection():
+        print(f"Verbunden mit {server.address}")
+        while True:
             server.receive_data()
             print(server.data)
             # if not server.data:
@@ -76,7 +74,7 @@ if __name__ == "__main__":
             #print("Speed: ", server.current_speed)
             #print("Dist: ", server.driven_distance)
             #print("rotation: ", server.current_rotation)
-            server.send_data("hallo")
+            #server.send_data("hallo")
         else:
             print("waiting for connection")
     server.connection.close()

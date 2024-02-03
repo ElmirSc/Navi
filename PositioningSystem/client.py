@@ -93,9 +93,8 @@ def a_b_way(client):  # test function for route a -> b
     speed = 0
     dist = 0.0
     rot = 4
-
-    while dist < 10.0:
-        client.connect_to_socket()
+    client.connect_to_socket()
+    while dist < 11.0:
         rot = 3
         if dist > 2.0 and dist < 6.5:
             rot = 1
@@ -106,7 +105,7 @@ def a_b_way(client):  # test function for route a -> b
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        client.close_connection()
+        #client.close_connection()
         if speed == 20:
             counter = -1
         elif speed == 0:

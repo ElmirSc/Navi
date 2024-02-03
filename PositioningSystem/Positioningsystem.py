@@ -26,22 +26,27 @@ class Positioningsystem:
         self.orientation_of_car = no_turn
         self.prev_turn = no_turn
         self.in_turn = False
+        self.prev_gyro_z_val = -2.5
 
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", gyro_z_value)
+
         if gyro_z_value < -turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
-            self.prev_turn = turn_right
+            self.prev_turn = no_turn
         elif gyro_z_value > turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
-            self.prev_turn = turn_left
+            self.prev_turn = no_turn
         elif -no_turn_threshold < gyro_z_value < no_turn_threshold and self.in_turn:
             self.in_turn = False
+            if self.orientation_of_car == turn_right:
+                self.prev_turn = turn_right
+            elif self.orientation_of_car == turn_left:
+                self.prev_turn = turn_left
             self.orientation_of_car = no_turn
-            self.prev_turn = no_turn
 
 
 

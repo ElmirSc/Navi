@@ -102,6 +102,7 @@ def start_positioning_system():  # function to start the positioning system
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
             pos_system.send_speed_distance_rotation_to_server()
+            pos_system.client.close_connection()
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()

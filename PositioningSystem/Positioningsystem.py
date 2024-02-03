@@ -26,29 +26,23 @@ class Positioningsystem:
         self.orientation_of_car = no_turn
         self.prev_turn = 0
         self.in_turn = False
-        self.prev_gyro_z_val = -2.5
+        self.counted_turn = True
 
-    def get_orientation(self):  # function to get orientation of car
+    def get_orientation(self):
         gyro_z_value = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", gyro_z_value)
 
-        if gyro_z_value < -turn_threshold and not self.in_turn and self.prev_turn != no_turn:
+        if gyro_z_value < -turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
-            self.prev_turn = no_turn
-        elif gyro_z_value > turn_threshold and not self.in_turn and self.prev_turn != no_turn:
+            self.counted_turn = False
+        elif gyro_z_value > turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
-            self.prev_turn = no_turn
+            self.counted_turn = False
         elif -no_turn_threshold < gyro_z_value < no_turn_threshold and self.in_turn:
             self.in_turn = False
-            if self.orientation_of_car == turn_right:
-                self.prev_turn = turn_right
-            elif self.orientation_of_car == turn_left:
-                self.prev_turn = turn_left
             self.orientation_of_car = no_turn
-
-
 
     def init_positioning_system(self):  # function to initialilze positioning system
         print("Initializing system")
@@ -125,26 +119,20 @@ def start_positioning_system():  # function to start the positioning system
         GPIO.cleanup()
 
 def test_rotation_of_car(pos_system):
-    test_var = []
-    left_var = []
-    right_var = []
-    left_var.append("links")
-    left_var.append(0)
-    right_var.append("rechts")
-    right_var.append(0)
-    test_var.append(left_var)
-    test_var.append(right_var)
+    test_var = {"links": 0, "rechts": 0}
     try:
         while True:
             os.system('clear')
             pos_system.get_orientation()
-            if pos_system.orientation_of_car == turn_left and pos_system.prev_turn == no_turn:
-                test_var[0][1] += 1
+            if pos_system.orientation_of_car == turn_left and not pos_system.counted_turn:
+                test_var["links"] += 1
+                pos_system.counted_turn = True
                 print("Links")
-            elif pos_system.orientation_of_car == turn_right and pos_system.prev_turn == no_turn:
-                test_var[1][1] += 1
+            elif pos_system.orientation_of_car == turn_right and not pos_system.counted_turn:
+                test_var["rechts"] += 1
+                pos_system.counted_turn = True
                 print("Rechts")
-            elif pos_system.orientation_of_car == 3:
+            elif pos_system.orientation_of_car == no_turn:
                 print("Keine drehung")
             print(test_var)
     except KeyboardInterrupt:

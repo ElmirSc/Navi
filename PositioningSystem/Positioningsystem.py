@@ -24,16 +24,19 @@ class Positioningsystem:
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
         self.client = Client()  # client object
         self.orientation_of_car = no_turn
-        self.prev_gyro_z_value = 0
+        self.prev_gyro_z_value = -2.5
+        self.in_turn = False
 
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", gyro_z_value)
-        if gyro_z_value < -10 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -10:
+        if gyro_z_value < -turn_threshold and not self.in_turn:
+            self.in_turn = True
             self.orientation_of_car = turn_right
-        elif gyro_z_value > 10 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 10:
+        elif gyro_z_value > turn_threshold and not self.in_turn:
+            self.in_turn = True
             self.orientation_of_car = turn_left
-        else:
+        elif -no_turn_threshold < gyro_z_value < no_turn_threshold and self.in_turn:
             self.orientation_of_car = no_turn
         self.prev_gyro_z_value = gyro_z_value
 

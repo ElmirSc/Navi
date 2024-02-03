@@ -13,7 +13,7 @@ class Client:
         self.address = None
 
     def connect_to_socket(self):  # function to create the client
-        self.connected_client.settimeout(0.5)
+        self.connected_client.settimeout(0.001)
         self.connected_client.connect((self.host_ip, self.port_number))
 
     def send_message(self, current_message_to_send):  # function to send messages to server

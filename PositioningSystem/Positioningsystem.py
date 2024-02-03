@@ -27,6 +27,7 @@ class Positioningsystem:
         self.prev_turn = 0
         self.in_turn = False
         self.counted_turn = True
+        self.test_var = {"links": 0, "rechts": 0}
 
     def get_orientation(self):
         gyro_z_value = self.mpu6050.get_gyro_z()
@@ -63,12 +64,15 @@ class Positioningsystem:
         self.get_orientation()
         if self.orientation_of_car == turn_left and not self.counted_turn:
             self.counted_turn = True
+            self.test_var["links"] += 1
             print("Links")
         elif self.orientation_of_car == turn_right and not self.counted_turn:
             self.counted_turn = True
+            self.test_var["rechts"] += 1
             print("Rechts")
         elif self.orientation_of_car == no_turn:
             print("Keine drehung")
+        print(self.test_var)
         message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
         self.client.send_message(message)
 

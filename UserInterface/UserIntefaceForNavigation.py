@@ -142,7 +142,8 @@ class Userinterface:
     def position_car_on_map(self, route):  # function to position car on map
         car = cv2.imread("UserInterface/car2.png", cv2.IMREAD_UNCHANGED)
         car_resized = cv2.resize(car, (10, 20))
-        rotation_of_car = self.get_initial_orientation_of_car_on_map(route)
+        rotation_of_car = []
+        rotation_of_car.append(self.get_initial_orientation_of_car_on_map(route))
         car_resized = self.get_rotated_car(rotation_of_car, car_resized)
         cv2.imwrite("UserInterface/car_current_orientation.png", car_resized)
 

@@ -234,7 +234,11 @@ class Userinterface:
 
     @staticmethod
     def get_rotated_car(standing_of_car_on_map, car_resized):  # function to rotate car
-        match standing_of_car_on_map:
+        if len(standing_of_car_on_map) != 0:
+            car_standing = standing_of_car_on_map.pop()
+        else:
+            car_standing = 3
+        match car_standing:
             case 0:
                 car_resized = cv2.rotate(car_resized, cv2.ROTATE_90_COUNTERCLOCKWISE)
             case 1:

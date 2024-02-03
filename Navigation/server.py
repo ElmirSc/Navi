@@ -12,7 +12,7 @@ class Server:
         self.data = None
         self.driven_distance = 0
         self.current_speed = 0
-        self.current_rotation = 0
+        self.current_rotation = []
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
         # self.server_socket.settimeout(10)
@@ -42,7 +42,8 @@ class Server:
             if len(string) > 0:
                 self.current_speed = int(string[0])
                 self.driven_distance = float(string[1])
-                self.current_rotation = int(string[2])
+                if int(string[2]) != 3:
+                    self.current_rotation.append(int(string[2]))
 
     def close_connection(self):  # function to close the connection to other
         self.server_socket.connection.close()

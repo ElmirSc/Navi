@@ -113,16 +113,20 @@ def start_positioning_system():  # function to start the positioning system
         GPIO.cleanup()
 
 def test_rotation_of_car(pos_system):
-    test_var = "None"
+    test_var = []
+    test_var[0][0] = "links"
+    test_var[0][1] = 0
+    test_var[1][0] = "rechts"
+    test_var[1][1] = 0
     try:
         while True:
             os.system('clear')
             pos_system.get_orientation()
             if pos_system.orientation_of_car == 0:
-                test_var = "links"
+                test_var[0][1] += 1
                 print("Links")
             elif pos_system.orientation_of_car == 1:
-                test_var = "rechts"
+                test_var[1][1] += 1
                 print("Rechts")
             elif pos_system.orientation_of_car == 3:
                 print("Keine drehung")

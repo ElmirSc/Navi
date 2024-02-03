@@ -84,6 +84,7 @@ class Navigation:
                         self.server.receive_data()
                         self.server.handle_data()
                         print("Server Distance:", self.server.driven_distance)
+                        print("Rotation: ", self.server.current_rotation)
                         self.ui.calc_distance_to_drive(self.server.driven_distance)
                         self.ui.update_speed(self.server.current_speed * self.factor_for_real_distance)
                         print(self.ui.distance_to_drive)
@@ -107,6 +108,7 @@ class Navigation:
                             self.prev_driven_cost += self.current_node_cost
                             if len(self.all_driving_instructions) > 0:
                                 self.next_instruction = str(self.all_driving_instructions.pop())
+                                self.server.send_data(self.next_instruction)
 
                         if self.find_next_cost_between_two_nodes() > self.server.driven_distance * self.factor_for_real_distance - self.prev_driven_cost:
                             # print("Next")

@@ -50,7 +50,7 @@ def a_f_way(client):  # test function for route a -> f
     counter = 1
     speed = 0
     dist = 0.0
-    rot = 4
+    rot = 3
 
     while True:
         client.connect_to_socket()
@@ -96,14 +96,17 @@ def a_b_way(client):  # test function for route a -> b
     counter = 1
     speed = 0
     dist = 0.0
-    rot = 4
     client.connect_to_socket()
+    check_for_rotation = 0
+
     while dist < 11.0:
         rot = 3
-        if dist > 2.0 and dist < 6.5:
+        if dist > 2.0 and check_for_rotation == 0:
             rot = 1
-        elif dist > 6.5:
-            rot = 2
+            check_for_rotation = 1
+        elif dist > 6.5 and check_for_rotation == 1:
+            rot = 1
+            check_for_rotation = 2
         speed = speed + counter
         dist = dist + 0.1
         message = str(speed) + " " + str(dist) + " " + str(rot)

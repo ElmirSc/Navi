@@ -57,6 +57,8 @@ class Server:
         data_to_send = ""
         if type(data) == int:
             return str(data)
+        elif type(data) == str:
+            return data
         for i in data:
             data_to_send = data_to_send + str(i) + " "
         return data_to_send

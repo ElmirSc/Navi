@@ -15,7 +15,7 @@ class Server:
         self.current_rotation = 0
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
-        #self.server_socket.settimeout(10)
+        # self.server_socket.settimeout(10)
         self.server_socket.bind((self.host_ip, self.port_number))
 
     def set_socket_to_listen_mode(self):  # function to set the socket into listen mode
@@ -52,8 +52,10 @@ class Server:
         if self.server_socket.connect:
             self.connection.sendall(data.encode())
 
-    def change_data_into_string(self,data):
+    def change_data_into_string(self, data):
         data_to_send = ""
+        if type(data) == int:
+            return str(data)
         for i in data:
             data_to_send = data_to_send + str(i) + " "
         return data_to_send
@@ -70,11 +72,11 @@ if __name__ == "__main__":
             print(server.data)
             # if not server.data:
             #    break
-            #server.handle_data()
-            #print("Speed: ", server.current_speed)
-            #print("Dist: ", server.driven_distance)
-            #print("rotation: ", server.current_rotation)
-            #server.send_data("hallo")
+            # server.handle_data()
+            # print("Speed: ", server.current_speed)
+            # print("Dist: ", server.driven_distance)
+            # print("rotation: ", server.current_rotation)
+            # server.send_data("hallo")
         else:
             print("waiting for connection")
     server.connection.close()

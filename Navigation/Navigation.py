@@ -60,7 +60,6 @@ class Navigation:
                         route, cost = self.get_route_from_algorithm(
                             self.ui.get_start_point_for_navigation(), self.ui.get_end_point_for_navigation())
 
-
                         self.all_driving_instructions = self.ui.get_driving_instructions_from_route(route)
                         self.all_driving_instructions.append("m")
                         print(self.all_driving_instructions)
@@ -68,7 +67,7 @@ class Navigation:
                         print(self.all_driving_instructions)
                         self.next_instruction = str(self.all_driving_instructions.pop())
 
-                        #self.send_route_to_raspberry(route)
+                        # self.send_route_to_raspberry(route)
 
                         self.update_nodes_to_get_new_next_and_current_nodes(route[0], route[1])
                         self.routing_cost = self.calc_all_node_cost(cost)
@@ -96,26 +95,28 @@ class Navigation:
                             self.prev_driven_cost = 0
                             self.server.driven_distance = 0
 
-                        self.current_node_cost = self.find_next_cost_between_two_nodes() + self.get_cost_for_driving_in_node(self.next_instruction)
-                        #print(self.current_node_cost)
+                        self.current_node_cost = self.find_next_cost_between_two_nodes() + self.get_cost_for_driving_in_node(
+                            self.next_instruction)
+                        # print(self.current_node_cost)
 
                         if self.server.driven_distance * self.factor_for_real_distance >= self.current_node_cost + self.prev_driven_cost:
-                            #print("Next")
+                            # print("Next")
                             self.update_nodes_to_get_new_next_and_current_nodes(self.next_node,
-                                                                                    self.get_next_node_from_route(
-                                                                                        route))
+                                                                                self.get_next_node_from_route(
+                                                                                    route))
                             self.prev_driven_cost += self.current_node_cost
                             if len(self.all_driving_instructions) > 0:
                                 self.next_instruction = str(self.all_driving_instructions.pop())
 
                         if self.find_next_cost_between_two_nodes() > self.server.driven_distance * self.factor_for_real_distance - self.prev_driven_cost:
-                            #print("Next")
+                            # print("Next")
                             driven_distance_between_nodes = self.server.driven_distance * self.factor_for_real_distance - self.prev_driven_cost
                             self.ui.update_position_of_car_on_map(self.node_coords_list[self.current_node - 1],
-                                                                self.node_coords_list[self.next_node - 1],
-                                                                self.server.current_rotation,
-                                                                driven_distance_between_nodes,
-                                                                self.current_node_cost - self.get_cost_for_driving_in_node(self.next_instruction))
+                                                                  self.node_coords_list[self.next_node - 1],
+                                                                  self.server.current_rotation,
+                                                                  driven_distance_between_nodes,
+                                                                  self.current_node_cost - self.get_cost_for_driving_in_node(
+                                                                      self.next_instruction))
                     case 4:  # end state
                         print("finished driving")
                         self.ui.update_ui_to_start_again()
@@ -141,18 +142,16 @@ class Navigation:
             case _:
                 return 0
 
-    def calc_all_node_cost(self,route_cost):
+    def calc_all_node_cost(self, route_cost):
         instructions = self.all_driving_instructions
         cost = route_cost
         for i in instructions:
             cost += self.get_cost_for_driving_in_node(str(i))
         return cost
 
-
-    def send_route_to_raspberry(self,route):
+    def send_route_to_raspberry(self, route):
         if self.server.accept_connection():
             self.server.send_data(route)
-
 
     def find_next_cost_between_two_nodes(self):  # get cost between current and next node
         max_edges_for_node = node_list[self.current_node] - node_list[self.current_node - 1]

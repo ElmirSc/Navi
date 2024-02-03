@@ -31,11 +31,14 @@ class Positioningsystem:
         print("Gyro Z: ", gyro_z_value)
         if gyro_z_value < -15 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -5:
             self.orientation_of_car = turn_right
+            self.prev_gyro_z_value = gyro_z_value
         elif gyro_z_value > 15 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 5:
             self.orientation_of_car = turn_left
+            self.prev_gyro_z_value = gyro_z_value
         else:
             self.orientation_of_car = no_turn
-        self.prev_gyro_z_value = gyro_z_value
+            self.prev_gyro_z_value = 0
+
 
 
     def init_positioning_system(self):  # function to initialilze positioning system

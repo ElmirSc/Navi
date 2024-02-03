@@ -93,7 +93,6 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
-    pos_system.client.connect_to_socket()
     try:
         while True:
             pos_system.speedometer.set_count()

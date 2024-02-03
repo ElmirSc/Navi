@@ -114,10 +114,14 @@ def start_positioning_system():  # function to start the positioning system
 
 def test_rotation_of_car(pos_system):
     test_var = []
-    test_var[0][0] = "links"
-    test_var[0][1] = 0
-    test_var[1][0] = "rechts"
-    test_var[1][1] = 0
+    left_var = []
+    right_var = []
+    left_var[0] = "links"
+    left_var[1] = 0
+    right_var[0] = "rechts"
+    right_var[1] = 0
+    test_var.append(left_var)
+    test_var.append(right_var)
     try:
         while True:
             os.system('clear')

@@ -29,9 +29,9 @@ class Positioningsystem:
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", gyro_z_value)
-        if gyro_z_value < -15 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -15:
+        if gyro_z_value < -10 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -10:
             self.orientation_of_car = turn_right
-        elif gyro_z_value > 15 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 15:
+        elif gyro_z_value > 10 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 10:
             self.orientation_of_car = turn_left
         else:
             self.orientation_of_car = no_turn

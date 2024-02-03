@@ -61,12 +61,14 @@ class Positioningsystem:
         print("Speed: ", speed)
         print("Dist: ", dist)
         self.get_orientation()
-        if self.orientation_of_car == no_turn:
-            print("Keine Drehung")
-        elif self.orientation_of_car == turn_right:
-            print("Rechtsdrehung")
-        elif self.orientation_of_car == turn_left:
-            print("Linksdrehung")
+        if self.orientation_of_car == turn_left and not self.counted_turn:
+            self.counted_turn = True
+            print("Links")
+        elif self.orientation_of_car == turn_right and not self.counted_turn:
+            self.counted_turn = True
+            print("Rechts")
+        elif self.orientation_of_car == no_turn:
+            print("Keine drehung")
         message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
         self.client.send_message(message)
 

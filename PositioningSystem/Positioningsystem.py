@@ -32,11 +32,11 @@ class Positioningsystem:
         gyro_z_value = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", gyro_z_value)
 
-        if gyro_z_value < -turn_threshold and not self.in_turn:
+        if gyro_z_value < -turn_threshold and not self.in_turn and self.prev_turn != no_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
             self.prev_turn = no_turn
-        elif gyro_z_value > turn_threshold and not self.in_turn:
+        elif gyro_z_value > turn_threshold and not self.in_turn and self.prev_turn != no_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
             self.prev_turn = no_turn

@@ -89,6 +89,7 @@ class Navigation:
                         self.ui.update_speed(self.server.current_speed * self.factor_for_real_distance)
                         print(self.ui.distance_to_drive)
                         if self.ui.distance_to_drive < 0:
+                            self.server.send_data(0)
                             self.current_state_of_app = driving_end_state
                             self.ui.update_speed(0)
                             self.ui.set_distance(0)

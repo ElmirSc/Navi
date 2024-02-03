@@ -23,6 +23,7 @@ class Client:
         try:
             self.data = self.connected_client.recv(1024)
             self.data = self.data.decode()
+            self.data = int(self.data)
         except socket.timeout:
             print("No messages!")
 

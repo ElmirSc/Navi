@@ -20,8 +20,11 @@ class Client:
         self.connected_client.sendall(current_message_to_send.encode())
 
     def receive_message(self):  # function to receive messages
-        self.data = self.connected_client.recv(1024)
-        self.data = self.data.decode()
+        try:
+            self.data = self.connected_client.recv(1024)
+            self.data = self.data.decode()
+        except socket.timeout:
+            print("No messages!")
 
     def close_connection(self):  # function to close the connection to server
         self.connected_client.close()

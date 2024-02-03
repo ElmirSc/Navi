@@ -12,7 +12,7 @@ class Client:
         self.connection = None
         self.address = None
 
-    def create_socket(self):  # function to create the client
+    def connect_to_socket(self):  # function to create the client
         self.connected_client.settimeout(10)
         self.connected_client.connect((self.host_ip, self.port_number))
 
@@ -49,7 +49,7 @@ def a_f_way(client):  # test function for route a -> f
     rot = 4
 
     while True:
-        client.create_socket()
+        client.connect_to_socket()
         if dist > 2.0:
             rot = 1
         speed = speed + counter
@@ -72,7 +72,7 @@ def a_g_way(client):  # test function for route a -> g
     dist = 0
     rot = 4
     while True:
-        client.create_socket()
+        client.connect_to_socket()
         if dist == 5:
             rot = 0
         speed = speed + counter
@@ -95,7 +95,7 @@ def a_b_way(client):  # test function for route a -> b
     rot = 4
 
     while dist < 10.0:
-        client.create_socket()
+        client.connect_to_socket()
         rot = 3
         if dist > 2.0 and dist < 6.5:
             rot = 1

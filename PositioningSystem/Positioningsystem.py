@@ -28,7 +28,7 @@ class Positioningsystem:
 
     def get_orientation(self):  # function to get orientation of car
         gyro_z_value = self.mpu6050.get_gyro_z()
-        print(gyro_z_value)
+        print("Gyro Z: ", gyro_z_value)
         if gyro_z_value < -20 and self.orientation_of_car != turn_right and self.prev_gyro_z_value > -20:
             self.orientation_of_car = turn_right
         elif gyro_z_value > 20 and self.orientation_of_car != turn_left and self.prev_gyro_z_value < 20:
@@ -112,11 +112,25 @@ def start_positioning_system():  # function to start the positioning system
         pos_system.client.close_connection()
         GPIO.cleanup()
 
+def test_rotation_of_car(pos_system):
+    try:
+        while True:
+            pos_system.get_orientation()
+            if pos_system.orientation_of_car == 0:
+                print("Links")
+            elif pos_system.orientation_of_car == 1:
+                print("Rechts")
+            elif pos_system.orientation_of_car == 3:
+                print("Keine drehung")
+    except KeyboardInterrupt:
+        print("Finished")
+
 
 
 if __name__ == "__main__":
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
+    test_rotation_of_car(pos_system)
     try:
         while True:
             pos_system.speedometer.set_count()

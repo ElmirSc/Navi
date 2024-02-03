@@ -96,9 +96,10 @@ class OwnMpu6050:
 
 if __name__ == "__main__":
     mpu6050 = OwnMpu6050()
-    mpu6050.init_mpu6050(250, 20)
+    mpu6050.init_mpu6050(250, 5)
     try:
-        print(mpu6050.get_gyro_z())
+        while True:
+            print("Gyro Z:",mpu6050.get_gyro_z())
     except KeyboardInterrupt:
         print("Finish")
 

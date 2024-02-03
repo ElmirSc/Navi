@@ -13,9 +13,10 @@ class Server:
         self.driven_distance = 0
         self.current_speed = 0
         self.current_rotation = []
+        self.has_connection_to_client = False
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
-        # self.server_socket.settimeout(10)
+        self.server_socket.settimeout(10)
         self.server_socket.bind((self.host_ip, self.port_number))
 
     def set_socket_to_listen_mode(self):  # function to set the socket into listen mode
@@ -27,6 +28,7 @@ class Server:
             conn, addr = self.server_socket.accept()
             self.connection = conn
             self.address = addr
+            self.has_connection_to_client = True
             return True
         except OSError as e:
             if isinstance(e, socket.timeout):
@@ -46,7 +48,7 @@ class Server:
                     self.current_rotation.append(int(string[2]))
 
     def close_connection(self):  # function to close the connection to other
-        self.server_socket.connection.close()
+        self.server_socket.connect.close()
 
     def send_data(self, data):
         data = self.change_data_into_string(data)

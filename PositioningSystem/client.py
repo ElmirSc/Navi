@@ -11,10 +11,12 @@ class Client:
         self.data = None
         self.connection = None
         self.address = None
+        self.is_connected = False
 
     def connect_to_socket(self):  # function to create the client
         self.connected_client.settimeout(0.01)
         self.connected_client.connect((self.host_ip, self.port_number))
+        self.is_connected = True
 
     def send_message(self, current_message_to_send):  # function to send messages to server
         self.connected_client.sendall(current_message_to_send.encode())
@@ -56,7 +58,7 @@ def a_f_way(client):  # test function for route a -> f
         if dist > 2.0:
             rot = 1
         speed = speed + counter
-        dist = dist + 0.1
+        dist = dist + 0.5
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
@@ -90,12 +92,12 @@ def a_g_way(client):  # test function for route a -> g
             counter = 1
         time.sleep(4)
 
-def a_b_way(client):  # test function for route a -> b
-    # client.create_socket()
+def drive_a_b_way(client):
     counter = 1
     speed = 0
     dist = 0.0
-    client.connect_to_socket()
+    if not client.is_connected:
+        client.connect_to_socket()
     check_for_rotation = 0
 
     while dist < 11.0:
@@ -107,30 +109,28 @@ def a_b_way(client):  # test function for route a -> b
             rot = 1
             check_for_rotation = 2
         speed = speed + counter
-        dist = dist + 0.1
+        dist = dist + 0.5
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        #client.close_connection()
         if speed == 20:
             counter = -1
         elif speed == 0:
             counter = 1
         time.sleep(0.5)
-    client.close_connection()
+        client.receive_message()
+
+def test_a_b_way(client):  # test function for route a -> b
+    # client.create_socket()
+    while True:
+        drive_a_b_way(client)
+        input_of_tester = input("Want another round?[j/n]")
+        if input_of_tester == "n":
+            client.close_connection()
+            break
 
 
 if __name__ == "__main__":
     # testing socket connection
     client = Client()
-    #client.create_socket()
-    #client.send_message("Test")
-    #client.set_socket_to_listen_mode()
-    #while True:
-        #if client.accept_connection():
-    #client.receive_message()
-    #print(client.data)
-    #client.close_connection()
-    a_b_way(client)
-    # a_g_way(client)
-    # client.create_socket()
+    test_a_b_way(client)

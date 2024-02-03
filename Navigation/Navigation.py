@@ -44,6 +44,14 @@ class Navigation:
         self.start_ui()
         self.thread_one.join()
 
+    def set_to_end_of_driving(self):
+        self.server.send_data(0)
+        self.current_state_of_app = driving_end_state
+        self.ui.update_speed(0)
+        self.ui.set_distance(0)
+        self.prev_driven_cost = 0
+        self.server.driven_distance = 0
+
     def start_application(self):  # function to start the state manager
         try:
             route = None
@@ -62,22 +70,17 @@ class Navigation:
 
                         self.all_driving_instructions = self.ui.get_driving_instructions_from_route(route)
                         self.all_driving_instructions.append("m")
-                        print(self.all_driving_instructions)
                         self.all_driving_instructions.reverse()
-                        print(self.all_driving_instructions)
                         self.next_instruction = str(self.all_driving_instructions.pop())
-
-                        # self.send_route_to_raspberry(route)
 
                         self.update_nodes_to_get_new_next_and_current_nodes(route[0], route[1])
                         self.routing_cost = self.calc_all_node_cost(cost)
-                        print(self.routing_cost)
 
                         self.next_instruction = str(self.all_driving_instructions.pop())
                         self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
                         self.ui.draw_route_in_map(route)
                         self.ui.position_car_on_map(route)
-                        if self.server.accept_connection():
+                        if self.server.has_connection_to_client or self.server.accept_connection():
                             self.current_state_of_app = driving_state
                     case 3:  # driving state where distance, speed and car location gets updated
 
@@ -87,21 +90,13 @@ class Navigation:
                         print("Rotation: ", self.server.current_rotation)
                         self.ui.calc_distance_to_drive(self.server.driven_distance)
                         self.ui.update_speed(self.server.current_speed * self.factor_for_real_distance)
-                        print(self.ui.distance_to_drive)
                         if self.ui.distance_to_drive < 0:
-                            self.server.send_data(0)
-                            self.current_state_of_app = driving_end_state
-                            self.ui.update_speed(0)
-                            self.ui.set_distance(0)
-                            self.prev_driven_cost = 0
-                            self.server.driven_distance = 0
+                            self.set_to_end_of_driving()
 
                         self.current_node_cost = self.find_next_cost_between_two_nodes() + self.get_cost_for_driving_in_node(
                             self.next_instruction)
-                        # print(self.current_node_cost)
 
                         if self.server.driven_distance * self.factor_for_real_distance >= self.current_node_cost + self.prev_driven_cost:
-                            # print("Next")
                             self.update_nodes_to_get_new_next_and_current_nodes(self.next_node,
                                                                                 self.get_next_node_from_route(
                                                                                     route))
@@ -122,6 +117,7 @@ class Navigation:
                     case 4:  # end state
                         print("finished driving")
                         self.ui.update_ui_to_start_again()
+                        #self.init_navigation_again()
 
 
 

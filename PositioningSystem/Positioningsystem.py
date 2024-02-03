@@ -107,6 +107,7 @@ def start_positioning_system():  # function to start the positioning system
                 print("Received Data: ", pos_system.client.data)
                 if pos_system.client.data == 0:
                     pos_system.speedometer.current_distance = 0
+                    pos_system.client.data = None
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()

@@ -104,15 +104,12 @@ def start_positioning_system():  # function to start the positioning system
             pos_system.send_speed_distance_rotation_to_server()
             pos_system.client.receive_message()
             if pos_system.client.data != None:
-                print(f"Received Data:{pos_system.client.data}")
+                print(f"Received Data: {pos_system.client.data} ")
                 if pos_system.client.data == 0:
                     pos_system.speedometer.current_distance = 0
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()
-    #if pos_system.client.accept_connection():
-    #    pos_system.client.receive_message()
-    #print(pos_system.client.data)
 
 
 

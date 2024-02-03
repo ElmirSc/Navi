@@ -24,7 +24,7 @@ class Positioningsystem:
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
         self.client = Client()  # client object
         self.orientation_of_car = no_turn
-        self.prev_turn = no_turn
+        self.prev_turn = 0
         self.in_turn = False
         self.prev_gyro_z_val = -2.5
 

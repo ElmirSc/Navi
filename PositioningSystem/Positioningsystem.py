@@ -113,15 +113,20 @@ def start_positioning_system():  # function to start the positioning system
         GPIO.cleanup()
 
 def test_rotation_of_car(pos_system):
+    test_var = "None"
     try:
         while True:
+            os.system('clear')
             pos_system.get_orientation()
             if pos_system.orientation_of_car == 0:
+                test_var = "links"
                 print("Links")
             elif pos_system.orientation_of_car == 1:
+                test_var = "rechts"
                 print("Rechts")
             elif pos_system.orientation_of_car == 3:
                 print("Keine drehung")
+            print(test_var)
     except KeyboardInterrupt:
         print("Finished")
 
@@ -131,16 +136,16 @@ if __name__ == "__main__":
     pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
     pos_system.init_positioning_system()
     test_rotation_of_car(pos_system)
-    try:
-        while True:
-            pos_system.speedometer.set_count()
-            time.sleep(1)
-            pos_system.speedometer.check_direction_tire()
-            currenDistance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
-            pos_system.speedometer.set_distance(currenDistance)
-            pos_system.speedometer.set_speed(currenDistance * 3.6 * pos_system.speedometer.direction)
-            pos_system.speedometer.print_stats()
-            pos_system.send_speed_distance_rotation_to_server()
-    except KeyboardInterrupt:
-        pos_system.client.close_connection()
-        GPIO.cleanup()
+    # try:
+    #     while True:
+    #         pos_system.speedometer.set_count()
+    #         time.sleep(1)
+    #         pos_system.speedometer.check_direction_tire()
+    #         currenDistance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.get_wheel() * pi) / 4))
+    #         pos_system.speedometer.set_distance(currenDistance)
+    #         pos_system.speedometer.set_speed(currenDistance * 3.6 * pos_system.speedometer.direction)
+    #         pos_system.speedometer.print_stats()
+    #         pos_system.send_speed_distance_rotation_to_server()
+    # except KeyboardInterrupt:
+    #     pos_system.client.close_connection()
+    #     GPIO.cleanup()

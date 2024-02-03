@@ -24,7 +24,7 @@ class Positioningsystem:
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
         self.client = Client()  # client object
         self.orientation_of_car = no_turn
-        self.prev_gyro_z_value = -2.5
+        self.prev_turn = no_turn
         self.in_turn = False
 
     def get_orientation(self):  # function to get orientation of car
@@ -33,13 +33,16 @@ class Positioningsystem:
         if gyro_z_value < -turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
+            self.prev_turn = turn_right
         elif gyro_z_value > turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
+            self.prev_turn = turn_left
         elif -no_turn_threshold < gyro_z_value < no_turn_threshold and self.in_turn:
             self.in_turn = False
             self.orientation_of_car = no_turn
-        self.prev_gyro_z_value = gyro_z_value
+            self.prev_turn = no_turn
+
 
 
     def init_positioning_system(self):  # function to initialilze positioning system
@@ -130,10 +133,10 @@ def test_rotation_of_car(pos_system):
         while True:
             os.system('clear')
             pos_system.get_orientation()
-            if pos_system.orientation_of_car == 0:
+            if pos_system.orientation_of_car == turn_left and pos_system.prev_turn == no_turn:
                 test_var[0][1] += 1
                 print("Links")
-            elif pos_system.orientation_of_car == 1:
+            elif pos_system.orientation_of_car == turn_right and pos_system.prev_turn == no_turn:
                 test_var[1][1] += 1
                 print("Rechts")
             elif pos_system.orientation_of_car == 3:

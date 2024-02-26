@@ -4,7 +4,7 @@ import socket
 # class which creates a socket an allows connections
 class Server:
     def __init__(self):
-        self.host_ip = '172.20.10.5'  # host ip address
+        self.host_ip = '192.168.0.12'  # host ip address
         self.port_number = 5556  # communication port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # object which is the real socket
         self.connection = None
@@ -52,8 +52,8 @@ class Server:
 
     def send_data(self, data):
         data = self.change_data_into_string(data)
-        if self.server_socket.connect:
-            self.connection.sendall(data.encode())
+        #if self.server_socket.connect:
+        self.connection.sendall(data.encode())
 
     def change_data_into_string(self, data):
         data_to_send = ""
@@ -81,7 +81,7 @@ if __name__ == "__main__":
             # print("Speed: ", server.current_speed)
             # print("Dist: ", server.driven_distance)
             # print("rotation: ", server.current_rotation)
-            # server.send_data("hallo")
+            server.send_data("hallo")
         else:
             print("waiting for connection")
     server.connection.close()

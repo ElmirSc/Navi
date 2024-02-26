@@ -30,8 +30,8 @@ class Userinterface:
     def init_ui(self):
         print("init Gui started")
         # Setze die Fenstergröße auf 1000x530 Pixel
-        self.tk_root_window.geometry("1000x530")
-        self.tk_root_window.maxsize(800, 700)
+        #self.tk_root_window.geometry("1000x530")
+        self.tk_root_window.maxsize(800, 550)
         # Ändern der Hintergrundfarbe auf hellgrün
         self.tk_root_window.configure(bg="#45BD6A")
         self.tk_root_window.title("Navigation")
@@ -399,7 +399,6 @@ class Userinterface:
 
     @staticmethod
     def get_driving_point_from_input_and_convert_it_to_a_number(input):  # function to get node number where to drive after input
-        numb = 0
         match input.lower():
             case "a":
                 numb = 1

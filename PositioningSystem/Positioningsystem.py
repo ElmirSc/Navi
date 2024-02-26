@@ -28,6 +28,7 @@ class Positioningsystem:
         self.in_turn = False
         self.counted_turn = True
         self.test_var = {"links": 0, "rechts": 0}
+        self.route = None
 
     def get_orientation(self):
         gyro_z_value = self.mpu6050.get_gyro_z()

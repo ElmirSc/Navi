@@ -4,6 +4,7 @@ from Routing.routing import dijkstra, arc_list, node_list
 from Navigation.configNavigation import *
 from threading import Thread
 from Navigation.server import Server
+import time
 
 
 # class which implements the whole state manager for the navigation
@@ -65,10 +66,12 @@ class Navigation:
                         if self.ui.user_input_check_if_ready:
                             self.current_state_of_app = after_input_state
                     case 2:  # state after input to get route and cost and initialize the map in the ui
+
                         route, cost = self.get_route_from_algorithm(
                             self.ui.get_start_point_for_navigation(), self.ui.get_end_point_for_navigation())
 
                         self.all_driving_instructions = self.ui.get_driving_instructions_from_route(route)
+                        instructions_to_send = self.all_driving_instructions[:]
                         self.all_driving_instructions.append("m")
                         self.all_driving_instructions.reverse()
                         self.next_instruction = str(self.all_driving_instructions.pop())
@@ -77,17 +80,19 @@ class Navigation:
                         self.routing_cost = self.calc_all_node_cost(cost)
 
                         self.next_instruction = str(self.all_driving_instructions.pop())
+
                         self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
                         self.ui.draw_route_in_map(route)
                         self.ui.position_car_on_map(route)
+
                         if self.server.has_connection_to_client or self.server.accept_connection():
                             self.current_state_of_app = driving_state
+
+                        self.server.send_data(instructions_to_send)
                     case 3:  # driving state where distance, speed and car location gets updated
 
                         self.server.receive_data()
                         self.server.handle_data()
-                        print("Server Distance:", self.server.driven_distance)
-                        print("Rotation: ", self.server.current_rotation)
                         self.ui.calc_distance_to_drive(self.server.driven_distance)
                         self.ui.update_speed(self.server.current_speed * self.factor_for_real_distance)
                         if self.ui.distance_to_drive < 0:
@@ -117,7 +122,7 @@ class Navigation:
                     case 4:  # end state
                         print("finished driving")
                         self.ui.update_ui_to_start_again()
-                        #self.init_navigation_again()
+
 
 
 

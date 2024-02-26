@@ -1,6 +1,6 @@
 import sys
 sys.path.append("/root")
-from Navigation.Navigation import Navigation
+from Navigation.navigation import Navigation
 
 #start application
 if __name__ == "__main__":

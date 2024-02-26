@@ -5,7 +5,7 @@ import time
 # class to create a client to communicate to server
 class Client:
     def __init__(self):
-        self.host_ip = '172.20.10.5'  # host ip address
+        self.host_ip = '192.168.0.12'  # host ip address
         self.port_number = 5556  # communication port
         self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.data = None
@@ -94,12 +94,13 @@ def a_g_way(client):  # test function for route a -> g
 
 def drive_a_b_way(client):
     counter = 1
-    speed = 0
+    speed = 1
     dist = 0.0
     if not client.is_connected:
         client.connect_to_socket()
     check_for_rotation = 0
-
+    client.receive_message()
+    print(client.data)
     while dist < 11.0:
         rot = 3
         if dist > 2.0 and check_for_rotation == 0:
@@ -108,8 +109,8 @@ def drive_a_b_way(client):
         elif dist > 6.5 and check_for_rotation == 1:
             rot = 1
             check_for_rotation = 2
-        speed = speed + counter
-        dist = dist + 0.5
+        #speed = speed + counter
+        dist = dist + 0.3
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
@@ -119,8 +120,9 @@ def drive_a_b_way(client):
             counter = 1
         time.sleep(0.5)
         client.receive_message()
+        print(client.data)
 
-def test_a_b_way(client):  # test function for route a -> b
+def a_b_way(client):  # test function for route a -> b
     # client.create_socket()
     while True:
         drive_a_b_way(client)
@@ -133,4 +135,4 @@ def test_a_b_way(client):  # test function for route a -> b
 if __name__ == "__main__":
     # testing socket connection
     client = Client()
-    test_a_b_way(client)
+    a_b_way(client)

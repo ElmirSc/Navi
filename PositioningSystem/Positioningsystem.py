@@ -108,6 +108,8 @@ def start_positioning_system():  # function to start the positioning system
     pos_system.init_positioning_system()
     pos_system.client.connect_to_socket()
     try:
+        pos_system.client.receive_message()
+        print(pos_system.client.data)
         while True:
             pos_system.speedometer.set_count()
             time.sleep(1)

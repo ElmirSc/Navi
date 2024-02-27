@@ -10,7 +10,7 @@ from server import Server
 class Navigation:
     def __init__(self):
         self.ui = Userinterface()  # ui object
-        self.server = Server("192.168.0.101", 5556)  # server object
+        self.server = Server("10.27.100.25", 5556)  # server object
         self.current_state_of_app = before_navigation_state  # initial state of the application
         self.routing_cost = 0  # total routing cost
         self.thread_one = 0  # thread object for start application without ui

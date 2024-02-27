@@ -26,8 +26,8 @@ class Positioningsystem:
         self.speedometer = Speedometer(hall_pin_forward, hall_pin_backward)  # speedometer object
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
-        self.server_line_detection = Server("192.168.0.103", 5557)  # client object
-        self.client_gui = Client("192.168.0.101", 5556)
+        self.server_line_detection = Server("10.27.100.25", 5557)  # client object
+        #self.client_gui = Client("192.168.0.101", 5556)
         self.orientation_of_car = no_turn
         self.prev_turn = 0
         self.in_turn = False
@@ -125,11 +125,11 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem()
     pos_system.init_positioning_system()
-    print("start input in gui!")
-    time.sleep(2)
+    #print("start input in gui!")
+    #time.sleep(2)
     pos_system.client_gui.connect_to_socket()
-    pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
-    pos_system.thread_one.start()
+    #pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
+    #pos_system.thread_one.start()
 
     try:
         pos_system.client_gui.receive_message()

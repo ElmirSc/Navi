@@ -1,7 +1,7 @@
 import sys
 
 sys.path.append("/root")
-sys.path.append("~/Desktop/Navi")
+sys.path.append("/home/pi/Desktop/Navi")
 import RPi.GPIO as GPIO
 from speedometer import *
 from ownmpu6050 import OwnMpu6050

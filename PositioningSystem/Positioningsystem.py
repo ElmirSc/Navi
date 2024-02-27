@@ -85,15 +85,6 @@ class Positioningsystem:
         self.orientation_of_car = no_turn
         self.client_gui.send_message(message)
 
-    def handle_connection_to_server_line_detection(self):
-        print("Hello")
-        self.server_line_detection.create_socket()
-        self.server_line_detection.set_socket_to_listen_mode()
-        self.server_line_detection.accept_connection()
-        while True:
-            self.server_line_detection.receive_data()
-            print(self.server_line_detection.data)
-
 
 def drive_car_with_keyboard(car):
     try:
@@ -125,12 +116,7 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem()
     pos_system.init_positioning_system()
-    #print("start input in gui!")
-    #time.sleep(2)
     pos_system.client_gui.connect_to_socket()
-    #pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
-    #pos_system.thread_one.start()
-
     try:
         pos_system.client_gui.receive_message()
         print(pos_system.client_gui.data)

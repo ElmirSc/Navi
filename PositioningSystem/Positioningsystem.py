@@ -91,9 +91,8 @@ class Positioningsystem:
         self.server_line_detection.set_socket_to_listen_mode()
         self.server_line_detection.accept_connection()
         while True:
-            if not None:
-                self.server_line_detection.receive_data()
-                print(self.server_line_detection.data)
+            self.server_line_detection.receive_data()
+            print(self.server_line_detection.data)
 
 
 def drive_car_with_keyboard(car):

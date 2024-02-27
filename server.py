@@ -25,6 +25,7 @@ class Server:
     def accept_connection(
             self):  # function to check if someone wants to communicate, after timeout there is an exception to let the code run
         try:
+            print("trying to accept connection")
             conn, addr = self.server_socket.accept()
             self.connection = conn
             self.address = addr

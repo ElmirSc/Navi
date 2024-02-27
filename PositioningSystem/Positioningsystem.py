@@ -1,4 +1,5 @@
 import sys
+import time
 
 sys.path.append("/root")
 sys.path.append("/home/pi/Desktop/Navi")
@@ -124,6 +125,8 @@ def handle_connection_to_socket(pos_system):
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem()
     pos_system.init_positioning_system()
+    print("start input in gui!")
+    time.sleep(2)
     pos_system.client_gui.connect_to_socket()
     pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
     pos_system.thread_one.thread_one.start()

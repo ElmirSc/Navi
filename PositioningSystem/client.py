@@ -14,7 +14,7 @@ class Client:
         self.is_connected = False
 
     def connect_to_socket(self):  # function to create the client
-        self.connected_client.settimeout(0.1)
+        self.connected_client.settimeout(0.01)
         self.connected_client.connect((self.host_ip, self.port_number))
         self.is_connected = True
 

@@ -34,8 +34,8 @@ class Positioningsystem:
         self.counted_turn = True
         self.test_var = {"links": 0, "rechts": 0}
         self.route = None
-        self.rc_control_car = RCModellAuto(motor_pin=motor_pin, steering_pin=steering_pin)
-        self.thread_one = None
+        #self.rc_control_car = RCModellAuto(motor_pin=motor_pin, steering_pin=steering_pin)
+        #self.thread_one = None
 
     def get_orientation(self):
         gyro_z_value = self.mpu6050.get_gyro_z()

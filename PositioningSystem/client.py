@@ -14,7 +14,7 @@ class Client:
         self.is_connected = False
 
     def connect_to_socket(self):  # function to create the client
-        self.connected_client.settimeout(0.1)
+        self.connected_client.settimeout(0.01)
         self.connected_client.connect((self.host_ip, self.port_number))
         self.is_connected = True
 
@@ -134,5 +134,5 @@ def a_b_way(client):  # test function for route a -> b
 
 if __name__ == "__main__":
     # testing socket connection
-    client = Client("192.168.0.12", 5556)
+    client = Client("192.168.0.100", 5556)
     a_b_way(client)

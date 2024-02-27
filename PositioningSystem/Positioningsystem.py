@@ -151,6 +151,7 @@ def start_positioning_system():  # function to start the positioning system
         pos_system.thread_one.join()
 
 
+
 def test_rotation_of_car(pos_system):
     test_var = {"links": 0, "rechts": 0}
     try:

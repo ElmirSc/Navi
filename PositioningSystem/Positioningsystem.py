@@ -91,8 +91,9 @@ class Positioningsystem:
         self.server_line_detection.set_socket_to_listen_mode()
         self.server_line_detection.accept_connection()
         while True:
-            self.server_line_detection.receive_data()
-            print(self.server_line_detection.data)
+            if not None:
+                self.server_line_detection.receive_data()
+                print(self.server_line_detection.data)
 
 
 def drive_car_with_keyboard(car):
@@ -129,7 +130,7 @@ def start_positioning_system():  # function to start the positioning system
     time.sleep(2)
     pos_system.client_gui.connect_to_socket()
     pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
-    pos_system.thread_one.thread_one.start()
+    pos_system.thread_one.start()
 
     try:
         pos_system.client_gui.receive_message()

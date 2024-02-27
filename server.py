@@ -16,7 +16,7 @@ class Server:
         self.has_connection_to_client = False
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
-        self.server_socket.settimeout(10)
+        self.server_socket.settimeout(20)
         self.server_socket.bind((self.host_ip, self.port_number))
 
     def set_socket_to_listen_mode(self):  # function to set the socket into listen mode
@@ -53,7 +53,8 @@ class Server:
     def send_data(self, data):
         data = self.change_data_into_string(data)
         #if self.server_socket.connect:
-        self.connection.sendall(data.encode())
+        if not None:
+            self.connection.sendall(data.encode())
 
     def change_data_into_string(self, data):
         data_to_send = ""

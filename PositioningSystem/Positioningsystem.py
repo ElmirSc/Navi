@@ -1,12 +1,13 @@
 import sys
 
 sys.path.append("/root")
+sys.path.append("~/Desktop/Navi")
 import RPi.GPIO as GPIO
 from speedometer import *
 from ownmpu6050 import OwnMpu6050
 from positionigSystemConfig import *
 from client import Client
-from ..server import Server
+from server import Server
 from rc_controll import RCModellAuto, control_car
 from threading import Thread
 

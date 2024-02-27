@@ -71,7 +71,7 @@ if __name__ == "__main__":
     server.create_socket()
     server.set_socket_to_listen_mode()
     if server.accept_connection():
-        print(f"Verbunden mit {server.address}")
+        #print(f"Verbunden mit {server.address}")
         while True:
             server.receive_data()
             print(server.data)

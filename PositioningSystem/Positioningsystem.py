@@ -126,6 +126,8 @@ def start_positioning_system():  # function to start the positioning system
     pos_system.init_positioning_system()
     pos_system.client_gui.connect_to_socket()
     pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
+    pos_system.thread_one.thread_one.start()
+
     try:
         pos_system.client_gui.receive_message()
         print(pos_system.client_gui.data)
@@ -146,6 +148,7 @@ def start_positioning_system():  # function to start the positioning system
     except KeyboardInterrupt:
         pos_system.client_gui.close_connection()
         GPIO.cleanup()
+        pos_system.thread_one.join()
 
 
 def test_rotation_of_car(pos_system):

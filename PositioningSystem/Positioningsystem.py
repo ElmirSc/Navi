@@ -27,7 +27,7 @@ class Positioningsystem:
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
         #self.server_line_detection = Server("10.27.100.25", 5557)  # client object
-        self.client_gui = Client("172.20.10.5", 5556)
+        self.client_gui = Client("10.28.99.103", 5556)
         self.orientation_of_car = no_turn
         self.prev_turn = 0
         self.in_turn = False
@@ -138,7 +138,6 @@ def start_positioning_system():  # function to start the positioning system
     except KeyboardInterrupt:
         pos_system.client_gui.close_connection()
         GPIO.cleanup()
-        pos_system.thread_one.join()
 
 
 

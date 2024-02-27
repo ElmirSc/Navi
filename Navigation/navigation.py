@@ -3,15 +3,14 @@ from UserInterface.UserIntefaceForNavigation import Userinterface
 from Routing.routing import dijkstra, arc_list, node_list
 from Navigation.configNavigation import *
 from threading import Thread
-from Navigation.server import Server
-import time
+from server import Server
 
 
 # class which implements the whole state manager for the navigation
 class Navigation:
     def __init__(self):
         self.ui = Userinterface()  # ui object
-        self.server = Server("192.168.10.2", 5556)  # server object
+        self.server = Server("192.168.0.101", 5556)  # server object
         self.current_state_of_app = before_navigation_state  # initial state of the application
         self.routing_cost = 0  # total routing cost
         self.thread_one = 0  # thread object for start application without ui

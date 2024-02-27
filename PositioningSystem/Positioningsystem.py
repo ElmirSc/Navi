@@ -1,5 +1,4 @@
 import sys
-import os
 
 sys.path.append("/root")
 import RPi.GPIO as GPIO
@@ -7,7 +6,7 @@ from speedometer import *
 from ownmpu6050 import OwnMpu6050
 from positionigSystemConfig import *
 from client import Client
-from Navigation.server import Server
+from server import Server
 from rc_controll import RCModellAuto, control_car
 from threading import Thread
 
@@ -25,8 +24,8 @@ class Positioningsystem:
         self.speedometer = Speedometer(hall_pin_forward, hall_pin_backward)  # speedometer object
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
-        self.server_line_detection = Server("1.1.1.1", 5557)  # client object
-        self.client_gui = Client("192.168.0.12", 5556)
+        self.server_line_detection = Server("192.168.0.103", 5557)  # client object
+        self.client_gui = Client("192.168.0.101", 5556)
         self.orientation_of_car = no_turn
         self.prev_turn = 0
         self.in_turn = False

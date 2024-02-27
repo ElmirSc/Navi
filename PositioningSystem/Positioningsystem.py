@@ -7,28 +7,34 @@ from speedometer import *
 from ownmpu6050 import OwnMpu6050
 from positionigSystemConfig import *
 from client import Client
+from Navigation.server import Server
 from rc_controll import RCModellAuto, control_car
 from threading import Thread
 
 gyroAddress = 0x68
 hall_pin_forward = 17
 hall_pin_backward = 27
+motor_pin = 13
+steering_pin = 19
 
 
 # positioning system class for whole system
 class Positioningsystem:
-    def __init__(self, hall_pin_forward, hall_pin_backward):
-        self.mpu6050 = OwnMpu6050(gyro_range=250,filter_range=5)  # mpu6050 object
+    def __init__(self):
+        self.mpu6050 = OwnMpu6050(gyro_range=250, filter_range=5)  # mpu6050 object
         self.speedometer = Speedometer(hall_pin_forward, hall_pin_backward)  # speedometer object
         self.default_orientation_value = self.mpu6050.get_gyro_z()  # initial value for rotation of car
         self.default_orientation_value_range = self.default_orientation_value * 0.1  # range of initial state of rotation of car
-        self.client = Client()  # client object
+        self.server_line_detection = Server("1.1.1.1", 5557)  # client object
+        self.client_gui = Client("192.168.0.12", 5556)
         self.orientation_of_car = no_turn
         self.prev_turn = 0
         self.in_turn = False
         self.counted_turn = True
         self.test_var = {"links": 0, "rechts": 0}
         self.route = None
+        self.rc_control_car = RCModellAuto(motor_pin=motor_pin, steering_pin=steering_pin)
+        self.thread_one = None
 
     def get_orientation(self):
         gyro_z_value = self.mpu6050.get_gyro_z()
@@ -78,11 +84,22 @@ class Positioningsystem:
         self.orientation_of_car = no_turn
         self.client.send_message(message)
 
+    def handle_connection_to_server_line_detection(self):
+        print("Hello")
+        self.server_line_detection.create_socket()
+        self.server_line_detection.set_socket_to_listen_mode()
+        self.server_line_detection.accept_connection()
+        while True:
+            self.server_line_detection.receive_data()
+            print(self.server_line_detection.data)
+
+
 def drive_car_with_keyboard(car):
     try:
         control_car(car)
     finally:
         car.cleanup()
+
 
 def process_hall_and_mpu6050(pos_system):
     try:
@@ -92,10 +109,11 @@ def process_hall_and_mpu6050(pos_system):
             curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.wheel_diameter * pi) / 4))
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
-            #pos_system.send_speed_distance_rotation_to_server()
+            # pos_system.send_speed_distance_rotation_to_server()
     except KeyboardInterrupt:
         pos_system.client.close_connection()
         GPIO.cleanup()
+
 
 def handle_connection_to_socket(pos_system):
     while True:
@@ -104,12 +122,13 @@ def handle_connection_to_socket(pos_system):
 
 
 def start_positioning_system():  # function to start the positioning system
-    pos_system = Positioningsystem(hall_pin_forward, hall_pin_backward)
+    pos_system = Positioningsystem()
     pos_system.init_positioning_system()
-    pos_system.client.connect_to_socket()
+    pos_system.client_gui.connect_to_socket()
+    pos_system.thread_one = Thread(target=pos_system.handle_connection_to_server_line_detection())
     try:
-        pos_system.client.receive_message()
-        print(pos_system.client.data)
+        pos_system.client_gui.receive_message()
+        print(pos_system.client_gui.data)
         while True:
             pos_system.speedometer.set_count()
             time.sleep(1)
@@ -118,15 +137,16 @@ def start_positioning_system():  # function to start the positioning system
             pos_system.speedometer.set_distance(curren_distance)
             pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
             pos_system.send_speed_distance_rotation_to_server()
-            pos_system.client.receive_message()
-            if pos_system.client.data != None:
-                print("Received Data: ", pos_system.client.data)
-                if pos_system.client.data == 0:
+            pos_system.client_gui.receive_message()
+            if pos_system.client_gui.data != None:
+                print("Received Data: ", pos_system.client_gui.data)
+                if pos_system.client_gui.data == 0:
                     pos_system.speedometer.current_distance = 0
-                pos_system.client.data = None
+                pos_system.client_gui.data = None
     except KeyboardInterrupt:
-        pos_system.client.close_connection()
+        pos_system.client_gui.close_connection()
         GPIO.cleanup()
+
 
 def test_rotation_of_car(pos_system):
     test_var = {"links": 0, "rechts": 0}
@@ -147,7 +167,6 @@ def test_rotation_of_car(pos_system):
             print(test_var)
     except KeyboardInterrupt:
         print("Finished")
-
 
 
 if __name__ == "__main__":

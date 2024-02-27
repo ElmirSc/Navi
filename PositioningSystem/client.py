@@ -4,9 +4,9 @@ import time
 
 # class to create a client to communicate to server
 class Client:
-    def __init__(self):
-        self.host_ip = '192.168.0.12'  # host ip address
-        self.port_number = 5556  # communication port
+    def __init__(self, ip, port):
+        self.host_ip = ip  # host ip address
+        self.port_number = port  # communication port
         self.connected_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.data = None
         self.connection = None
@@ -134,5 +134,5 @@ def a_b_way(client):  # test function for route a -> b
 
 if __name__ == "__main__":
     # testing socket connection
-    client = Client()
+    client = Client("192.168.0.12", 5556)
     a_b_way(client)

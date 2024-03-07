@@ -1,4 +1,4 @@
-from mpu6050Config import *
+from mpu6050_config import *
 import smbus
 
 
@@ -29,10 +29,6 @@ class OwnMpu6050:
         else:
             return value
 
-    def get_temperature(self):  # function to get temperature of mpu6050
-        raw = self.read_from_bus(temperautre_out_reg)
-        temp = (raw / 340.0) + 36.53
-        return temp
 
     def set_gyro_range(self):  # function to set gyroskope range on mpu6050
         # First change it to 0x00 to make sure we write the correct value later

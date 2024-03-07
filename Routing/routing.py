@@ -2,53 +2,57 @@ from Routing.routingConfig import *
 
 
 def dijkstra(start_node, end_node, cost_type):
-    permanent_nodes = []  # Array für die Permanent gesetzten Knoten
-    temporary_nodes = [start_node]  # Array für die Temporär gesetzten Knoten
+    permanent_nodes = []  # array for the permanent nodes
+    temporary_nodes = [start_node]  # array for the temporaty nodes
 
-    p_j = np.zeros(len(node_list))  # Array für die Vorgängerknoten
-    l_j = np.full((len(node_list), 1), np.inf)  # Array für die Gewichtung der Knoten
-    l_j[start_node - 1] = 0  # Gewichtung des Startknoten 0 setzen
-    r_j = np.full((len(node_list), 1), np.inf)  # Array für die Reichweite der Knoten inf setzen
-    r_j[start_node - 1] = 0  # Reichweite des Startknoten 0 setzen
+    predecessor_j = np.zeros(len(node_list))  # array for the predecessor nodes
+    weight_j = np.full((len(node_list), 1), np.inf)  # array for the weighting of the nodes
+    weight_j[start_node - 1] = 0  # setting weight of startnode to zero
+    range_j = np.full((len(node_list), 1), np.inf)  # setting in an array the range of every node to inf
+    range_j[start_node - 1] = 0  # setting range of startnode to zero
 
-    while len(temporary_nodes) != 0:  # solange die Temporäre Liste nicht leer ist den Algorithmus weiter machen
-        v_i, label = get_temporary_node_with_smallest_time(temporary_nodes, l_j)  # den Knoten mit der geringsten Gewichtung nehmen aus den Temporären
+    while len(temporary_nodes) != 0:
+        current_node, label = get_temporary_node_with_smallest_range(temporary_nodes,
+                                                                     weight_j)  # getting temporary node with the smallest range
 
-        permanent_nodes.append(v_i)  # Knoten mit der geringsten Gewichtung Permanent setzen
-        temporary_nodes.remove(v_i)  # jenen Knoten aus der Temporären entfernen
+        permanent_nodes.append(current_node)  # setting node with the smallest weight to permanent
+        temporary_nodes.remove(current_node)
 
-        edge_list = get_edgelist_for_current_node(v_i)  # Arcs vom derzeitig genutzten Knoten herausholen aus der Arcliste
+        edge_list = get_edgelist_for_current_node(current_node)  # getting all arcs for the current node
 
         if edge_list != 0:
-            for vj in edge_list:  # für jeden Arc die jeweiligen Knoten setzen
-                if look_for_temporary_node(int(vj[0]), temporary_nodes) == 0 and look_for_permanent_node(int(vj[0]),
-                                                                                                         permanent_nodes) == 0:  # überprüfung ob der nächste Knoten in keiner der beiden Arrays drin ist
+            for edge in edge_list:
+                if look_for_temporary_node(int(edge[0]), temporary_nodes) == 0 and look_for_permanent_node(int(edge[0]),
+                                                                                                           permanent_nodes) == 0:  # überprüfung ob der nächste Knoten in keiner der beiden Arrays drin ist
 
-                    l_j[int(vj[0]) - 1] = get_cost_from_edge(vj, cost_type) + l_j[v_i - 1]  # Gewichtung speichern
-                    r_j[int(vj[0]) - 1] = get_cost_from_arc(vj) + r_j[v_i - 1]  # Range speichern
-                    p_j[int(vj[0]) - 1] = v_i  # den Vorgänger Knoten abspeichern
+                    weight_j[int(edge[0]) - 1] = get_cost_from_edge(edge, cost_type) + weight_j[
+                        current_node - 1]  # safe weight oft current node
+                    range_j[int(edge[0]) - 1] = get_cost_from_arc(edge) + range_j[
+                        current_node - 1]  # safe range oft current node
+                    predecessor_j[int(edge[0]) - 1] = current_node  # safe predecessor of current node
 
-                    temporary_nodes.append(int(vj[0]))  # Zielknoten der Arc auf Temporär setzen
+                    temporary_nodes.append(int(edge[0]))  # setting next node of edge to temporary nodes
 
-                if look_for_temporary_node(int(vj[0]), temporary_nodes) == 1 and (
-                        get_cost_from_edge(vj, cost_type) + l_j[v_i - 1]) < l_j[int(vj[
-                                                                                        0]) - 1]:  # Überprüfen ob sich Zielknoten in der Temporären bereits befindet und ob dessen Gewichtung durch einen anderen Arc verbessert werden würde
-                    l_j[int(vj[0]) - 1] = get_cost_from_edge(vj, cost_type) + l_j[
-                        v_i - 1]  # setzen der neuen Gewichtung
-                    r_j[int(vj[0]) - 1] = get_cost_from_arc(vj) + r_j[v_i - 1]  # setzen der neuen Range
-                    p_j[int(vj[0]) - 1] = v_i  # setzen des neuen Vorgängerknoten
+                if look_for_temporary_node(int(edge[0]), temporary_nodes) == 1 and (
+                        get_cost_from_edge(edge, cost_type) + weight_j[current_node - 1]) < weight_j[int(edge[
+                                                                                                             0]) - 1]:  # check if target node is already in temp array and if its weight can be reduced
+                    weight_j[int(edge[0]) - 1] = get_cost_from_edge(edge, cost_type) + weight_j[
+                        current_node - 1]  # set new weight
+                    range_j[int(edge[0]) - 1] = get_cost_from_arc(edge) + range_j[
+                        current_node - 1]  # set new range
+                    predecessor_j[int(edge[0]) - 1] = current_node  # set new predecessor
 
-    end_range = r_j[end_node - 1]  # Endreichweite filtern
+    end_range = range_j[end_node - 1]  # getting end range
 
-    route = get_route(p_j, start_node, end_node)  # Route von Start bis Ende berrechnen
+    route = get_route(predecessor_j, start_node, end_node)  # getting route
     return route, end_range
 
 
-def get_cost_from_arc(arc):  # Range rausfiltern
+def get_cost_from_arc(arc):
     return arc[1]
 
 
-def get_route(p_j, start_node, end_node):  # Routenberrechnung
+def get_route(p_j, start_node, end_node):  # calc route from start to end
     route = []
     iteration = end_node
     while start_node != iteration:
@@ -60,25 +64,26 @@ def get_route(p_j, start_node, end_node):  # Routenberrechnung
     return route
 
 
-def get_cost_from_edge(edge, cost_type):  # Kosten filtern
+def get_cost_from_edge(edge, cost_type):  # get cost
     return edge[cost_type]
 
 
-def look_for_temporary_node(node, temporary_node_list):  # Überprüfung ob sich Knoten in Temporären Liste befindet
+def look_for_temporary_node(node, temporary_node_list):  # check if node is in temp list
     for i in range(0, len(temporary_node_list)):
         if temporary_node_list[i] == node:
             return 1
     return 0
 
 
-def look_for_permanent_node(node, permanent_node_list):  # Überprüfung ob sich Knoten in Permanenten Liste befindet
+def look_for_permanent_node(node, permanent_node_list):  # check if node is in permanent list
     for i in range(0, len(permanent_node_list)):
         if permanent_node_list[i] == node:
             return 1
     return 0
 
 
-def get_temporary_node_with_smallest_time(temporary_nodes, label_list):  # Funktion zum filtern des Knoten mit der geringsten Gewichtung in den Temporären
+def get_temporary_node_with_smallest_range(temporary_nodes,
+                                           label_list):
     if (len(temporary_nodes) == 1):
         return temporary_nodes[0], 0
 
@@ -96,7 +101,7 @@ def get_temporary_node_with_smallest_time(temporary_nodes, label_list):  # Funkt
     return node, smallest_label
 
 
-def get_edgelist_for_current_node(current_node):  # Arcs vom bestimmten Knoten filtern
+def get_edgelist_for_current_node(current_node):
     edge_list = []
 
     if current_node == len(node_list) - 1:

@@ -11,6 +11,7 @@ class Server:
         self.address = None
         self.data = None
         self.driven_distance = 0
+        self.distance_difference_between_cur_and_prev_values = 0
         self.current_speed = 0
         self.current_rotation = []
         self.has_connection_to_client = False
@@ -29,7 +30,8 @@ class Server:
             conn, addr = self.server_socket.accept()
             self.connection = conn
             self.address = addr
-            self.has_connection_to_client = True
+            if self.connection is not None:
+                self.has_connection_to_client = True
             return True
         except OSError as e:
             if isinstance(e, socket.timeout):
@@ -44,6 +46,8 @@ class Server:
             string = self.data.split()
             if len(string) > 0:
                 self.current_speed = int(string[0])
+                self.distance_difference_between_cur_and_prev_values = float(string[1]) - self.driven_distance
+                print(self.distance_difference_between_cur_and_prev_values)
                 self.driven_distance = float(string[1])
                 if int(string[2]) != 3:
                     self.current_rotation.append(int(string[2]))
@@ -53,8 +57,7 @@ class Server:
 
     def send_data(self, data):
         data = self.change_data_into_string(data)
-        #if self.server_socket.connect:
-        if not None:
+        if self.connection is not None:
             self.connection.sendall(data.encode())
 
     def change_data_into_string(self, data):
@@ -69,7 +72,7 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server()
+    server = Server("1.1.1.1", 4555)
     server.create_socket()
     server.set_socket_to_listen_mode()
     if server.accept_connection():
@@ -77,12 +80,7 @@ if __name__ == "__main__":
         while True:
             server.receive_data()
             print(server.data)
-            # if not server.data:
-            #    break
-            # server.handle_data()
-            # print("Speed: ", server.current_speed)
-            # print("Dist: ", server.driven_distance)
-            # print("rotation: ", server.current_rotation)
+
             server.send_data("hallo")
         else:
             print("waiting for connection")

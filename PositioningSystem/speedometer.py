@@ -92,6 +92,7 @@ class Speedometer:
             self.hall_forward_sensor.time_sensor = time.time()
             self.hall_forward_sensor.set_pin_state()
             self.change_edge_event_speedometer(self.hall_forward_sensor.pin)
+            self.set_distance((self.wheel_diameter * pi) / 4)
             if self.get_start_bool():
                 self.add_to_count()
             else:

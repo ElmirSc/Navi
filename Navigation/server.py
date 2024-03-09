@@ -44,6 +44,7 @@ class Server:
     def handle_data(self):  # function to split every number of the data pack to get speed, distance and rotation
         if len(self.data) > 0:
             string = self.data.split()
+            print(string)
             if len(string) > 0:
                 self.current_speed = int(string[0])
                 self.distance_difference_between_cur_and_prev_values = float(string[1]) - self.driven_distance

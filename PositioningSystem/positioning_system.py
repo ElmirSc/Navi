@@ -107,9 +107,12 @@ class Positioningsystem:
 
 
 def start_positioning_system():  # function to start the positioning system
+    print("starting positioning system")
     pos_system = Positioningsystem()
+    print("initializing system")
     pos_system.init_positioning_system()
     if not pos_system.client_gui.is_connected:
+        print("trying connection to Serversocket")
         pos_system.client_gui.connect_to_socket()
     pos_system.client_gui.receive_message()
     print(pos_system.client_gui.data)

@@ -93,9 +93,8 @@ class Positioningsystem:
     def calc_speed(self):
         while True:
             self.speedometer.set_count()
-            print("Hello")
             time.sleep(1)
-            #os.system('clear')
+            os.system('clear')
             self.speedometer.check_direction_tire()
             self.thread_lock.acquire()
             try:

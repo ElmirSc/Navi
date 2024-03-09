@@ -93,6 +93,7 @@ class Positioningsystem:
     def calc_speed(self):
         while True:
             self.speedometer.set_count()
+            print("Hello")
             time.sleep(1)
             #os.system('clear')
             self.speedometer.check_direction_tire()
@@ -117,6 +118,7 @@ def start_positioning_system():  # function to start the positioning system
     time.sleep(5)
     pos_system.client_gui.connected_client.settimeout(0.01)
     try:
+        print("Hello")
         pos_system.thread = Thread(target=pos_system.calc_speed())
         pos_system.thread.start()
         print("Hello")

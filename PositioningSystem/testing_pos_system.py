@@ -43,5 +43,5 @@ def a_b_way(client):  # test function for route a -> b
 
 if __name__ == "__main__":
     # testing socket connection
-    client = Client("192.168.0.12", 5556)
+    client = Client("172.20.10.5", 5556)
     a_b_way(client)

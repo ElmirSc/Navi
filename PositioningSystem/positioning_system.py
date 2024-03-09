@@ -94,14 +94,14 @@ class Positioningsystem:
 
     def calc_speed(self):
         while True:
-            pos_system.speedometer.set_count()
+            self.speedometer.set_count()
             time.sleep(1)
             os.system('clear')
-            pos_system.speedometer.check_direction_tire()
+            self.speedometer.check_direction_tire()
             self.thread_lock.acquire()
             try:
-                curren_distance = (pos_system.speedometer.get_count() * ((pos_system.speedometer.wheel_diameter * pi) / 4))
-                pos_system.speedometer.set_speed(curren_distance * 3.6 * pos_system.speedometer.direction)
+                curren_distance = (self.speedometer.get_count() * ((self.speedometer.wheel_diameter * pi) / 4))
+                self.speedometer.set_speed(curren_distance * 3.6 * self.speedometer.direction)
             finally:
                 self.thread_lock.release()
 

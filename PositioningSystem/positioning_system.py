@@ -116,6 +116,7 @@ def start_positioning_system():  # function to start the positioning system
         pos_system.client_gui.connect_to_socket()
     pos_system.client_gui.receive_message()
     print(pos_system.client_gui.data)
+    time.sleep(10)
     pos_system.client_gui.connected_client.settimeout(0.01)
     try:
         pos_system.thread = Thread(target=pos_system.send_speed_distance_rotation_to_server())

@@ -14,12 +14,12 @@ def drive_a_b_way(client):
     while dist < 11.0:
         rot = 3
         if dist > 2.0 and check_for_rotation == 0:
-            rot = 3
+            rot = 1
             check_for_rotation = 1
         elif dist > 6.6 and check_for_rotation == 1:
             rot = 1
             check_for_rotation = 2
-        # speed = speed + counter
+        #speed = speed + counter
         dist = dist + 0.1
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)

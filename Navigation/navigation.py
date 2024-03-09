@@ -223,9 +223,10 @@ class Navigation:
     def update_car_rotation(self):
         if len(self.server.current_rotation) != 0:
             car_standing = self.server.current_rotation.pop()
+            print("Car rotation:",car_standing)
         else:
             car_standing = 2
-        if car_standing != 2 and self.next_instruction != "g":
+        if car_standing != 2:
             self.wait_for_crossing = True
         self.ui.map.update_rotation_of_car(car_standing)
 
@@ -240,7 +241,7 @@ class Navigation:
         if abs(self.ui.map.car.x_position - current_node_x) <= 2 and abs(self.ui.map.car.y_position - current_node_y) <= 2:
             route.pop()
             if self.wait_for_crossing:
-                self.prev_distance += self.get_cost_for_driving_in_node(self.next_instruction)
+                self.prev_distance += self.get_cost_for_driving_in_node("r")
                 self.wait_for_crossing = False
             else:
                 self.prev_distance += self.get_cost_for_driving_in_node("g")

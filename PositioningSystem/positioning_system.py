@@ -122,7 +122,7 @@ def start_positioning_system():  # function to start the positioning system
     try:
         pos_system.thread = Thread(target=pos_system.calc_speed())
         pos_system.thread.start()
-        pos_system.send_speed_distance_rotation_to_server()()
+        pos_system.send_speed_distance_rotation_to_server()
 
     except KeyboardInterrupt:
         pos_system.client_gui.close_connection()

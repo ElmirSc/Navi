@@ -58,8 +58,6 @@ class Positioningsystem:
         self.speedometer.init_speedometer()
         self.mpu6050.init_gyroskop()
 
-
-
     def send_speed_distance_rotation_to_server(self):  # function to send speed, distance and rotation to navigation
         while True:
             start_sending_infos = time.time()
@@ -74,8 +72,8 @@ class Positioningsystem:
             self.get_orientation()
             end_sending_infos = time.time()
             time_elapsed = end_sending_infos - start_sending_infos
-            gyro_angle = self.gyro_val/time_elapsed
-            print("Grad: ",gyro_angle)
+            gyro_angle = self.gyro_val / time_elapsed
+            print("Grad: ", gyro_angle)
             if self.orientation_of_car == turn_left and not self.counted_turn:
                 self.counted_turn = True
                 self.test_var["links"] += 1
@@ -96,7 +94,7 @@ class Positioningsystem:
         while True:
             self.speedometer.set_count()
             time.sleep(1)
-            os.system('clear')
+            #os.system('clear')
             self.speedometer.check_direction_tire()
             self.thread_lock.acquire()
             try:
@@ -104,7 +102,6 @@ class Positioningsystem:
                 self.speedometer.set_speed(curren_distance * 3.6 * self.speedometer.direction)
             finally:
                 self.thread_lock.release()
-
 
 
 def start_positioning_system():  # function to start the positioning system
@@ -117,11 +114,12 @@ def start_positioning_system():  # function to start the positioning system
         pos_system.client_gui.connect_to_socket()
     pos_system.client_gui.receive_message()
     print(pos_system.client_gui.data)
-    time.sleep(10)
+    time.sleep(5)
     pos_system.client_gui.connected_client.settimeout(0.01)
     try:
         pos_system.thread = Thread(target=pos_system.calc_speed())
         pos_system.thread.start()
+        print("Hello")
         pos_system.send_speed_distance_rotation_to_server()
 
     except KeyboardInterrupt:
@@ -133,4 +131,3 @@ def start_positioning_system():  # function to start the positioning system
 if __name__ == "__main__":
     pos_system = Positioningsystem()
     pos_system.init_positioning_system()
-

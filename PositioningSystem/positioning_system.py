@@ -109,11 +109,12 @@ class Positioningsystem:
 def start_positioning_system():  # function to start the positioning system
     pos_system = Positioningsystem()
     pos_system.init_positioning_system()
-    pos_system.client_gui.connect_to_socket()
+    if not pos_system.client_gui.is_connected:
+        pos_system.client_gui.connect_to_socket()
+    pos_system.client_gui.receive_message()
+    print(pos_system.client_gui.data)
     pos_system.client_gui.connected_client.settimeout(0.01)
     try:
-        pos_system.client_gui.receive_message()
-        print(pos_system.client_gui.data)
         pos_system.thread.start()
         pos_system.calc_speed()
 

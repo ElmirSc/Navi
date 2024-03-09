@@ -89,7 +89,7 @@ class Positioningsystem:
             self.orientation_of_car = no_turn
             print(message)
             self.client_gui.send_message(message)
-            time.sleep(0.5)
+            time.sleep(0.6)
 
     def calc_speed(self):
         while True:

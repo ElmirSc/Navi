@@ -123,7 +123,7 @@ class Navigation:
         self.current_node = new_current_node
 
     def check_if_route_ended(self):
-        if self.ui.map.car.x_position == self.end_node_x_cords and self.ui.map.car.y_position == self.end_node_y_cords:
+        if abs(self.ui.map.car.x_position - self.end_node_x_cords) <= 2 and abs(self.ui.map.car.y_position - self.end_node_y_cords) <= 2:
             self.set_to_end_of_driving()
 
     def check_and_handle_the_data_from_server_socket(self):

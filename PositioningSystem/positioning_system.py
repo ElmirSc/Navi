@@ -89,7 +89,7 @@ class Positioningsystem:
             message = ""
             message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
             self.orientation_of_car = no_turn
-
+            print(message)
             self.client_gui.send_message(message)
 
     def calc_speed(self):

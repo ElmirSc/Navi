@@ -38,8 +38,7 @@ class Server:
                 return False
 
     def receive_data(self):  # function to receive data and decode it
-        self.data = self.connection.recv(1024)
-        self.data = self.data.decode()
+        self.data = self.connection.recv(1024).decode()
 
     def handle_data(self):  # function to split every number of the data pack to get speed, distance and rotation
         if len(self.data) > 0:

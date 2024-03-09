@@ -75,6 +75,7 @@ class Positioningsystem:
             end_sending_infos = time.time()
             time_elapsed = end_sending_infos - start_sending_infos
             gyro_angle = self.gyro_val/time_elapsed
+            print("Grad: ",gyro_angle)
             if self.orientation_of_car == turn_left and not self.counted_turn:
                 self.counted_turn = True
                 self.test_var["links"] += 1
@@ -119,9 +120,9 @@ def start_positioning_system():  # function to start the positioning system
     time.sleep(10)
     pos_system.client_gui.connected_client.settimeout(0.01)
     try:
-        pos_system.thread = Thread(target=pos_system.send_speed_distance_rotation_to_server())
+        pos_system.thread = Thread(target=pos_system.calc_speed())
         pos_system.thread.start()
-        pos_system.calc_speed()
+        pos_system.send_speed_distance_rotation_to_server()()
 
     except KeyboardInterrupt:
         pos_system.client_gui.close_connection()

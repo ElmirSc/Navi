@@ -11,7 +11,7 @@ def drive_a_b_way(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
-    while dist < 11.0:
+    while dist < 14.0:
         rot = 3
         if dist > 2.0 and check_for_rotation == 0:
             rot = 1
@@ -19,15 +19,10 @@ def drive_a_b_way(client):
         elif dist > 6.6 and check_for_rotation == 1:
             rot = 1
             check_for_rotation = 2
-        #speed = speed + counter
-        dist = dist + 0.1
+        dist = dist + 0.14
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        if speed == 20:
-            counter = -1
-        elif speed == 0:
-            counter = 1
         time.sleep(0.5)
 
 

@@ -92,6 +92,30 @@ class Map:
         cv2.imwrite("UserInterface/map_with_route_and_car_position.png", map)
         self.current_map = Image.open("UserInterface/map_with_route_and_car_position.png").resize((800, 500))
 
+    def center_car_to_node(self, node):
+        map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
+        # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
+        height, width = map.shape[:2]
+        alpha_channel = np.ones((height, width),
+                                dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
+
+        # Füge den Alphakanal dem Bild hinzu
+        map = cv2.merge((map, alpha_channel))
+
+        car_height, car_width = self.car.picture_of_car_rotated.shape[:2]
+        self.car.x_position = self.car.coordinates_of_all_node[node - 1][0]
+        self.car.y_position = self.car.coordinates_of_all_node[node - 1][1]
+        x_position = self.car.x_position - int(car_width / 2)
+        y_position = self.car.y_position - int(car_height / 2)
+        print(self.car.x_position, self.car.y_position)
+
+        # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
+        map[y_position:y_position + car_height, x_position:x_position + car_width] = self.car.picture_of_car_rotated
+
+        # Speichern des resultierenden Bildes mit dem platzierten Auto
+        cv2.imwrite("UserInterface/map_with_route_and_car_position.png", map)
+        self.current_map = Image.open("UserInterface/map_with_route_and_car_position.png").resize((800, 500))
+
 
 if __name__ == "__main__":
     map = Map()

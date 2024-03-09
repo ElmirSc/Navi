@@ -99,10 +99,11 @@ class Navigation:
                             self.check_and_handle_the_data_from_server_socket()
                             self.update_ui_with_current_distance_and_speed()
                             self.check_if_route_ended()
+
                             self.update_car_rotation()
                             route = self.check_if_car_is_at_node_position(route)
-
                             self.update_car_position()
+
                             self.ui.update_map()
 
                             #self.calc_current_node_cost()
@@ -223,9 +224,10 @@ class Navigation:
     def update_car_rotation(self):
         if len(self.server.current_rotation) != 0:
             car_standing = self.server.current_rotation.pop()
-            print("Car rotation:",car_standing)
         else:
+            print("empty")
             car_standing = 2
+        print("Car rotation:", car_standing)
         if car_standing != 2:
             self.wait_for_crossing = True
         self.ui.map.update_rotation_of_car(car_standing)
@@ -238,10 +240,12 @@ class Navigation:
     def check_if_car_is_at_node_position(self,route):
         current_node_x = self.ui.map.car.coordinates_of_all_node[route[len(route)-1]-1][0]
         current_node_y = self.ui.map.car.coordinates_of_all_node[route[len(route)-1]-1][1]
-        if abs(self.ui.map.car.x_position - current_node_x) <= 2 and abs(self.ui.map.car.y_position - current_node_y) <= 2:
-            route.pop()
+        if abs(self.ui.map.car.x_position - current_node_x) <= 4 and abs(self.ui.map.car.y_position - current_node_y) <= 4:
+            current_node = route.pop()
+            self.ui.map.center_car_to_node(current_node)
             if self.wait_for_crossing:
                 self.prev_distance += self.get_cost_for_driving_in_node("r")
+                print("prev distance",self.prev_distance)
                 self.wait_for_crossing = False
             else:
                 self.prev_distance += self.get_cost_for_driving_in_node("g")

@@ -86,8 +86,7 @@ class Positioningsystem:
             elif self.orientation_of_car == no_turn:
                 print("Keine drehung")
             print(self.test_var)
-            message = ""
-            message = (str(speed) + " " + str(dist) + " " + str(self.orientation_of_car))
+            message = str(speed) + " " + str(dist) + " " + str(self.orientation_of_car)
             self.orientation_of_car = no_turn
             print(message)
             self.client_gui.send_message(message)

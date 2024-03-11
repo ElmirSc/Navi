@@ -90,7 +90,8 @@ class Navigation:
 
                             self.server.send_data(instructions_to_send)
                         case 3:  # driving state where distance, speed and car location gets updated
-
+                            print("x-position:", self.ui.map.car.x_position)
+                            print("y-position:", self.ui.map.car.y_position)
                             self.check_and_handle_the_data_from_server_socket()
                             self.update_ui_with_current_distance_and_speed()
                             self.check_if_route_ended()

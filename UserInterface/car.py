@@ -56,13 +56,21 @@ class Car:
             case 3:
                 self.picture_of_car_rotated = cv2.rotate(self.picture_of_car, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
-    def add_distance_to_coordinates_of_car(self,distance):
+    def add_distance_to_coordinates_of_car(self,distance, map_height, map_width):
         match self.rotation:
             case 0: #norden
                 self.y_position = self.y_position - distance
+                if self.y_position < 0:
+                    self.y_position = 0
             case 2:#süden
                 self.y_position = self.y_position + distance
+                if self.y_position > map_height:
+                    self.y_position = map_height - 1
             case 1:#osten
                 self.x_position = self.x_position + distance
+                if self.x_position > map_width:
+                    self.x_position = map_width - 1
             case 3:#westen
                 self.x_position = self.x_position - distance
+                if self.x_position < 0:
+                    self.x_position = 0

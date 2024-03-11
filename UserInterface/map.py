@@ -10,10 +10,14 @@ class Map:
         self.current_map = None
         self.car = Car()
         self.min_pixel_value_for_drawing = 0.3
+        self.map_height = 0
+        self.map_width = 0
         self.init_map()
 
     def init_map(self):
         self.default_map = Image.open("UserInterface/street_with_node_nummeration.png").resize((800, 500))
+        self.map_height, self.map_width = cv2.imread("UserInterface/street_with_node_nummeration.png", cv2.IMREAD_UNCHANGED).shape[:2]
+
 
     def draw_route_in_map(self, route_cords):  # function to draw route in map
         print("drawRoute")
@@ -33,8 +37,7 @@ class Map:
         self.car.initialize_car(start, end)
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
-        height, width = map.shape[:2]
-        alpha_channel = np.ones((height, width),
+        alpha_channel = np.ones((self.map_height, self.map_width),
                                 dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
 
         # Füge den Alphakanal dem Bild hinzu
@@ -67,13 +70,12 @@ class Map:
                     self.car.rotation = 0
 
     def update_position_of_car_on_map(self, driven_distance):
-
         pixel_to_add = round(driven_distance*100 * self.min_pixel_value_for_drawing)
-        self.car.add_distance_to_coordinates_of_car(pixel_to_add)
+        self.car.add_distance_to_coordinates_of_car(pixel_to_add, self.map_height, self.map_width)
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
-        height, width = map.shape[:2]
-        alpha_channel = np.ones((height, width),
+
+        alpha_channel = np.ones((self.map_height, self.map_width),
                                 dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
 
         # Füge den Alphakanal dem Bild hinzu
@@ -96,7 +98,7 @@ class Map:
         map = cv2.imread("UserInterface/map_with_route.png", cv2.IMREAD_UNCHANGED)
         # Erstelle einen leeren Alphakanal mit denselben Dimensionen wie das Bild
         height, width = map.shape[:2]
-        alpha_channel = np.ones((height, width),
+        alpha_channel = np.ones((self.map_height, self.map_width),
                                 dtype=np.uint8) * 255  # Fülle den Alphakanal mit voller Transparenz (255)
 
         # Füge den Alphakanal dem Bild hinzu

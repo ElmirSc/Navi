@@ -94,9 +94,10 @@ class Navigation:
                             self.check_and_handle_the_data_from_server_socket()
                             self.update_ui_with_current_distance_and_speed()
                             self.check_if_route_ended()
-                            self.update_car_rotation()
+
                             route = self.check_if_car_is_at_node_position(route)
                             self.update_car_position()
+                            self.update_car_rotation()
 
                             self.ui.update_map()
 

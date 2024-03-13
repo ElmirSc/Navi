@@ -10,6 +10,7 @@ class Car:
         self.picture_of_car_rotated = None
         self.rotation = None
         self.coordinates_of_all_node = np.loadtxt("UserInterface/node_cordinates_on_map.txt").astype(int)
+        self.drives_true_route = True
 
     def initialize_car(self, start_node, next_node):
         self.x_position = self.coordinates_of_all_node[start_node-1][0]

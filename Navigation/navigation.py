@@ -255,7 +255,6 @@ class Navigation:
         self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
         self.ui.map.draw_route_in_map(route)
         self.update_car_position()
-        self.ui.update_map()
         route.reverse()
         #route.pop()
         self.check_if_car_is_at_node_position(route)

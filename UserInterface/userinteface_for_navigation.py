@@ -256,6 +256,8 @@ class Userinterface:
     def update_driven_distance(self, dist):  # function to update distance in ui
         # self.dist = dist
         rounded_dist = round(dist, 1)
+        if rounded_dist < 0:
+            rounded_dist = 0
         self.tk_current_driven_distance_window.config(text="Distance: " + str(rounded_dist) + " m")
 
     def update_button(self):  # function to set new button function

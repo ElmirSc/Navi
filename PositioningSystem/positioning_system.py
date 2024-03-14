@@ -36,6 +36,9 @@ class Positioningsystem:
         self.thread = None
         self.thread_lock = threading.Lock()
         self.gyro_val = 0
+        self.start_time_of_measuring_gyroskop = 0
+        self.end_time_of_measuring_gyroskop = 0
+        self.integrated_gyro_val = 0.0
 
     def get_orientation(self):
         self.gyro_val = self.mpu6050.get_gyro_z()
@@ -53,14 +56,36 @@ class Positioningsystem:
             self.in_turn = False
             self.orientation_of_car = no_turn
 
+    def get_orientation_two(self):
+        self.gyro_val = self.mpu6050.get_gyro_z()
+        self.end_time_of_measuring_gyroskop = time.time()
+        time_diff = self.end_time_of_measuring_gyroskop - self.start_time_of_measuring_gyroskop
+        print("Gyro Z: ", self.gyro_val)
+        gyro_val_in_degree = self.gyro_val / time_diff
+        print("Gyro_Val in Grad: ", gyro_val_in_degree)
+        self.start_time_of_measuring_gyroskop = self.end_time_of_measuring_gyroskop
+        self.integrated_gyro_val += gyro_val_in_degree
+        if self.integrated_gyro_val < -turn_threshold and not self.in_turn:
+            self.in_turn = True
+            self.orientation_of_car = turn_right
+            self.counted_turn = False
+        elif self.integrated_gyro_val > turn_threshold and not self.in_turn:
+            self.in_turn = True
+            self.orientation_of_car = turn_left
+            self.counted_turn = False
+        elif -no_turn_threshold < self.integrated_gyro_val < no_turn_threshold and self.in_turn:
+            self.in_turn = False
+            self.orientation_of_car = no_turn
+            self.integrated_gyro_val = 0.0
+
     def init_positioning_system(self):  # function to initialilze positioning system
         print("Initializing system")
         self.speedometer.init_speedometer()
         self.mpu6050.init_gyroskop()
 
     def send_speed_distance_rotation_to_server(self):  # function to send speed, distance and rotation to navigation
+        self.start_time_of_measuring_gyroskop = time.time()
         while True:
-            start_sending_infos = time.time()
             self.thread_lock.acquire()
             try:
                 speed = int(self.speedometer.current_speed)
@@ -70,10 +95,6 @@ class Positioningsystem:
             print("Speed: ", speed)
             print("Dist: ", dist)
             self.get_orientation()
-            end_sending_infos = time.time()
-            time_elapsed = end_sending_infos - start_sending_infos
-            gyro_angle = self.gyro_val / time_elapsed
-            print("Grad: ", gyro_angle)
             if self.orientation_of_car == turn_left and not self.counted_turn:
                 self.counted_turn = True
                 self.test_var["links"] += 1

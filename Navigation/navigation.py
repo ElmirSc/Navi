@@ -12,7 +12,7 @@ from Navigation.server import Server
 class Navigation:
     def __init__(self):
         self.ui = Userinterface()  # ui object
-        self.server = Server("172.20.10.5", 5556)  # server object
+        self.server = Server("192.168.0.12", 5556)  # server object
         self.current_state_of_app = before_navigation_state  # initial state of the application
         self.routing_cost = 0  # total routing cost
         self.thread_one = 0  # thread object for start application without ui
@@ -104,7 +104,7 @@ class Navigation:
                             route = self.check_if_car_is_at_node_position(route)
                             self.update_car_position()
 
-                            #route = self.check_if_car_is_at_other_node_position()
+                            route = self.check_if_car_is_at_other_node_position(route)
                             self.ui.update_map()
 
                         case 4:  # end state
@@ -197,6 +197,7 @@ class Navigation:
             self.is_at_node = False
             self.crossing_updated = False
             route.pop()
+            self.next_node = route[len(route)-1]
         new_route = route[:]
         print(self.prev_distance)
         # self.next_node_x == 0 and self.next_node_y == 0:
@@ -209,11 +210,11 @@ class Navigation:
             self.ui.map.center_car_to_node(current_node)
             if self.wait_for_crossing:
                 self.prev_distance += self.get_cost_for_driving_in_node("r")
-                if self.crossing_updated == True:   #hier
+                if self.crossing_updated == True:  # hier
                     self.prev_distance = self.prev_distance - self.get_cost_for_driving_in_node("g")
                 else:
                     self.crossing_updated = True
-                    #hier
+                    # hier
                 print("prev distance", self.prev_distance)
                 self.wait_for_crossing = False
                 if self.next_instruction != "g":
@@ -221,29 +222,28 @@ class Navigation:
                 else:
                     self.ui.map.car.drives_true_route = False
             else:
-                if self.crossing_updated == False:   #hier
+                if self.crossing_updated == False:  # hier
                     self.prev_distance += self.get_cost_for_driving_in_node("g")
-                    self.crossing_updated = True    #hier
+                    self.crossing_updated = True  # hier
                 if self.next_instruction == "g":
                     self.next_instruction = str(self.all_driving_instructions.pop())
                 else:
                     self.ui.map.car.drives_true_route = False
         return route
 
-    def check_if_car_is_at_other_node_position(self):
+    def check_if_car_is_at_other_node_position(self, route):
         new_node_x = 0
         new_node_y = 0
-        i = 1
+        current_node_x = self.ui.map.car.coordinates_of_all_node[self.next_node - 1][0]
+        current_node_y = self.ui.map.car.coordinates_of_all_node[self.next_node - 1][1]
+
         if not self.ui.map.car.drives_true_route:
-            for x, y in enumerate(self.ui.map.car.coordinates_of_all_node):
-                if abs(self.ui.map.car.x_position - x) <= 4 and abs(
-                        self.ui.map.car.y_position - y) <= 4:
-                    self.ui.map.car.drives_true_route = True
-                    return self.calc_new_route(i)
-                else:
-                    i += 1
-
-
+            for i, (x, y) in enumerate(self.ui.map.car.coordinates_of_all_node):
+                if abs(self.ui.map.car.x_position - x) <= 2 and abs(self.ui.map.car.y_position - y) <= 2:
+                    if self.ui.map.car.x_position != current_node_x or self.ui.map.car.y_position != current_node_y:
+                        self.ui.map.car.drives_true_route = True
+                        return self.calc_new_route(i + 1)
+        return route
 
     def calc_new_route(self, new_node):
         route, cost = self.get_route_from_algorithm(
@@ -252,11 +252,14 @@ class Navigation:
         self.process_driving_instructions()
 
         self.update_nodes_calc_routing_cost_and_get_next_instruction(route, cost)
-        self.set_distance_and_draw_route_in_map(route)
+        self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
+        self.ui.map.draw_route_in_map(route)
+        self.update_car_position()
+        self.ui.update_map()
         route.reverse()
-        route.pop()
+        #route.pop()
+        self.check_if_car_is_at_node_position(route)
         return route
-
 
 
 if __name__ == "__main__":

@@ -11,13 +11,13 @@ def drive_a_b_way(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
-    while dist < 14.0:
+    while dist < 30.0:
         rot = 3
-        if dist > 1.0 and check_for_rotation == 0:
+        if dist > 7.0 and check_for_rotation == 0:
             rot = 1
             check_for_rotation = 1
-        elif dist > 3.0 and check_for_rotation == 1:
-            rot = 0
+        elif dist > 10.6 and check_for_rotation == 1:
+            rot = 1
             check_for_rotation = 2
         dist = dist + 0.14
         message = str(speed) + " " + str(dist) + " " + str(rot)
@@ -38,5 +38,5 @@ def a_b_way(client):  # test function for route a -> b
 
 if __name__ == "__main__":
     # testing socket connection
-    client = Client("172.20.10.5", 5556)
+    client = Client("192.168.0.12", 5556)
     a_b_way(client)

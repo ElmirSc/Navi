@@ -102,7 +102,7 @@ class Positioningsystem:
                 self.thread_lock.release()
             print("Speed: ", speed)
             print("Dist: ", dist)
-            self.get_orientation()
+            self.get_orientation_two()
             if self.orientation_of_car == turn_left and not self.counted_turn:
                 self.counted_turn = True
                 self.test_var["links"] += 1

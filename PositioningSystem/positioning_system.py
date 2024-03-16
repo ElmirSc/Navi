@@ -69,10 +69,10 @@ class Positioningsystem:
 
         self.start_time_of_measuring_gyroskop = self.end_time_of_measuring_gyroskop
 
-        if -no_turn_threshold > self.gyro_val:
-            self.integrated_gyro_val -= gyro_val_in_degree
-        elif no_turn_threshold < self.gyro_val:
+        if -no_turn_threshold > self.gyro_val or no_turn_threshold < self.gyro_val:
             self.integrated_gyro_val += gyro_val_in_degree
+        #elif no_turn_threshold < self.gyro_val:
+        #    self.integrated_gyro_val += gyro_val_in_degree
         print("Complete Degree:", self.integrated_gyro_val)
 
         if self.integrated_gyro_val < -turn_threshold and not self.in_turn:

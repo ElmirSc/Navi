@@ -64,7 +64,8 @@ class Positioningsystem:
         gyro_val_in_degree = self.gyro_val / time_diff
         print("Gyro_Val in Grad: ", gyro_val_in_degree)
         self.start_time_of_measuring_gyroskop = self.end_time_of_measuring_gyroskop
-        self.integrated_gyro_val += gyro_val_in_degree
+        if -no_turn_threshold > self.gyro_val or self.gyro_val > no_turn_threshold:
+            self.integrated_gyro_val += gyro_val_in_degree
         if self.integrated_gyro_val < -turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right

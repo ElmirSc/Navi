@@ -104,7 +104,7 @@ class Navigation:
                             route = self.check_if_car_is_at_node_position(route)
                             self.update_car_position()
 
-                            route = self.check_if_car_is_at_other_node_position(route)
+                            #route = self.check_if_car_is_at_other_node_position(route)
                             self.ui.update_map()
 
                         case 4:  # end state

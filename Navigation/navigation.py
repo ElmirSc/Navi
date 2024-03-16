@@ -217,7 +217,7 @@ class Navigation:
                     # hier
                 print("prev distance", self.prev_distance)
                 self.wait_for_crossing = False
-                if self.next_instruction != "g":
+                if self.next_instruction != "g" and len(self.all_driving_instructions) != 0:
                     self.next_instruction = str(self.all_driving_instructions.pop())
                 else:
                     self.ui.map.car.drives_true_route = False
@@ -225,7 +225,7 @@ class Navigation:
                 if self.crossing_updated == False:  # hier
                     self.prev_distance += self.get_cost_for_driving_in_node("g")
                     self.crossing_updated = True  # hier
-                if self.next_instruction == "g":
+                if self.next_instruction == "g" and len(self.all_driving_instructions) != 0:
                     self.next_instruction = str(self.all_driving_instructions.pop())
                 else:
                     self.ui.map.car.drives_true_route = False

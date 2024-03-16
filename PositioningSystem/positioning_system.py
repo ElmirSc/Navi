@@ -71,8 +71,6 @@ class Positioningsystem:
 
         if -no_turn_threshold > self.gyro_val or no_turn_threshold < self.gyro_val:
             self.integrated_gyro_val += gyro_val_in_degree
-        #elif no_turn_threshold < self.gyro_val:
-        #    self.integrated_gyro_val += gyro_val_in_degree
         print("Complete Degree:", self.integrated_gyro_val)
 
         if self.integrated_gyro_val < -turn_threshold and not self.in_turn:
@@ -104,7 +102,7 @@ class Positioningsystem:
                 self.thread_lock.release()
             print("Speed: ", speed)
             print("Dist: ", dist)
-            self.get_orientation_two()
+            self.get_orientation()
             if self.orientation_of_car == turn_left and not self.counted_turn:
                 self.counted_turn = True
                 self.test_var["links"] += 1

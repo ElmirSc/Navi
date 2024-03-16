@@ -83,7 +83,7 @@ class Positioningsystem:
             self.in_turn = True
             self.orientation_of_car = turn_left
             self.counted_turn = False
-        elif -no_turn_threshold < self.integrated_gyro_val < no_turn_threshold and self.in_turn:
+        elif -no_turn_threshold < self.gyro_val < no_turn_threshold and self.in_turn:
             self.in_turn = False
             self.orientation_of_car = no_turn
             self.integrated_gyro_val = 0.0

@@ -58,17 +58,23 @@ class Positioningsystem:
 
     def get_orientation_two(self):
         self.gyro_val = self.mpu6050.get_gyro_z()
+
         self.end_time_of_measuring_gyroskop = time.time()
         time_diff = self.end_time_of_measuring_gyroskop - self.start_time_of_measuring_gyroskop
+
         print("Gyro Z: ", self.gyro_val)
+
         gyro_val_in_degree = self.gyro_val / time_diff
         print("Gyro_Val in Grad: ", gyro_val_in_degree)
+
         self.start_time_of_measuring_gyroskop = self.end_time_of_measuring_gyroskop
+
         if -no_turn_threshold > self.gyro_val:
             self.integrated_gyro_val -= gyro_val_in_degree
-        else:
+        elif no_turn_threshold < self.gyro_val:
             self.integrated_gyro_val += gyro_val_in_degree
         print("Complete Degree:", self.integrated_gyro_val)
+
         if self.integrated_gyro_val < -turn_threshold and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right

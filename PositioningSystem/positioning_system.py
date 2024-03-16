@@ -38,7 +38,7 @@ class Positioningsystem:
         self.gyro_val = 0
         self.start_time_of_measuring_gyroskop = 0
         self.end_time_of_measuring_gyroskop = 0
-        self.integrated_gyro_val = 0.0
+        self.integrated_gyro_val = 0
 
     def get_orientation(self):
         self.gyro_val = self.mpu6050.get_gyro_z()

@@ -44,11 +44,11 @@ class Positioningsystem:
         self.gyro_val = self.mpu6050.get_gyro_z()
         print("Gyro Z: ", self.gyro_val)
 
-        if self.gyro_val < -turn_threshold and not self.in_turn:
+        if self.gyro_val < -turn_threshold_implementation_one and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
             self.counted_turn = False
-        elif self.gyro_val > turn_threshold and not self.in_turn:
+        elif self.gyro_val > turn_threshold_implementation_one and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
             self.counted_turn = False
@@ -73,11 +73,11 @@ class Positioningsystem:
             self.integrated_gyro_val += gyro_val_in_degree
         print("Complete Degree:", self.integrated_gyro_val)
 
-        if self.integrated_gyro_val < -turn_threshold and not self.in_turn:
+        if self.integrated_gyro_val < -turn_threshold_implementation_two and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_right
             self.counted_turn = False
-        elif self.integrated_gyro_val > turn_threshold and not self.in_turn:
+        elif self.integrated_gyro_val > turn_threshold_implementation_two and not self.in_turn:
             self.in_turn = True
             self.orientation_of_car = turn_left
             self.counted_turn = False

@@ -12,7 +12,7 @@ from Navigation.server import Server
 class Navigation:
     def __init__(self):
         self.ui = Userinterface()  # ui object
-        self.server = Server("172.20.10.5", 5556)  # server object
+        self.server = Server("192.168.0.8", 5556)  # server object
         self.current_state_of_app = before_navigation_state  # initial state of the application
         self.routing_cost = 0  # total routing cost
         self.thread_one = 0  # thread object for start application without ui
@@ -33,10 +33,14 @@ class Navigation:
         self.crossing_updated = False
         self.straight_updated = False
         self.is_at_node = False
+        self.prev_node = None
+        self.driven_route = []
 
-    @staticmethod
-    def get_route_from_algorithm(start_node, end_node):  # function to calculate the route and its full cost
-        return dijkstra(start_node, end_node, 1)
+    def get_route_from_algorithm(self, start_node, end_node, new_route=False):  # function to calculate the route and its full cost
+        if new_route:
+            return dijkstra(start_node, end_node, 1, prev_node=self.prev_node)
+        else:
+            return dijkstra(start_node, end_node, 1)
 
     def calc_real_range_from_cost_and_factor(self):  # calculating real range if the real driving area is bigger
         return self.factor_for_real_distance * self.routing_cost
@@ -94,6 +98,7 @@ class Navigation:
                                 self.current_state_of_app = driving_state
 
                             self.server.send_data(instructions_to_send)
+                            self.ui.distance_to_drive = self.ui.distance
                         case 3:  # driving state where distance, speed and car location gets updated
                             print("x-position:", self.ui.map.car.x_position)
                             print("y-position:", self.ui.map.car.y_position)
@@ -104,7 +109,7 @@ class Navigation:
                             route = self.check_if_car_is_at_node_position(route)
                             self.update_car_position()
 
-                            #route = self.check_if_car_is_at_other_node_position(route)
+                            route = self.check_if_car_is_at_other_node_position(route)
                             self.ui.update_map()
 
                         case 4:  # end state
@@ -129,7 +134,7 @@ class Navigation:
         self.server.handle_data()
 
     def update_ui_with_current_distance_and_speed(self):
-        self.ui.calc_distance_to_drive(self.server.driven_distance)
+        self.ui.calc_distance_to_drive(self.server.distance_difference_between_cur_and_prev_values)
 
         self.ui.update_speed(self.server.current_speed)
 
@@ -196,7 +201,8 @@ class Navigation:
         if self.prev_distance < self.server.driven_distance and self.is_at_node == True:
             self.is_at_node = False
             self.crossing_updated = False
-            route.pop()
+            self.prev_node = route.pop()
+            self.driven_route.append(self.prev_node)
             self.next_node = route[len(route)-1]
         new_route = route[:]
         print(self.prev_distance)
@@ -247,13 +253,33 @@ class Navigation:
 
     def calc_new_route(self, new_node):
         route, cost = self.get_route_from_algorithm(
-            new_node, self.ui.get_end_point_for_navigation())
+            new_node, self.ui.get_end_point_for_navigation(), new_route=True)
+
         self.all_driving_instructions = self.ui.get_driving_instructions_from_route(route)
+
         self.process_driving_instructions()
 
+
+
+
+        #self.server.fault_distance = self.server.driven_distance
+
+        #self.prev_distance = 0
+
+        #self.server.driven_distance = 0
+
         self.update_nodes_calc_routing_cost_and_get_next_instruction(route, cost)
+
         self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
-        self.ui.map.draw_route_in_map(route)
+
+
+
+
+
+        start_point_as_array = [self.ui.start_point]
+        full_route = start_point_as_array + self.driven_route + route
+        self.ui.map.draw_route_in_map(full_route)
+
         self.update_car_position()
         route.reverse()
         #route.pop()

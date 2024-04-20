@@ -240,7 +240,7 @@ class Userinterface:
     def calc_distance_to_drive(self, dist):  # function to calculate current distance to drive
         self.thread_lock.acquire()
         try:
-            self.distance_to_drive = self.distance - dist
+            self.distance_to_drive = self.distance_to_drive - dist
             # new_cost = self.dist - range_to_drive
             self.update_driven_distance(self.distance_to_drive)
         finally:

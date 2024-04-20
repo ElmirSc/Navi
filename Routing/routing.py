@@ -1,7 +1,19 @@
 from Routing.routingConfig import *
 
 
-def dijkstra(start_node, end_node, cost_type):
+def remove_all_edges_with_prev_node_as_target(edge_list, prev_node):
+    new_edge_list = []
+    for edge in edge_list:
+        if edge[0] != prev_node:
+            new_edge_list.append(edge)
+
+    if len(new_edge_list) > 0:
+        return new_edge_list
+    else:
+        return edge_list
+
+
+def dijkstra(start_node, end_node, cost_type, prev_node=None):
     permanent_nodes = []  # array for the permanent nodes
     temporary_nodes = [start_node]  # array for the temporaty nodes
 
@@ -19,6 +31,9 @@ def dijkstra(start_node, end_node, cost_type):
         temporary_nodes.remove(current_node)
 
         edge_list = get_edgelist_for_current_node(current_node)  # getting all arcs for the current node
+
+        if prev_node != None:
+            edge_list = remove_all_edges_with_prev_node_as_target(edge_list, prev_node)
 
         if edge_list != 0:
             for edge in edge_list:

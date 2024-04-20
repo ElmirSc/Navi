@@ -15,6 +15,7 @@ class Server:
         self.current_speed = 0
         self.current_rotation = []
         self.has_connection_to_client = False
+        self.fault_distance = 0
 
     def create_socket(self):  # function which creates and binds the socket with a timeout of 10sec
         self.server_socket.settimeout(20)
@@ -46,9 +47,9 @@ class Server:
             print(string)
             if len(string) > 0:
                 self.current_speed = int(string[0])
-                self.distance_difference_between_cur_and_prev_values = float(string[1]) - self.driven_distance
+                self.distance_difference_between_cur_and_prev_values = (float(string[1]) - self.fault_distance) - self.driven_distance
                 print(self.distance_difference_between_cur_and_prev_values)
-                self.driven_distance = float(string[1])
+                self.driven_distance = float(string[1]) - self.fault_distance
                 if int(string[2]) != 3:
                     self.current_rotation.append(int(string[2]))
 

@@ -6,6 +6,8 @@ class Car:
     def __init__(self):
         self.x_position = 0
         self.y_position = 0
+        self.prev_x_position = 0
+        self.prev_y_position = 0
         self.picture_of_car = None
         self.picture_of_car_rotated = None
         self.rotation = None
@@ -60,18 +62,22 @@ class Car:
     def add_distance_to_coordinates_of_car(self,distance, map_height, map_width):
         match self.rotation:
             case 0: #norden
+                self.prev_y_position = self.y_position
                 self.y_position = self.y_position - distance
                 if self.y_position < 0:
                     self.y_position = 0
             case 2:#süden
+                self.prev_y_position = self.y_position
                 self.y_position = self.y_position + distance
                 if self.y_position > map_height:
                     self.y_position = map_height - 1
             case 1:#osten
+                self.prev_x_position = self.x_position
                 self.x_position = self.x_position + distance
                 if self.x_position > map_width:
                     self.x_position = map_width - 1
             case 3:#westen
+                self.prev_x_position = self.x_position
                 self.x_position = self.x_position - distance
                 if self.x_position < 0:
                     self.x_position = 0

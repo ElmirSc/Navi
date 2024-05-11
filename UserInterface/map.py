@@ -85,7 +85,6 @@ class Map:
 
         x_position = self.car.x_position - int(car_width / 2)
         y_position = self.car.y_position - int(car_height / 2)
-        print(x_position, y_position)
 
         # Platzieren des Auto-Bildes auf dem Hauptbild an den angegebenen Koordinaten
         map[y_position:y_position + car_height, x_position:x_position + car_width] = self.car.picture_of_car_rotated

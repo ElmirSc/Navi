@@ -11,6 +11,7 @@ def drive_a_b_way(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
+    client.connected_client.settimeout(0.5)
     while dist < 30.0:
         rot = 3
         if dist > 2.1 and check_for_rotation == 0:
@@ -23,9 +24,10 @@ def drive_a_b_way(client):
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        time.sleep(0.5)
+        client.receive_message()
+        #time.sleep(0.5)
 
-def drive_c_d_way(client):
+def drive_c_f_way(client):
     counter = 1
     speed = 1
     dist = 0.0
@@ -34,13 +36,15 @@ def drive_c_d_way(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
+    client.connected_client.settimeout(0.5)
     while dist < 30.0:
         rot = 3
         dist = dist + 0.1
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        time.sleep(0.5)
+        #time.sleep(0.5)
+        client.receive_message()
 
 def drive_a_b_way_wrong(client):
     counter = 1
@@ -51,6 +55,7 @@ def drive_a_b_way_wrong(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
+    client.connected_client.settimeout(0.5)
     while dist < 30.0:
         rot = 3
         if dist > 7.0 and check_for_rotation == 0:
@@ -63,9 +68,10 @@ def drive_a_b_way_wrong(client):
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        time.sleep(0.5)
+        #time.sleep(0.5)
+        client.receive_message()
 
-def drive_c_d_way_wrong(client):
+def drive_c_f_way_wrong(client):
     counter = 1
     speed = 1
     dist = 0.0
@@ -74,6 +80,7 @@ def drive_c_d_way_wrong(client):
     check_for_rotation = 0
     client.receive_message()
     print(client.data)
+    client.connected_client.settimeout(0.5)
     while dist < 30.0:
         rot = 3
         if dist > 3.1 and check_for_rotation == 0:
@@ -92,7 +99,8 @@ def drive_c_d_way_wrong(client):
         message = str(speed) + " " + str(dist) + " " + str(rot)
         print(dist)
         client.send_message(message)
-        time.sleep(0.5)
+        #time.sleep(0.5)
+        client.receive_message()
 
 
 def a_b_way(client):  # test function for route a -> b
@@ -107,5 +115,5 @@ def a_b_way(client):  # test function for route a -> b
 
 if __name__ == "__main__":
     # testing socket connection
-    client = Client("192.168.0.8", 5556)
-    drive_c_d_way_wrong(client)
+    client = Client("192.168.0.12", 5556)
+    drive_c_f_way_wrong(client)

@@ -47,8 +47,8 @@ class Server:
             print(string)
             if len(string) > 0:
                 self.current_speed = int(string[0])
-                self.distance_difference_between_cur_and_prev_values = (float(string[1]) - self.fault_distance) - self.driven_distance
-                print(self.distance_difference_between_cur_and_prev_values)
+                self.distance_difference_between_cur_and_prev_values = round((float(string[1]) - self.fault_distance) - self.driven_distance, 2)
+                print("distance_diff:",self.distance_difference_between_cur_and_prev_values)
                 self.driven_distance = float(string[1]) - self.fault_distance
                 if int(string[2]) != 3:
                     self.current_rotation.append(int(string[2]))

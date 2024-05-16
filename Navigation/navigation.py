@@ -113,7 +113,7 @@ class Navigation:
                             route = self.check_if_car_is_at_node_position(route)
 
                             self.update_car_position()
-                            #self.print_infos()
+                            self.print_infos()
                             route = self.check_if_car_is_driving_wrong_route(route)
                             self.ui.update_map()
 
@@ -172,9 +172,26 @@ class Navigation:
         self.ui.update_ui_to_start_again()
 
     def process_driving_instructions(self):
-        #self.all_driving_instructions.append("m")
-        #self.all_driving_instructions.reverse()
+        self.all_driving_instructions.reverse()
+        self.all_driving_instructions.pop()
+        self.all_driving_instructions.reverse()
+        self.all_driving_instructions.append("g")
+        self.all_driving_instructions.reverse()
         self.next_instruction = str(self.all_driving_instructions.pop())
+
+
+        # if len(self.all_driving_instructions) != 0:
+        #     self.next_instruction = str(self.all_driving_instructions.pop())
+        # self.all_driving_instructions.reverse()
+        # self.all_driving_instructions.append("g")
+    def process_driving_instructions_after_wrong_way(self):
+        self.next_instruction = str(self.all_driving_instructions.pop())
+
+
+        # if len(self.all_driving_instructions) != 0:
+        #     self.next_instruction = str(self.all_driving_instructions.pop())
+        # self.all_driving_instructions.reverse()
+        # self.all_driving_instructions.append("g")
 
     def set_distance_and_draw_route_in_map(self, route):
         self.ui.set_distance(self.calc_real_range_from_cost_and_factor())
@@ -269,7 +286,7 @@ class Navigation:
             print("test")
         if len(route) == 1:
             route.append(2)
-        prev_instruction = self.ui.calc_instruction(self.ui.map.car.coordinates_of_all_node[self.prev_node], self.ui.map.car.coordinates_of_all_node[route[0]], self.ui.map.car.coordinates_of_all_node[route[1]])
+        prev_instruction = self.ui.calc_instruction(self.ui.map.car.coordinates_of_all_node[self.prev_node-1], self.ui.map.car.coordinates_of_all_node[route[0]-1], self.ui.map.car.coordinates_of_all_node[route[1]-1])
         self.all_driving_instructions.clear()
         self.all_driving_instructions.append(prev_instruction)
         new_instructions = self.ui.get_driving_instructions_from_route(route)
@@ -279,12 +296,11 @@ class Navigation:
         for instruction in new_instructions:
             self.all_driving_instructions.append(instruction)
         #self.all_driving_instructions = self.ui.get_driving_instructions_from_route(route)
+        #self.all_driving_instructions.reverse()
+        self.all_driving_instructions.append("g")
         self.all_driving_instructions.reverse()
         self.server.send_data(self.all_driving_instructions)
-        self.process_driving_instructions()
-
-
-        # anhand von x bzw y distanz von fahrzeug zu knoten kosten dazurechnen
+        self.process_driving_instructions_after_wrong_way()
 
         #self.update_nodes_calc_routing_cost_and_get_next_instruction(route, cost)
         self.update_nodes_to_get_new_next_and_current_nodes(route[0], route[1])
@@ -393,6 +409,7 @@ class Navigation:
             elif self.ui.map.car.rotation == west_orientation:
                 self.next_orientation = south_orientation
         else:
+
             self.next_orientation = self.ui.map.car.rotation
 
     def calc_new_routing_costs_after_wrong_route(self, route):

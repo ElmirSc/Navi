@@ -36,6 +36,7 @@ def dijkstra(start_node, end_node, cost_type, prev_node=None):
             edge_list = remove_all_edges_with_prev_node_as_target(edge_list, prev_node)
 
         if edge_list != 0:
+            prev_node = None
             for edge in edge_list:
                 if look_for_temporary_node(int(edge[0]), temporary_nodes) == 0 and look_for_permanent_node(int(edge[0]),
                                                                                                            permanent_nodes) == 0:  # überprüfung ob der nächste Knoten in keiner der beiden Arrays drin ist
